@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>f0a3737d-fe0b-4301-a968-e7ea3755818f</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Deviax.QueryBuilder</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeTracking.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Changetracking\ChangeTracker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Execution.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FieldPart.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\Aggregate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\BasicParts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\Boolean.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\Comparison.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\Interval.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\Joins.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\Null.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\Operations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\Ordering.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\Parameters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\String.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Q.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Registry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SelectQuery.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Table.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UpdateQuery.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Visitors\ActualCommandResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Visitors\BaseVisitor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Visitors\SelectVisitor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Visitors\INodeVisitor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Visitors\IVisitorState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Visitors\ToSqlResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Visitors\UpdateVisitor.cs" />
+  </ItemGroup>
+</Project>
