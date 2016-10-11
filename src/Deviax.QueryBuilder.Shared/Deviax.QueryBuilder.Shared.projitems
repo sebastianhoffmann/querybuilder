@@ -10,12 +10,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ChangeTracking.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Changetracking\ChangeTracker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ChangeTracking\ChangeTracker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Execution.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FieldPart.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parts\Aggregate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parts\BasicParts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parts\Boolean.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\CasePart.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parts\Comparison.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parts\Interval.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parts\Joins.cs" />

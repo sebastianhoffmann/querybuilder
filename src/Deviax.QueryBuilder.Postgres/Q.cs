@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-
-using System.Diagnostics.Contracts;
+﻿using System.Diagnostics.Contracts;
 using Deviax.QueryBuilder.Parts;
-using Deviax.QueryBuilder;
 
 namespace Deviax.QueryBuilder
 {
