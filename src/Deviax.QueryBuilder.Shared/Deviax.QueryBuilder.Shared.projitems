@@ -9,7 +9,7 @@
     <Import_RootNamespace>Deviax.QueryBuilder</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)ChangeTracking.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PrimaryKeyAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ChangeTracking\ChangeTracker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Execution.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FieldPart.cs" />

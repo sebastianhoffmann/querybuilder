@@ -91,7 +91,7 @@ namespace Deviax.QueryBuilder.Parts
                 return this;
             }
 
-            public SelectQuery AppendTo(SelectQuery q) => _parts.Count == 0 ? q : q.Where(Build());
+            public T AppendTo<T>(T q) where T : BaseSelectQuery<T> => _parts.Count == 0 ? q : q.Where(Build());
 
             public IBooleanPart Build()
             {

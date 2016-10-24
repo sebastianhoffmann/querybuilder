@@ -585,6 +585,17 @@ namespace Deviax.QueryBuilder
             );
         }
 
+
+        [Pure]
+        public SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7> Where(params Func<TTable, IBooleanPart>[] parts)
+        {
+            return parts.Length == 0 ? this : new SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7>(Table1, Table2, Table3, Table4, Table5, Table6, Table7,
+                From, Joins, SelectParts, With(WhereParts, parts.Select(p => p(Table1)).ToArray()), HavingParts,
+                GroupByParts, OrderByParts, LimitOffsetPart,
+                ExtraParameters
+            );
+        }
+
         [Pure]
         public SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7> Where(params Func<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, IBooleanPart>[] parts)
         {

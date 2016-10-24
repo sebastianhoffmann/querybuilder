@@ -8,7 +8,7 @@ namespace Deviax.QueryBuilder
         {
             Fields = fields;
         }
-
+        
         public string[] Fields;
     }
 }

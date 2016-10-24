@@ -21,35 +21,35 @@ namespace Deviax.QueryBuilder
         public override void Accept(INodeVisitor visitor) => visitor.Visit(this);
 
         [Pure]
-        public EqPart Eq<T>(T value) => new EqPart(this, new Parameter<T>(value, Name));
+        public EqPart EqV<T>(T value, string name = null) => new EqPart(this, new Parameter<T>(value, name ?? Name));
 
         [Pure]
-        public SetFieldPart Set<T>(T value) => new SetFieldPart(this, new Parameter<T>(value, Name));
+        public SetFieldPart SetV<T>(T value) => new SetFieldPart(this, new Parameter<T>(value, Name));
         [Pure]
         public SetPart SetWithPart(IPart part) => new SetPart(this, part);
         [Pure]
-        public NeqPart Neq<T>(T value) => new NeqPart(this, new Parameter<T>(value, Name));
+        public NeqPart NeqV<T>(T value) => new NeqPart(this, new Parameter<T>(value, Name));
        
         [Pure]
-        public GtPart Gt<T>(T value) => new GtPart(this, new Parameter<T>(value, Name));
+        public GtPart GtV<T>(T value) => new GtPart(this, new Parameter<T>(value, Name));
         
         [Pure]
-        public GtePart Gte<T>(T value) => new GtePart(this, new Parameter<T>(value, Name));
+        public GtePart GteV<T>(T value) => new GtePart(this, new Parameter<T>(value, Name));
        
         [Pure]
-        public LtPart Lt<T>(T value) => new LtPart(this, new Parameter<T>(value, Name));
+        public LtPart LtV<T>(T value) => new LtPart(this, new Parameter<T>(value, Name));
         
         [Pure]
-        public LtePart Lte<T>(T value) => new LtePart(this, new Parameter<T>(value, Name));
+        public LtePart LteV<T>(T value) => new LtePart(this, new Parameter<T>(value, Name));
 
         [Pure]
-        public BetweenPart Between<T>(T left, T right) => new BetweenPart(this, new Parameter<T>(left, Name + "_l"), new Parameter<T>(right, Name + "_r"));
+        public BetweenPart BetweenV<T>(T left, T right) => new BetweenPart(this, new Parameter<T>(left, Name + "_l"), new Parameter<T>(right, Name + "_r"));
 
        [Pure]
-        public InPart In<T>(T item, T item2, params T[] items) => new InPart(this, new ArrayParameter<T>(new [] { item, item2 }.Concat(items), Name));
+        public InPart InV<T>(T item, T item2, params T[] items) => new InPart(this, new ArrayParameter<T>(new [] { item, item2 }.Concat(items), Name));
 
         [Pure]
-        public InPart In<T>(IEnumerable<T> items) => new InPart(this, new ArrayParameter<T>(items, Name));
+        public InPart InV<T>(IEnumerable<T> items) => new InPart(this, new ArrayParameter<T>(items, Name));
 
         [Pure]public static PlusPart operator +(Field left, int right) => new PlusPart(left, new Parameter<int>(right, left.Name));
         [Pure]public static PlusPart operator +(Field left, long right) => new PlusPart(left, new Parameter<long>(right, left.Name));
