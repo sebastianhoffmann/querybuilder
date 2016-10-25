@@ -29,6 +29,7 @@ namespace Deviax.QueryBuilder
 
         public abstract DbCommand ToCommand(BaseSelectQuery query, DbConnection con, DbTransaction tx = null);
         public abstract DbCommand ToCommand(BaseUpdateQuery query, DbConnection con, DbTransaction tx = null);
+        public abstract DbCommand ToCommand(BaseInsertQuery query, DbConnection con, DbTransaction tx = null);
 
         public string ToQueryText(BaseSelectQuery query)
         {
@@ -198,6 +199,30 @@ namespace Deviax.QueryBuilder
             }
         }
 
+        public async Task Insert<T>(T[] items, DbConnection con, DbTransaction tx = null)
+        {
+            var table = TypeToTableEntry<T>.DefaultTable;
+            var q = new BaseInsertQuery(table).WithValues(items.Select((item, i) => TypeToTableEntry<T>.ToValues(item, table, i)).ToArray());
+            var returningParts = TypeToTableEntry<T>.Returning(items[0], table);
+            if (returningParts != null)
+            {
+                q = q.Returning(returningParts);
+                var ids = await q.ScalarList<int>(con, tx);
+
+                if (ids.Count != items.Length)
+                    throw new InvalidOperationException();
+
+                for (int i = 0; i < items.Length; i++)
+                {
+                    TypeToTableEntry<T>.ApplyReturning(items[i], ids[i]);
+                }
+            }
+            else
+            {
+                await q.Execute(con, tx);
+            }
+        }
+
         public async Task<T> FirstOrDefault<T>(DbCommand cmd) where T : new()
         {
             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
@@ -255,6 +280,14 @@ namespace Deviax.QueryBuilder
             }
         }
 
+        public async Task<T> ScalarResult<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return await ScalarResult<T>(cmd);
+            }
+        }
+
         protected async Task<T> ScalarResult<T>(DbCommand cmd)
         {
             var val = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
@@ -286,6 +319,14 @@ namespace Deviax.QueryBuilder
         }
 
         public async Task<List<T>> ScalarListResult<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return await ScalarListResult<T>(cmd);
+            }
+        }
+
+        public async Task<List<T>> ScalarListResult<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx)
         {
             using (var cmd = ToCommand(query, con, tx))
             {

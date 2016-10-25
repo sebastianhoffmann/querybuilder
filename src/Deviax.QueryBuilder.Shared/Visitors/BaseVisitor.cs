@@ -13,7 +13,10 @@ namespace Deviax.QueryBuilder.Visitors
         OrderBy,
         ExtraParameters,
         Target,
-        Set
+        Set,
+        ValuesDeclaration,
+        Values,
+        Returning,
     }
 
     public abstract partial class BaseVisitor : INodeVisitor
@@ -210,10 +213,23 @@ namespace Deviax.QueryBuilder.Visitors
             State = CoarseState.OrderBy;
         }
 
+        protected virtual void TransitionToValuesDeclaration()
+        {
+            State = CoarseState.ValuesDeclaration;
+        }
+
+        protected virtual void TransitionToValues()
+        {
+            State = CoarseState.Values;
+        }
+
+        protected virtual void TransitionToReturning()
+        {
+            State = CoarseState.Returning;
+        }
+
         public abstract void Visit(SetFieldPart sfp);
-
-        public abstract void Visit(SetPart sp);
-
+        
         public abstract void Visit(DistinctPart distinctPart);
         public abstract void Visit(InnerJoinPart innerJoinPart);
         public abstract void Visit(DescOrdering desc);

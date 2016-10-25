@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Deviax.QueryBuilder.Parts;
+using System.Data.Common;
+using System.Threading.Tasks;
 
 namespace Deviax.QueryBuilder
 {
@@ -11,6 +13,18 @@ namespace Deviax.QueryBuilder
 
     public static partial class Q
     {
+        [Pure]
+        public static InsertQuery<TTable> InsertInto<TTable>(TTable table) where TTable : Table => new InsertQuery<TTable>(table);
+        public static async Task Insert<T>(DbConnection con, DbTransaction tx, params T[] items)
+        {
+            await QueryExecutor.DefaultExecutor.Insert<T>(items, con, tx);
+        }
+
+        public static async Task Insert<T>(DbConnection con, params T[] items)
+        {
+            await QueryExecutor.DefaultExecutor.Insert<T>(items, con, null);
+        }
+
         [Pure]
         public static CasePart Case => new CasePart();
 

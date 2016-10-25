@@ -9,6 +9,7 @@
     <Import_RootNamespace>Deviax.QueryBuilder</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)InsertQuery.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PrimaryKeyAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ChangeTracking\ChangeTracker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Execution.cs" />
@@ -32,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)UpdateQuery.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Visitors\ActualCommandResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Visitors\BaseVisitor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Visitors\InsertVisitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Visitors\SelectVisitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Visitors\INodeVisitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Visitors\IVisitorState.cs" />

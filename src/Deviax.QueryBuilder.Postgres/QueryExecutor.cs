@@ -51,5 +51,18 @@ namespace Deviax.QueryBuilder
 
             return r.Command;
         }
+
+        public override DbCommand ToCommand(BaseInsertQuery query, DbConnection con, DbTransaction tx = null)
+        {
+            var r = new ActualCommandResult(con);
+            r.Start();
+
+            new InsertVisitor(r).Process(query);
+
+            r.Finished();
+            r.Command.Transaction = tx;
+
+            return r.Command;
+        }
     }
 }
