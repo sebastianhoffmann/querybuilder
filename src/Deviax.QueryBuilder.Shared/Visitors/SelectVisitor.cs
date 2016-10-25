@@ -9,8 +9,7 @@ namespace Deviax.QueryBuilder.Visitors
         {
             State = CoarseState.Select;
         }
-
-       
+        
         public override void Visit(RightJoinPart rightJoinPart)
         {
             Result.Append("\nRIGHT JOIN ");
@@ -136,14 +135,8 @@ namespace Deviax.QueryBuilder.Visitors
                     throw new ArgumentOutOfRangeException();
             }
         }
-
-
+        
         public override void Visit(SetFieldPart sfp)
-        {
-            throw new NotSupportedException();
-        }
-
-        public override void Visit(SetPart sp)
         {
             throw new NotSupportedException();
         }
@@ -270,8 +263,5 @@ namespace Deviax.QueryBuilder.Visitors
                     para.Accept(this);
             }
         }
-        
-
-       
     }
 }

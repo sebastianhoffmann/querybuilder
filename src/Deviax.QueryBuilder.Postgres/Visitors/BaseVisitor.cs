@@ -13,8 +13,15 @@ namespace Deviax.QueryBuilder.Visitors
 
         public void Visit(IField field)
         {
-            field.Table.Accept(this);
-            Result.Append(".\"").Append(field.Name).Append("\" ");
+            if (NoTableName)
+            {
+                Result.Append("\"").Append(field.Name).Append("\" ");
+            }
+            else
+            {
+                field.Table.Accept(this);
+                Result.Append(".\"").Append(field.Name).Append("\" ");
+            }
         }
         
 

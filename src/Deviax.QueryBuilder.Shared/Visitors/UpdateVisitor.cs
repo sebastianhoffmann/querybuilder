@@ -51,6 +51,19 @@ namespace Deviax.QueryBuilder.Visitors
                 }
             }
 
+            if (q.ReturningParts != null && q.ReturningParts.Count > 0)
+            {
+                TransitionToReturning();
+                Result.Append("\n RETURNING ");
+                q.ReturningParts[0].Accept(this);
+
+                for (int i = 1; i < q.ReturningParts.Count; i++)
+                {
+                    Result.Append(", ");
+                    q.ReturningParts[i].Accept(this);
+                }
+            }
+
             TransitionToExtraParameters();
 
             if (q.ExtraParameters != null)

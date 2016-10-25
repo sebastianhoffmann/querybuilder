@@ -25,7 +25,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
             return Collect()
                 .GroupBy(c => c.Tracking)
                 .Select(group => {
-                    var qry = group.Aggregate(new UpdateQuery(group.Key.Table), (q, i) => q.Set(group.Key.Table.F(N.Db(i.Field)).SetWithPart(i.Parameter)));
+                    var qry = group.Aggregate(new UpdateQuery(group.Key.Table), (q, i) => q.Set(group.Key.Table.F(N.Db(i.Field)).Set(i.Parameter)));
 
                     if (group.Key.ConditionGetter != null)
                         qry = qry.Where(group.Key.ConditionGetter(group.Key.Original, group.Key.Table));
@@ -73,7 +73,15 @@ namespace Deviax.QueryBuilder.ChangeTracking
 
         private T Copy<T>(T item)
         {
-            return default(T);
+            if (CopyCache<T>.F == null)
+            {
+                var p1 = Expression.Parameter(typeof(T));
+                CopyCache<T>.F = Expression.Lambda<Func<T,T>>(
+                Expression.Convert(Expression.Call(p1, typeof(T).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance)), typeof(T)),
+                p1).Compile();
+            }
+
+            return CopyCache<T>.F(item);
         }
 
         private static Expression NewChange(Expression tracking, Type t, MemberInfo mi, Expression val)
@@ -233,8 +241,8 @@ namespace Deviax.QueryBuilder.ChangeTracking
         }
     }
 
-    internal static class ProxyCache<T>
+    internal static class CopyCache<T>
     {
-        // public static Func<T, ChangeTrackingContext, T> F;
+        public static Func<T, T> F;
     }
 }

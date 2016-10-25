@@ -26,6 +26,7 @@ namespace Deviax.QueryBuilder.Visitors
             State = CoarseState.Select;
         }
         protected bool ExpectsFqn;
+        protected bool NoTableName;
 
         public void Visit(PlusPart plus) => HandleOperation(plus.Left, plus.Right, "+ ");
         public void Visit(MinusPart minus) => HandleOperation(minus.Left, minus.Right, "- ");

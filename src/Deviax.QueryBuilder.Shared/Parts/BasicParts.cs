@@ -8,8 +8,7 @@ namespace Deviax.QueryBuilder.Parts
     public abstract partial class Part : IPart
     {
         public abstract void Accept(INodeVisitor visitor);
-
-        [Pure]public SetPart Set(IPart value) => new SetPart(this, value);
+        
         [Pure]public EqPart Eq(IPart other) => new EqPart(this, other);
         [Pure]public NeqPart Neq(IPart other) => new NeqPart(this, other);
         [Pure]public IsNotNullPart IsNotNull() => new IsNotNullPart(this);
@@ -54,23 +53,6 @@ namespace Deviax.QueryBuilder.Parts
         public SetFieldPart(Field field, IPart value)
         {
             Field = field;
-            Value = value;
-        }
-
-        public void Accept(INodeVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-    }
-
-    public class SetPart : ISetPart
-    {
-        public readonly IPart Left;
-        public readonly IPart Value;
-
-        public SetPart(IPart left, IPart value)
-        {
-            Left = left;
             Value = value;
         }
 

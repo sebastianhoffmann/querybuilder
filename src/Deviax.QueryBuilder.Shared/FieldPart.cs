@@ -24,9 +24,9 @@ namespace Deviax.QueryBuilder
         public EqPart EqV<T>(T value, string name = null) => new EqPart(this, new Parameter<T>(value, name ?? Name));
 
         [Pure]
-        public SetFieldPart SetV<T>(T value) => new SetFieldPart(this, new Parameter<T>(value, Name));
+        public SetFieldPart SetV<T>(T value, string name = null) => new SetFieldPart(this, new Parameter<T>(value, name ?? Name ));
         [Pure]
-        public SetPart SetWithPart(IPart part) => new SetPart(this, part);
+        public SetFieldPart Set(IPart part) => new SetFieldPart(this, part);
         [Pure]
         public NeqPart NeqV<T>(T value) => new NeqPart(this, new Parameter<T>(value, Name));
        
@@ -44,10 +44,7 @@ namespace Deviax.QueryBuilder
 
         [Pure]
         public BetweenPart BetweenV<T>(T left, T right) => new BetweenPart(this, new Parameter<T>(left, Name + "_l"), new Parameter<T>(right, Name + "_r"));
-
-       [Pure]
-        public InPart InV<T>(T item, T item2, params T[] items) => new InPart(this, new ArrayParameter<T>(new [] { item, item2 }.Concat(items), Name));
-
+        
         [Pure]
         public InPart InV<T>(IEnumerable<T> items) => new InPart(this, new ArrayParameter<T>(items, Name));
 

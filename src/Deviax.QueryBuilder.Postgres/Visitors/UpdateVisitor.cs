@@ -6,16 +6,11 @@ namespace Deviax.QueryBuilder.Visitors
     {
         public override void Visit(SetFieldPart sfp)
         {
+            NoTableName = true;
             sfp.Field.Accept(this);
+            NoTableName = false;
             Result.Append("= ");
             sfp.Value.Accept(this);
-        }
-
-        public override void Visit(SetPart sp)
-        {
-            sp.Left.Accept(this);
-            Result.Append("= ");
-            sp.Value.Accept(this);
         }
     }
 }
