@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 using Deviax.QueryBuilder.Parts;
+using NpgsqlTypes;
 
 namespace Deviax.QueryBuilder
 {
@@ -32,5 +33,17 @@ namespace Deviax.QueryBuilder
 
             return result;
         }
+
+        [Pure]
+        public static Parameter<T> P<T>(NpgsqlDbType npgsqlType, string name, T value) => new Parameter<T>(value, name, npgsqlType);
+
+        [Pure]
+        public static Parameter<T> Parameter<T>(NpgsqlDbType npgsqlType, string name, T value) => P(npgsqlType, name, value);
+
+        [Pure]
+        public static ArrayParameter<T> AP<T>(NpgsqlDbType npgsqlType, string name, params T[] values) => new ArrayParameter<T>(values, name, npgsqlType);
+
+        [Pure]
+        public static ArrayParameter<T> ArrayParameter<T>(NpgsqlDbType npgsqlType, string name, params T[] values) => AP(npgsqlType, name, values);
     }
 }

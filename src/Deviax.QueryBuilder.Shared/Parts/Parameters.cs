@@ -6,12 +6,12 @@ namespace Deviax.QueryBuilder.Parts
 {
     public interface IArrayParameter<T> : IParameter<T[]> { }
 
-    public interface IParameter<T> : INamedPart, IPart
+    public partial interface IParameter<T> : INamedPart, IPart
     {
         T Value { get; }
     }
 
-    public class Parameter<T> : Part, IParameter<T>
+    public partial class Parameter<T> : Part, IParameter<T>
     {
         public override void Accept(INodeVisitor visitor)
         {
@@ -28,7 +28,7 @@ namespace Deviax.QueryBuilder.Parts
         public T Value { get; }
     }
 
-    public class ArrayParameter<T> : Part, IArrayParameter<T>
+    public partial class ArrayParameter<T> : Part, IArrayParameter<T>
     {
         public override void Accept(INodeVisitor visitor)
         {

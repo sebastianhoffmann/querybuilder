@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using Deviax.QueryBuilder.Parts;
 
 namespace Deviax.QueryBuilder.Visitors
 {
@@ -24,9 +25,9 @@ namespace Deviax.QueryBuilder.Visitors
             return this;
         }
 
-        public void AddParameter<T>(string name, T value)
+        public void AddParameter<T>(IParameter<T> para)
         {
-            ParameterDic[name] = value;
+            ParameterDic[para.Name] = para.Value;
         }
 
         public string ParameterDescription => 

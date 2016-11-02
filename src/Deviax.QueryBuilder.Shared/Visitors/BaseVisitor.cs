@@ -73,11 +73,11 @@ namespace Deviax.QueryBuilder.Visitors
         {
             if (State == CoarseState.ExtraParameters)
             {
-                Result.AddParameter(parameter.Name, parameter.Value);
+                Result.AddParameter(parameter);
             }
             else
             {
-                Result.Append("@").Append(parameter.Name).Append(" ").AddParameter(parameter.Name, parameter.Value);
+                Result.Append("@").Append(parameter.Name).Append(" ").AddParameter(parameter);
             }
         }
 

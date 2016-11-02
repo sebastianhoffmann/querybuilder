@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Deviax.QueryBuilder.Visitors
 {
-    public class ActualCommandResult : IVisitorResult
+    public partial class ActualCommandResult : IVisitorResult
     {
         private readonly DbConnection _con;
 
@@ -28,22 +28,7 @@ namespace Deviax.QueryBuilder.Visitors
             return this;
         }
 
-        public void AddParameter<T>(string name, T value)
-        {
-            var val = Equals(null, value) ? (object)DBNull.Value : value;
-
-            if (Command.Parameters.Contains(name))
-            {
-                Command.Parameters[name].Value = val;
-            }
-            else
-            {
-                var para = Command.CreateParameter();
-                para.Value = val;
-                para.ParameterName = name;
-                Command.Parameters.Add(para);
-            }
-        }
+       
 
         public void Finished()
         {

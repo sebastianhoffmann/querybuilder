@@ -57,15 +57,12 @@ namespace Deviax.QueryBuilder
 
         [Pure]
         public static Parameter<T> Parameter<T>(string name, T value) => P(name, value);
+        
+        [Pure]
+        public static ArrayParameter<T> AP<T>(string name, params T[] values) => new ArrayParameter<T>(values, name);
 
         [Pure]
-        public static ArrayParameter<T> P<T>(string name, IEnumerable<T> value) => new ArrayParameter<T>(value, name);
-
-        [Pure]
-        public static ArrayParameter<T> AP<T>(string name, params T[] values) => P<T>(name, values);
-
-        [Pure]
-        public static ArrayParameter<T> ArrayParameter<T>(string name, params T[] values) => P<T>(name, values);
+        public static ArrayParameter<T> ArrayParameter<T>(string name, params T[] values) => AP(name, values);
 
         [Pure]
         public static MinPart Min(IPart over) => new MinPart(over);
