@@ -15,15 +15,19 @@ namespace Deviax.QueryBuilder
     {
         [Pure]
         public static InsertQuery<TTable> InsertInto<TTable>(TTable table) where TTable : Table => new InsertQuery<TTable>(table);
+
         public static async Task Insert<T>(DbConnection con, DbTransaction tx, params T[] items)
         {
-            await QueryExecutor.DefaultExecutor.Insert<T>(items, con, tx);
+            await QueryExecutor.DefaultExecutor.Insert(items, con, tx);
         }
 
         public static async Task Insert<T>(DbConnection con, params T[] items)
         {
-            await QueryExecutor.DefaultExecutor.Insert<T>(items, con, null);
+            await QueryExecutor.DefaultExecutor.Insert(items, con, null);
         }
+
+        [Pure]
+        public static DeleteQuery<TTable> DeleteFrom<TTable>(TTable table) where TTable : Table => new DeleteQuery<TTable>(table);
 
         [Pure]
         public static CasePart Case => new CasePart();

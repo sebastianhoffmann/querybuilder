@@ -30,7 +30,7 @@ namespace Deviax.QueryBuilder.Visitors
         }
 
         public string ParameterDescription => 
-            $"-- Parameters: {Environment.NewLine}--{string.Join($"{Environment.NewLine}--", ParameterDic.Select(kvp => $"{kvp.Key}: {kvp.Value}"))}";
+            $"{Environment.NewLine}-- Parameters: {Environment.NewLine}--{string.Join($"{Environment.NewLine}--", ParameterDic.Select(kvp => $"{kvp.Key}: {kvp.Value}"))}";
 
         public void Finished()
         {

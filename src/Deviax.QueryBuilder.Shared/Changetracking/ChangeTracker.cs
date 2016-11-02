@@ -19,7 +19,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
             public Table Table;
             public Func<object, Table, IBooleanPart[]> ConditionGetter;
         }
-
+        
         public IEnumerable<Tuple<object, UpdateQuery>> ToUpdateQueries()
         {
             return Collect()

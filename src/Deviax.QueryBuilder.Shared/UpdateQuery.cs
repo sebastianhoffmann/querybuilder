@@ -42,27 +42,10 @@ namespace Deviax.QueryBuilder
 
         public override void Accept(INodeVisitor visitor) => visitor.Visit(this);
 
-        //public async Task<List<T>> ToList<T>(DbConnection con, DbTransaction tx = null) where T : new()
-        //{
-        //    return await QueryExecutor.DefaultExecutor.ToList<T>(this, con, tx).ConfigureAwait(false);
-        //}
-
-        //public async Task<T> FirstOrDefault<T>(DbConnection con, DbTransaction tx = null) where T : new()
-        //{
-        //    return await QueryExecutor.DefaultExecutor.FirstOrDefault<T>(this, con, tx).ConfigureAwait(false);
-        //}
-
-        //public new AliasedSelectQuery As(string alias) => new AliasedSelectQuery(alias, this);
-
         public async Task<T> ScalarResult<T>(DbConnection con, DbTransaction tx = null)
         {
             return await QueryExecutor.DefaultExecutor.ScalarResult<T>(this, con, tx).ConfigureAwait(false);
         }
-
-        //public async Task<List<T>> ScalarList<T>(DbConnection con, DbTransaction tx = null)
-        //{
-        //    return await QueryExecutor.DefaultExecutor.ScalarListResult<T>(this, con, tx).ConfigureAwait(false);
-        //}
 
         public async Task<int> Execute(DbConnection con, DbTransaction tx = null)
         {
@@ -177,6 +160,15 @@ namespace Deviax.QueryBuilder
             return parts.Length == 0 ? this : new UpdateQuery<TTable>(Table1,
                 Target, From, With(WhereParts, parts.Select(p => p(Table1)).ToArray()), 
                 ReturningParts,ExtraParameters, SetParts
+            );
+        }
+
+        [Pure]
+        public UpdateQuery<TTable> Set(params Func<TTable, ISetPart>[] parts)
+        {
+            return parts.Length == 0 ? this : new UpdateQuery<TTable>(Table1,
+                Target, From, WhereParts,
+                ReturningParts, ExtraParameters, With(SetParts, parts.Select(p => p(Table1)).ToArray())
             );
         }
 

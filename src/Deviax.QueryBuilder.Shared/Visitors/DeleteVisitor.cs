@@ -3,44 +3,24 @@ using System;
 
 namespace Deviax.QueryBuilder.Visitors
 {
-    public partial class UpdateVisitor : BaseVisitor
+    public partial class DeleteVisitor : BaseVisitor
     {
-        public UpdateVisitor(IVisitorResult result) : base(result)
+        public DeleteVisitor(IVisitorResult result) : base(result)
         {
         }
-
-        public void Process(BaseUpdateQuery q)
+        
+        public void Process(BaseDeleteQuery q)
         {
-            
-            Result.Append("UPDATE ");
+            Result.Append("DELETE FROM ");
             TransitionToTargetPart();
             ExpectsFqn = true;
-            q.Target.Accept(this);
+            q.From.Accept(this);
             ExpectsFqn = false;
-            TransitionToSetPart();
-            Result.Append("\nSET ");
-
-            q.SetParts[0].Accept(this);
-
-            for (int i = 1; i < q.SetParts.Count; i++)
-            {
-                Result.Append(", ");
-                q.SetParts[i].Accept(this);
-            }
-
-            
-            if (q.From != null)
-            {
-                TransitionToFromPart();
-                Result.Append("\nFROM ");
-                ExpectsFqn = true;
-                q.From.Accept(this);
-                ExpectsFqn = false;
-            }
 
             if (q.WhereParts != null && q.WhereParts.Count > 0)
             {
                 TransitionToWhere();
+                NoTableName = true;
                 Result.Append("\nWHERE ");
                 q.WhereParts[0].Accept(this);
 
@@ -49,21 +29,9 @@ namespace Deviax.QueryBuilder.Visitors
                     Result.Append(", ");
                     q.WhereParts[i].Accept(this);
                 }
+                NoTableName = false;
             }
-
-            if (q.ReturningParts != null && q.ReturningParts.Count > 0)
-            {
-                TransitionToReturning();
-                Result.Append("\n RETURNING ");
-                q.ReturningParts[0].Accept(this);
-
-                for (int i = 1; i < q.ReturningParts.Count; i++)
-                {
-                    Result.Append(", ");
-                    q.ReturningParts[i].Accept(this);
-                }
-            }
-
+            
             TransitionToExtraParameters();
 
             if (q.ExtraParameters != null)
@@ -92,7 +60,7 @@ namespace Deviax.QueryBuilder.Visitors
         {
             throw new NotSupportedException();
         }
-
+        
         public override void Visit(DistinctPart distinctPart)
         {
             throw new NotSupportedException();
@@ -114,6 +82,11 @@ namespace Deviax.QueryBuilder.Visitors
         }
 
         public override void Visit(LimitOffsetPart limitOffset)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override void Visit(SetFieldPart sfp)
         {
             throw new NotSupportedException();
         }

@@ -27,9 +27,57 @@ namespace Deviax.QueryBuilder
 
         protected abstract INameResolver DefaultNameResolver { get; }
 
-        public abstract DbCommand ToCommand(BaseSelectQuery query, DbConnection con, DbTransaction tx = null);
-        public abstract DbCommand ToCommand(BaseUpdateQuery query, DbConnection con, DbTransaction tx = null);
-        public abstract DbCommand ToCommand(BaseInsertQuery query, DbConnection con, DbTransaction tx = null);
+        public DbCommand ToCommand(BaseSelectQuery query, DbConnection con, DbTransaction tx = null)
+        {
+            var r = new ActualCommandResult(con);
+            r.Start();
+
+            new SelectVisitor(r).Process(query);
+
+            r.Finished();
+            r.Command.Transaction = tx;
+
+            return r.Command;
+        }
+
+        public DbCommand ToCommand(BaseUpdateQuery query, DbConnection con, DbTransaction tx = null)
+        {
+            var r = new ActualCommandResult(con);
+            r.Start();
+
+            new UpdateVisitor(r).Process(query);
+
+            r.Finished();
+            r.Command.Transaction = tx;
+
+            return r.Command;
+        }
+
+        public DbCommand ToCommand(BaseInsertQuery query, DbConnection con, DbTransaction tx = null)
+        {
+            var r = new ActualCommandResult(con);
+            r.Start();
+
+            new InsertVisitor(r).Process(query);
+
+            r.Finished();
+            r.Command.Transaction = tx;
+
+            return r.Command;
+        }
+
+        public DbCommand ToCommand(BaseDeleteQuery query, DbConnection con, DbTransaction tx = null)
+        {
+            var r = new ActualCommandResult(con);
+            r.Start();
+
+            new DeleteVisitor(r).Process(query);
+
+            r.Finished();
+            r.Command.Transaction = tx;
+
+            return r.Command;
+        }
 
         public string ToQueryText(BaseSelectQuery query)
         {
@@ -37,6 +85,28 @@ namespace Deviax.QueryBuilder
             r.Start();
 
             new SelectVisitor(r).Process(query);
+
+            r.Finished();
+            return r.StringBuilder.ToString() + r.ParameterDescription;
+        }
+
+        public string ToQueryText(BaseDeleteQuery query)
+        {
+            var r = new ToSqlResult();
+            r.Start();
+
+            new DeleteVisitor(r).Process(query);
+
+            r.Finished();
+            return r.StringBuilder.ToString() + r.ParameterDescription;
+        }
+
+        public string ToQueryText(BaseInsertQuery query)
+        {
+            var r = new ToSqlResult();
+            r.Start();
+
+            new InsertVisitor(r).Process(query);
 
             r.Finished();
             return r.StringBuilder.ToString() + r.ParameterDescription;
@@ -281,6 +351,14 @@ namespace Deviax.QueryBuilder
         }
 
         public async Task<T> ScalarResult<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return await ScalarResult<T>(cmd);
+            }
+        }
+
+        public async Task<T> ScalarResult<T>(BaseDeleteQuery query, DbConnection con, DbTransaction tx)
         {
             using (var cmd = ToCommand(query, con, tx))
             {

@@ -64,6 +64,13 @@ namespace Deviax.QueryBuilder
         {
             return await QueryExecutor.DefaultExecutor.ScalarResult<int>(this, con, tx).ConfigureAwait(false);
         }
+
+        public string StringRepresentation => ToString();
+
+        public override string ToString()
+        {
+            return QueryExecutor.DefaultExecutor.ToQueryText(this);
+        }
     }
 
     public abstract class BaseInsertQuery<TQ> : BaseInsertQuery where TQ : BaseInsertQuery<TQ>

@@ -55,19 +55,7 @@ namespace Deviax.QueryBuilder.Visitors
             countPart.Over.Accept(this);
             Result.Append(")");
         }
-
-        public override void Visit(CoalescePart coalesce)
-        {
-            Result.Append("COALESCE(");
-            coalesce.Over[0].Accept(this);
-            for (int i = 1; i < coalesce.Over.Length; i++)
-            {
-                Result.Append(", ");
-                coalesce.Over[i].Accept(this);
-            }
-            Result.Append(")");
-        }
-
+        
         public override void Visit(DistinctPart distinctPart)
         {
             Result.Append("DISTINCT(");

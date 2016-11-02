@@ -171,6 +171,13 @@ namespace Deviax.QueryBuilder.Visitors
             Result.Append(")");
         }
 
+        public void Visit(BaseDeleteQuery query)
+        {
+            Result.Append("(");
+            new DeleteVisitor(Result).Process(query);
+            Result.Append(")");
+        }
+
         protected void TransitionToExtraParameters()
         {
             State = CoarseState.ExtraParameters;
@@ -238,7 +245,17 @@ namespace Deviax.QueryBuilder.Visitors
         public abstract void Visit(LeftJoinPart leftJoinPart);
         public abstract void Visit(SumPart sumPart);
         public abstract void Visit(CountPart countPart);
-        public abstract void Visit(CoalescePart coalesce);
+        public virtual void Visit(CoalescePart coalesce)
+        {
+            Result.Append("COALESCE(");
+            coalesce.Over[0].Accept(this);
+            for (int i = 1; i < coalesce.Over.Length; i++)
+            {
+                Result.Append(", ");
+                coalesce.Over[i].Accept(this);
+            }
+            Result.Append(")");
+        }
         public abstract void Visit(LimitOffsetPart limitOffset);
     }
 }

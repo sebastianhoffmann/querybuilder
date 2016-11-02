@@ -26,43 +26,6 @@ namespace Deviax.QueryBuilder
             DefaultNameResolver = resolver;
         }
         protected override INameResolver DefaultNameResolver { get; }
-        public override DbCommand ToCommand(BaseSelectQuery query, DbConnection con, DbTransaction tx = null)
-        {
-            var r = new ActualCommandResult(con);
-            r.Start();
-
-            new SelectVisitor(r).Process(query);
-
-            r.Finished();
-            r.Command.Transaction = tx;
-
-            return r.Command;
-        }
-
-        public override DbCommand ToCommand(BaseUpdateQuery query, DbConnection con, DbTransaction tx = null)
-        {
-            var r = new ActualCommandResult(con);
-            r.Start();
-
-            new UpdateVisitor(r).Process(query);
-
-            r.Finished();
-            r.Command.Transaction = tx;
-
-            return r.Command;
-        }
-
-        public override DbCommand ToCommand(BaseInsertQuery query, DbConnection con, DbTransaction tx = null)
-        {
-            var r = new ActualCommandResult(con);
-            r.Start();
-
-            new InsertVisitor(r).Process(query);
-
-            r.Finished();
-            r.Command.Transaction = tx;
-
-            return r.Command;
-        }
+        
     }
 }

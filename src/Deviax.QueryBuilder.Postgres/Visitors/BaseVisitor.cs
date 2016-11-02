@@ -65,7 +65,7 @@ namespace Deviax.QueryBuilder.Visitors
                 AppendFullyQuallifiedTableName(table);
                 ExpectsFqn = false;
 
-                if (State == CoarseState.FromAndJoins && !string.IsNullOrWhiteSpace(table.TableAlias))
+                if ((State == CoarseState.FromAndJoins || State == CoarseState.Target) && !string.IsNullOrWhiteSpace(table.TableAlias))
                 {
                     Result.Append(" AS ").Append(table.TableAlias);
                 }

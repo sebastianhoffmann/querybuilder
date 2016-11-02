@@ -8,7 +8,7 @@ namespace Deviax.QueryBuilder.Visitors
         void Visit(OrPart or);
         void Visit(EqPart eq);
         void Visit(SetFieldPart sfp);
-        
+        void Visit(BaseDeleteQuery deleteQuery);
         void Visit(StringConcatenation sc);
         void Visit(LikePart lp);
 
