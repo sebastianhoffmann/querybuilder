@@ -26,7 +26,7 @@ namespace Deviax.QueryBuilder.Visitors
 
                 for (int i = 1; i < q.WhereParts.Count; i++)
                 {
-                    Result.Append(", ");
+                    Result.Append("AND ");
                     q.WhereParts[i].Accept(this);
                 }
                 NoTableName = false;
