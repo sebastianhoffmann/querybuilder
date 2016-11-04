@@ -2,6 +2,7 @@
 using System.Diagnostics.Contracts;
 using Deviax.QueryBuilder.Parts;
 using System.Data.Common;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Deviax.QueryBuilder
@@ -15,14 +16,21 @@ namespace Deviax.QueryBuilder
     {
         [Pure]
         public static InsertQuery<TTable> InsertInto<TTable>(TTable table) where TTable : Table => new InsertQuery<TTable>(table);
+        
 
-        public static async Task Insert<T>(DbConnection con, DbTransaction tx, params T[] items)
+        public static async Task Insert<T>(DbConnection con, DbTransaction tx, T[] items)
         {
+            if (items == null || items.Length == 0)
+                return;
+
             await QueryExecutor.DefaultExecutor.Insert(items, con, tx);
         }
 
-        public static async Task Insert<T>(DbConnection con, params T[] items)
+        public static async Task Insert<T>(DbConnection con, T[] items)
         {
+            if (items == null || items.Length == 0)
+                return;
+
             await QueryExecutor.DefaultExecutor.Insert(items, con, null);
         }
 
