@@ -40,6 +40,18 @@ namespace Deviax.QueryBuilder
             return r.Command;
         }
 
+        public PreparedCommand ToPreparedCommand(BaseSelectQuery query)
+        {
+            var r = new PreparingCommandResult();
+            r.Start();
+
+            new SelectVisitor(r).Process(query);
+
+            r.Finished();
+
+            return r.Result;
+        }
+
         public DbCommand ToCommand(BaseUpdateQuery query, DbConnection con, DbTransaction tx = null)
         {
             var r = new ActualCommandResult(con);

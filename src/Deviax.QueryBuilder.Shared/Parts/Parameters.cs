@@ -1,12 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Deviax.QueryBuilder.Visitors;
+using System.Data.Common;
 
 namespace Deviax.QueryBuilder.Parts
 {
     public interface IArrayParameter<T> : IParameter<T[]> { }
 
-    public partial interface IParameter<T> : INamedPart, IPart
+    public partial interface IParameter : INamedPart, IPart
+    {
+        void ApplyTo(DbCommand cmd);
+    }
+
+    public partial interface IParameter<T> : IParameter
     {
         T Value { get; }
     }
