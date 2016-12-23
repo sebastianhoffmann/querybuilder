@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+﻿using System.Diagnostics.Contracts;
 using Deviax.QueryBuilder.Parts;
 using System.Data.Common;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Deviax.QueryBuilder
 {
     public static class N
     {
-        public static string Db(string csharpName, bool nullable = false) => QueryExecutor.NameResolver.CSharpToDb(csharpName, nullable);
+        public static string Db(string csharpName) => QueryExecutor.NameResolver.CSharpToDb(csharpName);
     }
 
     public static partial class Q

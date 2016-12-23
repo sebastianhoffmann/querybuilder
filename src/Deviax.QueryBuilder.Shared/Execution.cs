@@ -12,7 +12,7 @@ namespace Deviax.QueryBuilder
     public interface INameResolver
     {
         string DbToCSharp(string dbName);
-        string CSharpToDb(string csharpName, bool nullable);
+        string CSharpToDb(string csharpName);
     }
 
     public static class AssignmentCache<T> where T : new()
