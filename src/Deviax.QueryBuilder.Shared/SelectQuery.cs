@@ -1739,6 +1739,11 @@ namespace Deviax.QueryBuilder
         {
         }
 
+        public SelectQuery(BaseSelectQuery q) : base(q.From, q.Joins, q.SelectParts, q.WhereParts, q.HavingParts, q.GroupByParts, q.OrderByParts, q.LimitOffsetPart, q.ExtraParameters)
+        {
+            
+        }
+
         public SelectQuery(IFromPart from) : base(from)
         {
             
