@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Data.Common;
 using System.Linq;
-using Deviax.QueryBuilder.Visitors;
 
 namespace Deviax.QueryBuilder
 {

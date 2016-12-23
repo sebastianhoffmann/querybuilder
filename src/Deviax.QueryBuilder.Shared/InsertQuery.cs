@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Deviax.QueryBuilder.Parts;
-using System.Reflection;
 
 namespace Deviax.QueryBuilder
 {

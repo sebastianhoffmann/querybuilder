@@ -1,11 +1,10 @@
-﻿using System.Reflection;
-using Deviax.QueryBuilder.Visitors;
+﻿using Deviax.QueryBuilder.Visitors;
 
 namespace Deviax.QueryBuilder.Parts
 {
     public class ArrayAggPart : Part
     {
-        public IPart Over;
+        public readonly IPart Over;
         public ArrayAggPart(IPart over)
         {
             Over = over;

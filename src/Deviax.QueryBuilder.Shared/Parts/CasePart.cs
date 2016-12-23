@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Text;
-using Deviax.QueryBuilder;
 using Deviax.QueryBuilder.Visitors;
 
 namespace Deviax.QueryBuilder.Parts

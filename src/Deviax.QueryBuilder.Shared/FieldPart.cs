@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Deviax.QueryBuilder.Parts;
 using Deviax.QueryBuilder.Visitors;
 using System.Collections.Generic;
@@ -25,8 +24,10 @@ namespace Deviax.QueryBuilder
 
         [Pure]
         public SetFieldPart SetV<T>(T value, string name = null) => new SetFieldPart(this, new Parameter<T>(value, name ?? Name ));
+        
         [Pure]
         public SetFieldPart Set(IPart part) => new SetFieldPart(this, part);
+
         [Pure]
         public NeqPart NeqV<T>(T value) => new NeqPart(this, new Parameter<T>(value, Name));
        

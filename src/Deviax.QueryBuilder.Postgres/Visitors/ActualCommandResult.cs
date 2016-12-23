@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.Common;
 using Deviax.QueryBuilder.Parts;
 using Npgsql;
 using NpgsqlTypes;
@@ -35,4 +37,5 @@ namespace Deviax.QueryBuilder.Visitors
             }
         }
     }
+    
 }
