@@ -12,6 +12,23 @@ namespace Deviax.QueryBuilder.Parts
     public interface ITsVector : IPart { }
     public interface ITsQuery : IPart { }
 
+    public class MatchesRegexPart : Part, IBooleanPart
+    {
+        public readonly IPart Left;
+        public readonly IPart Right;
+
+        public MatchesRegexPart(IPart left, IPart right)
+        {
+            Left = left;
+            Right = right;
+        }
+
+        public override void Accept(INodeVisitor visitor)
+        {
+            visitor.Accept(this);
+        }
+    }
+
     public class ToTsVectorPart : Part, ITsVector
     {
         internal readonly string Regconfig;

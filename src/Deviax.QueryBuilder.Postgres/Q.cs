@@ -4,8 +4,21 @@ using NpgsqlTypes;
 
 namespace Deviax.QueryBuilder
 {
+    public enum Extractable
+    {
+        Year,
+        Month,
+        Day
+    }
+
     public static partial class Q
     {
+        [Pure]
+        public static RowNumberPart RowNumber(IPartitionOverPart over) => new RowNumberPart(over);
+
+        [Pure]
+        public static PartitionPart PartitionBy(IPart thing) => new PartitionPart(thing);
+
         [Pure]
         public static ArrayAggPart ArrayAgg(IPart over) => new ArrayAggPart(over);
 
@@ -16,17 +29,26 @@ namespace Deviax.QueryBuilder
         public static ToTsQueryPart ToTsQuery(string regconfig, IPart over) => new ToTsQueryPart(regconfig, over);
 
         [Pure]
+        public static CastPart Cast(IPart what, string targetType) => new CastPart(what, targetType);
+
+        [Pure]
+        public static AgePart Age(IPart what) => new AgePart(what);
+
+        [Pure]
+        public static ExtractPart Extract(Extractable what, IPart from) => new ExtractPart(what, from);
+
+        [Pure]
         public static IPart Concat(IPart part, params IPart[] parts)
         {
             if (parts.Length == 0)
                 return part;
 
-            if(parts.Length == 1)
+            if (parts.Length == 1)
                 return new StringConcatenation(part, parts[0]);
 
             var result = new StringConcatenation(part, parts[0]);
 
-            for (int i = 1; i < parts.Length; i++)
+            for (var i = 1; i < parts.Length; i++)
             {
                 result = new StringConcatenation(result, parts[i]);
             }

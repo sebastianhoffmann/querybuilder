@@ -1,5 +1,4 @@
-﻿using System;
-using Deviax.QueryBuilder.Parts;
+﻿using Deviax.QueryBuilder.Parts;
 
 namespace Deviax.QueryBuilder.Visitors
 {
@@ -125,6 +124,13 @@ namespace Deviax.QueryBuilder.Visitors
             Result.Append(") ");
         }
 
+        public void Visit(AbsPart absPart)
+        {
+            Result.Append("ABS(");
+            absPart.Over.Accept(this);
+            Result.Append(") ");
+        }
+
         public void Visit(MinPart min)
         {
             Result.Append("MIN(");
@@ -244,6 +250,7 @@ namespace Deviax.QueryBuilder.Visitors
         public abstract void Visit(RightJoinPart rightJoinPart);
         public abstract void Visit(LeftJoinPart leftJoinPart);
         public abstract void Visit(SumPart sumPart);
+        
         public abstract void Visit(CountPart countPart);
         public virtual void Visit(CoalescePart coalesce)
         {

@@ -114,6 +114,14 @@ namespace Deviax.QueryBuilder.Visitors
             Result.Append(")");
         }
 
+        public void Visit(ContainsPart containsPart)
+        {
+            containsPart.Left.Accept(this);
+            Result.Append(" = ANY (");
+            containsPart.Right.Accept(this);
+            Result.Append(")");
+        }
+
         public void Visit<T>(IArrayParameter<T> arrayParam)
         {
             if (State == CoarseState.ExtraParameters)
@@ -158,6 +166,50 @@ namespace Deviax.QueryBuilder.Visitors
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        public void Visit(AgePart agePart)
+        {
+            Result.Append("AGE(");
+            agePart.Of.Accept(this);
+            Result.Append(") ");
+        }
+
+        public void Visit(ExtractPart extractPart)
+        {
+            string arg ;
+            switch (extractPart.What)
+            {
+                case Extractable.Day:
+                    arg = "day";
+                    break;
+                case Extractable.Month:
+                    arg = "month";
+                    break;
+                case Extractable.Year:
+                    arg = "year";
+                    break;
+
+                default:
+                    throw new ArgumentException();
+            }
+
+            Result.Append("EXTRACT(").Append(arg).Append(" FROM ");
+            extractPart.From.Accept(this);
+            Result.Append(") ");
+        }
+
+        public void Visit(CastPart castPart)
+        {
+            castPart.What.Accept(this);
+            Result.Append("::").Append(castPart.TargetType).Append(" ");
+        }
+
+        public abstract void Visit(RowNumberPart rowNumberPart);
+        public abstract void Visit(PartitionPart partitionPart);
+        public void Accept(MatchesRegexPart matchesRegexPart)
+        {
+            HandleOperation(matchesRegexPart.Left, matchesRegexPart.Right, " ~ ");
         }
     }
 }

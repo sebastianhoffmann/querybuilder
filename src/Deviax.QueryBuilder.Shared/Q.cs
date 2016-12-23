@@ -39,6 +39,9 @@ namespace Deviax.QueryBuilder
 
         [Pure]
         public static CasePart Case => new CasePart();
+        
+        [Pure]
+        public static AbsPart Abs(IPart over) => new AbsPart(over);
 
         [Pure]
         public static Literal<T> L<T>(T t) => new Literal<T>(t);
