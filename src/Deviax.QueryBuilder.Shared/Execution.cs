@@ -281,6 +281,25 @@ namespace Deviax.QueryBuilder
             }
         }
 
+        public async Task InsertBatched<T>(T[] items, int batchSize, DbConnection con, DbTransaction tx = null)
+        {
+            
+            if (items.Length <= batchSize)
+            {
+                await Insert(items, con, tx);
+            }
+            else
+            {
+                foreach (var batch in items.Select((item, inx) => new {item, inx})
+                    .GroupBy(x => x.inx / batchSize)
+                    .Select(g => g.Select(x => x.item)))
+                {
+                    await Insert(batch.ToArray(), con, tx);
+                }
+
+            }
+        }
+
         public async Task Insert<T>(T[] items, DbConnection con, DbTransaction tx = null)
         {
             var table = TypeToTableEntry<T>.DefaultTable;

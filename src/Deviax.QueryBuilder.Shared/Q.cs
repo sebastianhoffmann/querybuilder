@@ -21,7 +21,7 @@ namespace Deviax.QueryBuilder
             if (items == null || items.Length == 0)
                 return;
 
-            await QueryExecutor.DefaultExecutor.Insert(items, con, tx);
+            await QueryExecutor.DefaultExecutor.InsertBatched(items, 1000, con, tx);
         }
 
         public static async Task Insert<T>(DbConnection con, T[] items)
@@ -29,7 +29,7 @@ namespace Deviax.QueryBuilder
             if (items == null || items.Length == 0)
                 return;
 
-            await QueryExecutor.DefaultExecutor.Insert(items, con, null);
+            await QueryExecutor.DefaultExecutor.InsertBatched(items, 1000, con, null);
         }
 
         [Pure]
