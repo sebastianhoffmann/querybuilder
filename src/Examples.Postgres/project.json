@@ -5,8 +5,8 @@
   },
 
   "dependencies": {
-    "Deviax.QueryBuilder.Postgres": "0.1.0-*",
-    "Npgsql": "3.1.8", 
+    "Deviax.QueryBuilder.Postgres": "0.2.0-*",
+    "Npgsql": "3.1.9",
     "Microsoft.NETCore.App": {
       "type": "platform",
       "version": "1.0.0"

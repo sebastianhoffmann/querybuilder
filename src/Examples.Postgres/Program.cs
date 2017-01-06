@@ -34,7 +34,7 @@ namespace Examples.Postgres
             using (var con = await OpenConnection())
             {
                 var customer = await Q.From(new Customer.CustomerTable("c"))
-                    .Where(ct => ct.Id.Eq(1))
+                    .Where(ct => ct.Id.EqV(1))
                     .Limit(1)
                     .FirstOrDefault<Customer>(con);
                 
@@ -60,14 +60,14 @@ namespace Examples.Postgres
                     q = q.Where(ct => ct.Name.Like("asdf%"));
                 }
 
-                q = q.Where(ct => ct.Id.Gt(5));
+                q = q.Where(ct => ct.Id.GtV(5));
 
                 await q.ToList<Customer>(con);
 
             }
         }
 
-        public static async Task<DbConnection> OpenConnection()
+        public static Task<DbConnection> OpenConnection()
         {
             return null;
         }

@@ -326,7 +326,7 @@
           "System.Xml.XDocument": "4.0.11"
         }
       },
-      "Npgsql/3.1.8": {
+      "Npgsql/3.1.9": {
         "type": "package",
         "dependencies": {
           "Microsoft.Win32.Primitives": "4.0.1",
@@ -2244,11 +2244,12 @@
           "lib/netstandard1.3/_._": {}
         }
       },
-      "Deviax.QueryBuilder.Postgres/0.1.0": {
+      "Deviax.QueryBuilder.Postgres/0.2.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v1.6",
         "dependencies": {
           "NETStandard.Library": "1.6.0",
+          "Npgsql": "3.1.9",
           "System.Data.Common": "4.1.0",
           "System.Diagnostics.Contracts": "4.0.1",
           "System.Linq.Expressions": "4.1.0",
@@ -2635,12 +2636,12 @@
         "dotnet_library_license.txt"
       ]
     },
-    "Npgsql/3.1.8": {
-      "sha512": "KkIIz4b4wQptzQsROXHv3dlnSfejuoSQ4I0a5BeRMLWCrxQ46pHPZIWBT/pJvb6i7wR2IYhw460d7Zq7IcYwWg==",
+    "Npgsql/3.1.9": {
+      "sha512": "maoOs4rudcIG1SlPHsLRTgwUQA8+06k037z2f9KSKe8KrVHu3tBUUePgt3U3saGFrACf80/j9CzsleCisnPo5A==",
       "type": "package",
-      "path": "Npgsql/3.1.8",
+      "path": "Npgsql/3.1.9",
       "files": [
-        "Npgsql.3.1.8.nupkg.sha512",
+        "Npgsql.3.1.9.nupkg.sha512",
         "Npgsql.nuspec",
         "lib/net45/Npgsql.dll",
         "lib/net45/Npgsql.xml",
@@ -7257,7 +7258,7 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "Deviax.QueryBuilder.Postgres/0.1.0": {
+    "Deviax.QueryBuilder.Postgres/0.2.0": {
       "type": "project",
       "path": "../Deviax.QueryBuilder.Postgres/project.json",
       "msbuildProject": "../Deviax.QueryBuilder.Postgres/Deviax.QueryBuilder.Postgres.xproj"
@@ -7265,9 +7266,9 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "Deviax.QueryBuilder.Postgres >= 0.1.0-*",
+      "Deviax.QueryBuilder.Postgres >= 0.2.0-*",
       "Microsoft.NETCore.App >= 1.0.0",
-      "Npgsql >= 3.1.8"
+      "Npgsql >= 3.1.9"
     ],
     ".NETCoreApp,Version=v1.0": []
   },
