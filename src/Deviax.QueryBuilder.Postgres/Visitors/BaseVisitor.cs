@@ -50,7 +50,7 @@ namespace Deviax.QueryBuilder.Visitors
         {
             if (ExpectsFqn)
             {
-                AppendFullyQuallifiedTableName(table);
+                AppendFullyQualifiedTableName(table);
                 ExpectsFqn = false;
 
                 if ((State == CoarseState.FromAndJoins || State == CoarseState.Target) && !string.IsNullOrWhiteSpace(table.TableAlias))
@@ -60,7 +60,7 @@ namespace Deviax.QueryBuilder.Visitors
             }
             else if (string.IsNullOrWhiteSpace(table.TableAlias))
             {
-                AppendFullyQuallifiedTableName(table);
+                AppendFullyQualifiedTableName(table);
             }
             else
             {
@@ -201,7 +201,7 @@ namespace Deviax.QueryBuilder.Visitors
             HandleOperation(matchesRegexPart.Left, matchesRegexPart.Right, " ~ ");
         }
 
-        private void AppendFullyQuallifiedTableName(Table table)
+        private void AppendFullyQualifiedTableName(Table table)
         {
             if (!string.IsNullOrWhiteSpace(table.TableSchema))
             {
