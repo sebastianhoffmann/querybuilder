@@ -16,7 +16,8 @@
     "Npgsql": "3.1.9"
   },
   "buildOptions": {
-    "warningsAsErrors": true,    
+    "warningsAsErrors": true,  
+    "allowUnsafe"  : true,
     "compile": {
       "include": [
         "../Deviax.QueryBuilder.Shared/**.cs" 

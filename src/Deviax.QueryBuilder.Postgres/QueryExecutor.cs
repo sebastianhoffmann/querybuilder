@@ -16,16 +16,53 @@ namespace Deviax.QueryBuilder
 
         public class DefaultPostgresNameResolver : INameResolver
         {
-            public string DbToCSharp(string name)
+            public unsafe string DbToCSharp(string name)
             {
-                if (name.StartsWith("n_"))
-                    name = name.Substring(2);
+                var len = name.Length;
+                var chars = stackalloc char[len];
+                
+                var writer = 0;
+                var nextUpper = true;
 
-                return string.Join("", name.Split(new[] { '_' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Substring(0, 1).ToUpper() + s.Substring(1)).ToArray());
+                for (int i = 0; i < len; i++)
+                {
+                    if (name[i] == '_')
+                    {
+                        nextUpper = true;
+                    }
+                    else if (nextUpper)
+                    {
+                        chars[writer++] = char.ToUpper(name[i]);
+                        nextUpper = false;
+                    }
+                    else
+                    {
+                        chars[writer++] = name[i];
+                    }
+                }
+
+                return new string(chars, 0, writer);
             }
 
-            public string CSharpToDb(string csharpName)
-                => string.Join(string.Empty, csharpName.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x.ToString() : x.ToString())).ToLower();
+            public unsafe string CSharpToDb(string csharpName)
+            {
+                var len = csharpName.Length;
+                var chars = stackalloc char[len * 2];
+                var writer = 0;
+                for (int i = 0; i < len; i++)
+                {
+                    if (char.IsUpper(csharpName[i]))
+                    {
+                        chars[writer++] = '_';
+                        chars[writer++] = char.ToLower(csharpName[i]);
+                    }
+                    else
+                    {
+                        chars[writer++] = csharpName[i];
+                    }
+                }
+                return new string(chars, 0, writer);
+            }
         }
     }
 }
