@@ -3,7 +3,7 @@ using Deviax.QueryBuilder.Parts;
 
 namespace Deviax.QueryBuilder.Visitors
 {
-    public partial class InsertVisitor 
+    public partial class InsertVisitor
     {
         public override void Visit(SetFieldPart sfp)
         {
@@ -21,7 +21,6 @@ namespace Deviax.QueryBuilder.Visitors
             {
                 throw new InvalidOperationException();
             }
-            
         }
 
         public override void Visit(RowNumberPart rowNumberPart)

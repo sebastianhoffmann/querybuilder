@@ -2,7 +2,8 @@
 
 namespace Deviax.QueryBuilder.Parts
 {
-    public class PartitionPart : Part, IPartitionOverPart {
+    public class PartitionPart : Part, IPartitionOverPart
+    {
         public readonly IPart Thing;
         public IOrderPart OrderPart;
 

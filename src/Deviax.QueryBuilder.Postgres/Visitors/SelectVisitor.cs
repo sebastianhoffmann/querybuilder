@@ -2,7 +2,7 @@
 
 namespace Deviax.QueryBuilder.Visitors
 {
-    public partial class SelectVisitor 
+    public partial class SelectVisitor
     {
         public override void Visit(LimitOffsetPart limitOffset)
         {

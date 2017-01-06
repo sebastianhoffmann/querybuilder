@@ -4,8 +4,8 @@ namespace Deviax.QueryBuilder.Parts
 {
     public class ExtractPart : Part
     {
-        public readonly Extractable What;
         public readonly IPart From;
+        public readonly Extractable What;
 
         public ExtractPart(Extractable what, IPart from)
         {

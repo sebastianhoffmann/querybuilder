@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 using Deviax.QueryBuilder.Parts;
+using Deviax.QueryBuilder.Parts.FullTextSearch;
 using NpgsqlTypes;
 
 namespace Deviax.QueryBuilder

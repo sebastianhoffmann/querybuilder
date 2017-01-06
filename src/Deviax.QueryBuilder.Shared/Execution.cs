@@ -296,7 +296,6 @@ namespace Deviax.QueryBuilder
                 {
                     await Insert(batch.ToArray(), con, tx);
                 }
-
             }
         }
 
@@ -478,7 +477,6 @@ namespace Deviax.QueryBuilder
                             throw new ArgumentException();
                         }
                     }
-
                 }
             }
 

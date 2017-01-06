@@ -43,9 +43,7 @@ namespace Deviax.QueryBuilder
 
                             if (prop == null)
                                 throw new ArgumentException($"Type `{typeof(T).FullName}` does not have a member of name `{fi.Name}`");
-
-
-
+                            
                             return Expression.Call(Expression.Field(Expression.Convert(tableArg, typeof(TTable)), fi),
                                 baseEqMethod.MakeGenericMethod(prop.PropertyType), Expression.Property(Expression.Convert(objArg, typeof(T)), prop), Expression.Constant(null, typeof(string)));
                         }
@@ -53,8 +51,6 @@ namespace Deviax.QueryBuilder
                     })
                 ), objArg, tableArg);
                 TypeToTableEntry<T>.GetDefaultConditions = l.Compile();
-
-              
             }
 
             var vcVar = Expression.Variable(typeof(ValuesCollection));
@@ -84,12 +80,8 @@ namespace Deviax.QueryBuilder
 
                     memberExpression = Expression.Property(Expression.Convert(objArg, typeof(T)), prop);
                     targetType = prop.PropertyType;
-                    //return Expression.Call(Expression.Field(Expression.Convert(tableArg, typeof(TTable)), fi),
-                    //    baseEqMethod.MakeGenericMethod(prop.PropertyType), , Expression.Constant(null, typeof(string)));
-                    
-                    setMethod = Expression.Call(tableFieldExpr,setVMethod.MakeGenericMethod(prop.PropertyType), Expression.Property(Expression.Convert(objArg, typeof(T)), prop), paraNameExpr);
 
-                    
+                    setMethod = Expression.Call(tableFieldExpr,setVMethod.MakeGenericMethod(prop.PropertyType), Expression.Property(Expression.Convert(objArg, typeof(T)), prop), paraNameExpr);
                 }
                 else
                 {
@@ -132,9 +124,7 @@ namespace Deviax.QueryBuilder
                 })).ToList();
 
             var blockExpressions = new List<Expression> { Expression.Assign(vcVar, Expression.New(typeof(ValuesCollection))) };
-
             
-
             foreach (var thing in memberThings)
             {
                 var setExpr = Expression.Assign(vcVar, Expression.Call(vcVar, addMethod,

@@ -1,11 +1,12 @@
 ﻿using System;
 using Deviax.QueryBuilder.Parts;
+using Deviax.QueryBuilder.Parts.FullTextSearch;
 
 namespace Deviax.QueryBuilder.Visitors
 {
-    
-    public abstract partial class BaseVisitor 
+    public abstract partial class BaseVisitor
     {
+        protected bool LimitWithoutOffsetAtStart => false;
 
         public void Visit(StringConcatenation sc) => HandleOperation(sc.Left, sc.Right, "|| ");
 
@@ -23,7 +24,6 @@ namespace Deviax.QueryBuilder.Visitors
                 Result.Append(".\"").Append(field.Name).Append("\" ");
             }
         }
-        
 
         public void Visit(IAliasPart aliased)
         {
@@ -44,18 +44,6 @@ namespace Deviax.QueryBuilder.Visitors
             {
                 Result.Append(" AS ").Append(aliased.Name);
             }
-        }
-
-        protected bool LimitWithoutOffsetAtStart => false;
-
-        private void AppendFullyQuallifiedTableName(Table table)
-        {
-            if (!string.IsNullOrWhiteSpace(table.TableSchema))
-            {
-                Result.Append("\"").Append(table.TableSchema).Append("\".");
-            }
-
-            Result.Append("\"").Append(table.TableName).Append("\"");
         }
 
         public void Visit(Table table)
@@ -177,7 +165,7 @@ namespace Deviax.QueryBuilder.Visitors
 
         public void Visit(ExtractPart extractPart)
         {
-            string arg ;
+            string arg;
             switch (extractPart.What)
             {
                 case Extractable.Day:
@@ -207,9 +195,20 @@ namespace Deviax.QueryBuilder.Visitors
 
         public abstract void Visit(RowNumberPart rowNumberPart);
         public abstract void Visit(PartitionPart partitionPart);
+
         public void Accept(MatchesRegexPart matchesRegexPart)
         {
             HandleOperation(matchesRegexPart.Left, matchesRegexPart.Right, " ~ ");
+        }
+
+        private void AppendFullyQuallifiedTableName(Table table)
+        {
+            if (!string.IsNullOrWhiteSpace(table.TableSchema))
+            {
+                Result.Append("\"").Append(table.TableSchema).Append("\".");
+            }
+
+            Result.Append("\"").Append(table.TableName).Append("\"");
         }
     }
 }

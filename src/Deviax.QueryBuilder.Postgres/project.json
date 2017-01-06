@@ -19,10 +19,7 @@
     "warningsAsErrors": true,    
     "compile": {
       "include": [
-        "../Deviax.QueryBuilder.Shared/*.cs",
-        "../Deviax.QueryBuilder.Shared/Parts/*.cs",
-        "../Deviax.QueryBuilder.Shared/Visitors/*.cs",
-        "../Deviax.QueryBuilder.Shared/ChangeTracking/*.cs" 
+        "../Deviax.QueryBuilder.Shared/**.cs" 
       ]
     }
   },

@@ -4,8 +4,8 @@ namespace Deviax.QueryBuilder.Parts
 {
     public class CastPart : Part
     {
-        public readonly IPart What;
         public readonly string TargetType;
+        public readonly IPart What;
 
         public CastPart(IPart what, string targetType)
         {

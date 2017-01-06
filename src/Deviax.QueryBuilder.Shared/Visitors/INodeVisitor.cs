@@ -1,4 +1,5 @@
 ﻿using Deviax.QueryBuilder.Parts;
+using Deviax.QueryBuilder.Parts.Aggregation;
 
 namespace Deviax.QueryBuilder.Visitors
 {

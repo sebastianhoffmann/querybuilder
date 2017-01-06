@@ -78,7 +78,6 @@ namespace Deviax.QueryBuilder
         [Pure]
         public static MulPart operator *(Field left, decimal right) => new MulPart(left, new Parameter<decimal>(right, left.Name));
         
-
         [Pure]
         public static DivPart operator /(Field left, int right) => new DivPart(left, new Parameter<int>(right, left.Name));
         [Pure]
@@ -89,8 +88,7 @@ namespace Deviax.QueryBuilder
         public static DivPart operator /(Field left, double right) => new DivPart(left, new Parameter<double>(right, left.Name));
         [Pure]
         public static DivPart operator /(Field left, decimal right) => new DivPart(left, new Parameter<decimal>(right, left.Name));
-
-
+        
         [Pure]
         public static ModPart operator %(Field left, int right) => new ModPart(left, new Parameter<int>(right, left.Name));
         [Pure]

@@ -1,12 +1,12 @@
 ﻿using Deviax.QueryBuilder.Visitors;
 
-namespace Deviax.QueryBuilder.Parts
+namespace Deviax.QueryBuilder.Parts.Aggregation
 {
-    public class ArrayAggPart : Part
+    public class MaxPart : Part
     {
-        public readonly IPart Over;
+        public IPart Over;
 
-        public ArrayAggPart(IPart over)
+        public MaxPart(IPart over)
         {
             Over = over;
         }

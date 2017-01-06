@@ -2,7 +2,8 @@
 
 namespace Deviax.QueryBuilder.Parts
 {
-    public class RowNumberPart : Part {
+    public class RowNumberPart : Part
+    {
         public readonly IPartitionOverPart Over;
 
         public RowNumberPart(IPartitionOverPart over)

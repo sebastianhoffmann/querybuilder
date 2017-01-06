@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 using Deviax.QueryBuilder.Parts;
+using Deviax.QueryBuilder.Parts.Aggregation;
 using System.Data.Common;
 using System.Threading.Tasks;
 

@@ -11,11 +11,16 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)DeleteQuery.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InsertQuery.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\Aggregation\CoalescePart.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\Aggregation\CountPart.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\Aggregation\DistinctPart.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\Aggregation\MaxPart.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\Aggregation\MinPart.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parts\Aggregation\SumPart.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PrimaryKeyAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ChangeTracking\ChangeTracker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Execution.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FieldPart.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Parts\Aggregate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parts\BasicParts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parts\Boolean.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parts\CasePart.cs" />

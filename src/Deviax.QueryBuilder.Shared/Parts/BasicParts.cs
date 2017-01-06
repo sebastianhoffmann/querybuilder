@@ -23,15 +23,11 @@ namespace Deviax.QueryBuilder.Parts
         [Pure]public InPart In(IPart part) => new InPart(this, part);
         [Pure]public InPart In<T>(IEnumerable<T> items, string parameterName) => new InPart(this, new ArrayParameter<T>(items, parameterName));
 
-        [Pure]
-        public AscOrdering Asc(Nulls n = Nulls.Unspecified) => new AscOrdering(this, n);
-        [Pure]
-        public DescOrdering Desc(Nulls n = Nulls.Unspecified) => new DescOrdering(this, n);
+        [Pure]public AscOrdering Asc(Nulls n = Nulls.Unspecified) => new AscOrdering(this, n);
+        [Pure]public DescOrdering Desc(Nulls n = Nulls.Unspecified) => new DescOrdering(this, n);
 
-        [Pure]
-        public AndPart And(IPart other) => new AndPart(this, other);
-        [Pure]
-        public OrPart Or(IPart other) => new OrPart(this, other);
+        [Pure]public AndPart And(IPart other) => new AndPart(this, other);
+        [Pure]public OrPart Or(IPart other) => new OrPart(this, other);
 
         [Pure]public AliasPart As(string alias) => new AliasPart(alias, this);
 
