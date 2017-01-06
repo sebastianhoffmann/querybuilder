@@ -29,12 +29,11 @@ namespace Deviax.QueryBuilder.Visitors
             _sb.Append(str);
             return this;
         }
-
-       
-
+        
         public void Finished()
         {
             Command.CommandText = _sb.ToString();
+            AddParameters();
             _sb.Clear();
             _sb = null;
         }
