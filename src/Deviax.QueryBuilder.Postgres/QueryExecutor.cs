@@ -49,11 +49,14 @@ namespace Deviax.QueryBuilder
                 var len = csharpName.Length;
                 var chars = stackalloc char[len * 2];
                 var writer = 0;
+
                 for (int i = 0; i < len; i++)
                 {
                     if (char.IsUpper(csharpName[i]))
                     {
-                        chars[writer++] = '_';
+                        if(writer > 0)
+                            chars[writer++] = '_';
+
                         chars[writer++] = char.ToLower(csharpName[i]);
                     }
                     else
