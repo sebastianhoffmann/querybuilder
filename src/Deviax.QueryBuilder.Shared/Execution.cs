@@ -234,7 +234,7 @@ namespace Deviax.QueryBuilder
                     AssignmentCache<T>.Action = GenerateAssignment<T>(DefaultNameResolver, reader);
                 }
 
-                while (await reader.ReadAsync().ConfigureAwait(false))
+                while (reader.Read())
                 {
                     var item = new T();
                     AssignmentCache<T>.Action(reader, item);
@@ -254,7 +254,7 @@ namespace Deviax.QueryBuilder
                     AssignmentCache<T>.Action = GenerateAssignment<T>(DefaultNameResolver, reader);
                 }
 
-                while (await reader.ReadAsync().ConfigureAwait(false))
+                while (reader.Read())
                 {
                     var item = new T();
                     AssignmentCache<T>.Action(reader, item);
@@ -272,7 +272,7 @@ namespace Deviax.QueryBuilder
                     AssignmentCache<T>.Action = GenerateAssignment<T>(DefaultNameResolver, reader);
                 }
 
-                while (await reader.ReadAsync().ConfigureAwait(false))
+                while (reader.Read())
                 {
                     var item = new T();
                     AssignmentCache<T>.Action(reader, item);
@@ -332,13 +332,13 @@ namespace Deviax.QueryBuilder
                     AssignmentCache<T>.Action = GenerateAssignment<T>(DefaultNameResolver, reader);
                 }
 
-                if (!await reader.ReadAsync().ConfigureAwait(false))
+                if (!reader.Read())
                     return default(T);
 
                 var item = new T();
                 AssignmentCache<T>.Action(reader, item);
 
-                while (await reader.ReadAsync().ConfigureAwait(false)) { }
+                while (reader.Read()) { }
                 return item;
             }
         }
@@ -448,7 +448,7 @@ namespace Deviax.QueryBuilder
 
             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
             {
-                while (await reader.ReadAsync())
+                while (reader.Read())
                 {
                     var val = reader[0];
 
