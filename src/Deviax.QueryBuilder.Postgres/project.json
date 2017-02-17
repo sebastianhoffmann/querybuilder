@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "0.2.2-*",
   "description": "SQL DSL / Micro ORM - PostgreSQL Driver",
   "authors": [
@@ -9,7 +9,7 @@
   ],
   "dependencies": {
     "NETStandard.Library": "1.6.1",
-    "Npgsql": "3.2.0",
+    "Npgsql": "3.2.1",
     "System.Data.Common": "4.3.0",
     "System.Diagnostics.Contracts": "4.3.0",
     "System.Linq.Expressions": "4.3.0",
