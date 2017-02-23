@@ -42,20 +42,6 @@ namespace Deviax.QueryBuilder.Visitors
                 leftJoinPart.Conditions[i].Accept(this);
             }
         }
-
-        public override void Visit(SumPart sumPart)
-        {
-            Result.Append("SUM(");
-            sumPart.Over.Accept(this);
-            Result.Append(")");
-        }
-
-        public override void Visit(CountPart countPart)
-        {
-            Result.Append("COUNT(");
-            countPart.Over.Accept(this);
-            Result.Append(")");
-        }
         
         public override void Visit(DistinctPart distinctPart)
         {

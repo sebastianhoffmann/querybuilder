@@ -2,9 +2,9 @@
 
 namespace Deviax.QueryBuilder.Parts.Aggregation
 {
-    public class MaxPart : Part
+    public partial class MaxPart : Part
     {
-        public IPart Over;
+        internal readonly IPart Over;
 
         public MaxPart(IPart over)
         {

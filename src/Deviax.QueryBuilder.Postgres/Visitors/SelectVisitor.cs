@@ -1,4 +1,5 @@
 ﻿using Deviax.QueryBuilder.Parts;
+using Deviax.QueryBuilder.Parts.Aggregation;
 
 namespace Deviax.QueryBuilder.Visitors
 {
@@ -22,6 +23,34 @@ namespace Deviax.QueryBuilder.Visitors
             Result.Append("row_number() OVER ( ");
             rowNumberPart.Over.Accept(this);
             Result.Append(")");
+        }
+
+        public override void Visit(SumPart sumPart)
+        {
+            Result.Append("SUM(");
+            sumPart.Over.Accept(this);
+            Result.Append(")");
+
+            if (sumPart.FilterPart != null)
+            {
+                Result.Append("FILTER (WHERE ");
+                sumPart.FilterPart.Accept(this);
+                Result.Append(")");
+            }
+        }
+
+        public override void Visit(CountPart countPart)
+        {
+            Result.Append("COUNT(");
+            countPart.Over.Accept(this);
+            Result.Append(")");
+
+            if (countPart.FilterPart != null)
+            {
+                Result.Append("FILTER (WHERE ");
+                countPart.FilterPart.Accept(this);
+                Result.Append(")");
+            }
         }
 
         public override void Visit(PartitionPart partitionPart)

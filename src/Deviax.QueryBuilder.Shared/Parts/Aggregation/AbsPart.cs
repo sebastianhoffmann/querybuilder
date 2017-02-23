@@ -1,12 +1,11 @@
-using Deviax.QueryBuilder.Visitors;
+﻿using Deviax.QueryBuilder.Visitors;
 
 namespace Deviax.QueryBuilder.Parts.Aggregation
 {
-    public class CoalescePart : Part
+    public partial class AbsPart : Part
     {
-        public IPart[] Over;
-
-        public CoalescePart(IPart[] over)
+        internal readonly IPart Over;
+        public AbsPart(IPart over)
         {
             Over = over;
         }

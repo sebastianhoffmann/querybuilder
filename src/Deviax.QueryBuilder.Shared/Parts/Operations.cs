@@ -31,15 +31,4 @@ namespace Deviax.QueryBuilder.Parts
         public override void Accept(INodeVisitor visitor) => visitor.Visit(this);
         public ModPart(IPart left, IPart right) : base(left, right) { }
     }
-
-    public class AbsPart : Part
-    {
-        public IPart Over;
-        public AbsPart(IPart over)
-        {
-            Over = over;
-        }
-
-        public override void Accept(INodeVisitor visitor) => visitor.Visit(this);
-    }
 }

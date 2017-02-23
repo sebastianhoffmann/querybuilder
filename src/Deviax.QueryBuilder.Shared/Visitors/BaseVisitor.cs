@@ -43,7 +43,6 @@ namespace Deviax.QueryBuilder.Visitors
             Result.Append(")");
         }
 
-        
         public virtual void Visit(CasePart casePart)
         {
             Result.Append("(CASE ");
@@ -92,8 +91,6 @@ namespace Deviax.QueryBuilder.Visitors
             notNull.Part.Accept(this);
             Result.Append("IS NOT NULL ");
         }
-        
-        
 
         public void Visit(IsNullPart isNull)
         {
@@ -117,28 +114,7 @@ namespace Deviax.QueryBuilder.Visitors
             Result.Append("NOT ");
             part.Part.Accept(this);
         }
-
-        public void Visit(MaxPart max)
-        {
-            Result.Append("MAX(");
-            max.Over.Accept(this);
-            Result.Append(") ");
-        }
-
-        public void Visit(AbsPart absPart)
-        {
-            Result.Append("ABS(");
-            absPart.Over.Accept(this);
-            Result.Append(") ");
-        }
-
-        public void Visit(MinPart min)
-        {
-            Result.Append("MIN(");
-            min.Over.Accept(this);
-            Result.Append(") ");
-        }
-
+        
         public virtual void Visit<T>(Literal<T> literal)
         {
             var t = typeof (T);

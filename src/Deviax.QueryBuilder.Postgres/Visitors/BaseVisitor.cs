@@ -1,5 +1,6 @@
 ﻿using System;
 using Deviax.QueryBuilder.Parts;
+using Deviax.QueryBuilder.Parts.Aggregation;
 using Deviax.QueryBuilder.Parts.FullTextSearch;
 
 namespace Deviax.QueryBuilder.Visitors
@@ -73,6 +74,55 @@ namespace Deviax.QueryBuilder.Visitors
             Result.Append("array_agg(");
             arrayAggPart.Over.Accept(this);
             Result.Append(")");
+
+            if (arrayAggPart.FilterPart != null)
+            {
+                Result.Append("FILTER (WHERE ");
+                arrayAggPart.FilterPart.Accept(this);
+                Result.Append(")");
+            }
+        }
+
+        public void Visit(MaxPart max)
+        {
+            Result.Append("MAX(");
+            max.Over.Accept(this);
+            Result.Append(") ");
+
+            if (max.FilterPart != null)
+            {
+                Result.Append("FILTER (WHERE ");
+                max.FilterPart.Accept(this);
+                Result.Append(")");
+            }
+        }
+
+        public void Visit(AbsPart absPart)
+        {
+            Result.Append("ABS(");
+            absPart.Over.Accept(this);
+            Result.Append(") ");
+
+            if (absPart.FilterPart != null)
+            {
+                Result.Append("FILTER (WHERE ");
+                absPart.FilterPart.Accept(this);
+                Result.Append(")");
+            }
+        }
+
+        public void Visit(MinPart min)
+        {
+            Result.Append("MIN(");
+            min.Over.Accept(this);
+            Result.Append(") ");
+
+            if (min.FilterPart != null)
+            {
+                Result.Append("FILTER (WHERE ");
+                min.FilterPart.Accept(this);
+                Result.Append(")");
+            }
         }
 
         public void Visit(ToTsVectorPart toTsVector)

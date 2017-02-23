@@ -2,9 +2,9 @@ using Deviax.QueryBuilder.Visitors;
 
 namespace Deviax.QueryBuilder.Parts.Aggregation
 {
-    public class MinPart : Part
+    public partial class MinPart : Part
     {
-        public IPart Over;
+        internal readonly IPart Over;
 
         public MinPart(IPart over)
         {

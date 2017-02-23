@@ -1,10 +1,10 @@
 using Deviax.QueryBuilder.Visitors;
 
-namespace Deviax.QueryBuilder.Parts.Aggregation
+namespace Deviax.QueryBuilder.Parts
 {
-    public class DistinctPart : Part
+    public partial class DistinctPart : Part
     {
-        public IPart[] Over;
+        internal readonly IPart[] Over;
 
         public DistinctPart(IPart[] over)
         {

@@ -1,4 +1,5 @@
 ﻿using Deviax.QueryBuilder.Parts;
+using Deviax.QueryBuilder.Parts.Aggregation;
 using Deviax.QueryBuilder.Parts.FullTextSearch;
 
 namespace Deviax.QueryBuilder.Visitors
