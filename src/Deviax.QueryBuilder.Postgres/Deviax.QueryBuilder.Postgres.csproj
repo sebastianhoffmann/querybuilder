@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <Description>SQL DSL / Micro ORM - PostgreSQL Driver</Description>
     <Authors>Sebastian Hoffmann</Authors>
@@ -20,11 +19,9 @@
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="..\Deviax.QueryBuilder.Shared\**.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Npgsql" Version="3.2.0" />
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
@@ -36,7 +33,5 @@
     <PackageReference Include="System.Reflection.Metadata" Version="1.4.2" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
   </ItemGroup>
-
   <Import Project="..\Deviax.QueryBuilder.Shared\Deviax.QueryBuilder.Shared.projitems" Label="Shared" />
-
 </Project>
