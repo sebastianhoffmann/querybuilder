@@ -4,15 +4,10 @@ using System;
 
 namespace Deviax.QueryBuilder.Visitors
 {
-    public partial class UpdateVisitor : BaseVisitor
+    public partial class UpdateVisitor : BaseVisitor, IQueryingVisitor<BaseUpdateQuery>
     {
-        public UpdateVisitor(IVisitorResult result) : base(result)
-        {
-        }
-
         public void Process(BaseUpdateQuery q)
         {
-            
             Result.Append("UPDATE ");
             TransitionToTargetPart();
             ExpectsFqn = true;

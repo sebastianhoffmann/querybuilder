@@ -99,8 +99,6 @@ namespace Deviax.QueryBuilder.Visitors
             _parameters = new List<IParameter>();
         }
 
-        //public Dictionary<string, object> ParameterDic = new Dictionary<String,Object>();
-
         public void AddParameter<T>(IParameter<T> para)
         {
             _parameters.Add(para);
@@ -111,8 +109,6 @@ namespace Deviax.QueryBuilder.Visitors
             _sb.Append(str);
             return this;
         }
-
-
 
         public void Finished()
         {

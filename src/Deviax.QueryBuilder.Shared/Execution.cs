@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Reflection;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Deviax.QueryBuilder.Visitors;
 
@@ -27,114 +28,81 @@ namespace Deviax.QueryBuilder
 
         protected abstract INameResolver DefaultNameResolver { get; }
 
-        public DbCommand ToCommand(BaseSelectQuery query, DbConnection con, DbTransaction tx = null)
+        private static readonly TypeConversionSpecialization DefaultTypeConversionSpeciliation = new DefaultTypeConversionSpecialization();
+        private static IEnumerable<TypeConversionSpecialization> TypeConversionSpecializationsWithDefault
+        {
+            get
+            {
+                foreach (var tcs in TypeConversionSpecializations)
+                    yield return tcs;
+
+                yield return DefaultTypeConversionSpeciliation;
+            }
+        }
+
+        private static readonly List<TypeConversionSpecialization> TypeConversionSpecializations = new List<TypeConversionSpecialization> {
+            new ListTypeConversionSpecialization()
+        };
+        
+        internal static void RegisterTypeConversionSpecialization(TypeConversionSpecialization tcs)
+        {
+            TypeConversionSpecializations.Add(tcs);
+        }
+
+        private void Process<TVisitor, TQuery>(TVisitor v, TQuery q, IVisitorResult r) where TVisitor : BaseVisitor, IQueryingVisitor<TQuery>
+        {
+            r.Start();
+            v.Result = r;
+            v.Process(q);
+            r.Finished();
+        }
+        
+        private DbCommand ToCommand<TVisitor, TQuery>(TQuery q, DbConnection con, DbTransaction tx = null) where TVisitor : BaseVisitor, IQueryingVisitor<TQuery>, new()
         {
             var r = new ActualCommandResult(con);
-            r.Start();
-
-            new SelectVisitor(r).Process(query);
-
-            r.Finished();
+            Process(new TVisitor(), q, r);
             r.Command.Transaction = tx;
-
             return r.Command;
         }
+        
+        private string ToQueryText<TVisitor, TQuery>(TQuery q) where TVisitor : BaseVisitor, IQueryingVisitor<TQuery>, new()
+        {
+            var r = new ToSqlResult();
+            Process(new TVisitor(), q, r);
+            return r.StringBuilder + r.ParameterDescription;
+        }
+        
+        public DbCommand ToCommand(BaseSelectQuery query, DbConnection con, DbTransaction tx = null) 
+            => ToCommand<SelectVisitor, BaseSelectQuery>(query, con, tx);
 
         public PreparedCommand ToPreparedCommand(BaseSelectQuery query)
         {
             var r = new PreparingCommandResult();
-            r.Start();
-
-            new SelectVisitor(r).Process(query);
-
-            r.Finished();
-
+            Process(new SelectVisitor(), query, r);
             return r.Result;
         }
 
         public DbCommand ToCommand(BaseUpdateQuery query, DbConnection con, DbTransaction tx = null)
-        {
-            var r = new ActualCommandResult(con);
-            r.Start();
-
-            new UpdateVisitor(r).Process(query);
-
-            r.Finished();
-            r.Command.Transaction = tx;
-
-            return r.Command;
-        }
-
+            => ToCommand<UpdateVisitor, BaseUpdateQuery>(query, con, tx);
+        
         public DbCommand ToCommand(BaseInsertQuery query, DbConnection con, DbTransaction tx = null)
-        {
-            var r = new ActualCommandResult(con);
-            r.Start();
-
-            new InsertVisitor(r).Process(query);
-
-            r.Finished();
-            r.Command.Transaction = tx;
-
-            return r.Command;
-        }
+            => ToCommand<InsertVisitor, BaseInsertQuery>(query, con, tx);
 
         public DbCommand ToCommand(BaseDeleteQuery query, DbConnection con, DbTransaction tx = null)
-        {
-            var r = new ActualCommandResult(con);
-            r.Start();
-
-            new DeleteVisitor(r).Process(query);
-
-            r.Finished();
-            r.Command.Transaction = tx;
-
-            return r.Command;
-        }
+            => ToCommand<DeleteVisitor, BaseDeleteQuery>(query, con, tx);
 
         public string ToQueryText(BaseSelectQuery query)
-        {
-            var r = new ToSqlResult();
-            r.Start();
-
-            new SelectVisitor(r).Process(query);
-
-            r.Finished();
-            return r.StringBuilder.ToString() + r.ParameterDescription;
-        }
+            => ToQueryText<SelectVisitor, BaseSelectQuery>(query);
 
         public string ToQueryText(BaseDeleteQuery query)
-        {
-            var r = new ToSqlResult();
-            r.Start();
-
-            new DeleteVisitor(r).Process(query);
-
-            r.Finished();
-            return r.StringBuilder.ToString() + r.ParameterDescription;
-        }
+            => ToQueryText<DeleteVisitor, BaseDeleteQuery>(query);
 
         public string ToQueryText(BaseInsertQuery query)
-        {
-            var r = new ToSqlResult();
-            r.Start();
-
-            new InsertVisitor(r).Process(query);
-
-            r.Finished();
-            return r.StringBuilder.ToString() + r.ParameterDescription;
-        }
-
+            => ToQueryText<InsertVisitor, BaseInsertQuery>(query);
+        
         public string ToQueryText(BaseUpdateQuery query)
-        {
-            var r = new ToSqlResult();
-            r.Start();
-
-            new UpdateVisitor(r).Process(query);
-
-            r.Finished();
-            return r.StringBuilder.ToString() + r.ParameterDescription;
-        }
-
+            => ToQueryText<UpdateVisitor, BaseUpdateQuery>(query);
+        
         private static Action<DbDataReader, T> GenerateAssignment<T>(INameResolver nameResolver, DbDataReader reader) where T : new()
         {
             var expressions = new List<Expression>();
@@ -165,18 +133,17 @@ namespace Deviax.QueryBuilder
                 if (field != null)
                 {
                     var fi = field.FieldType.GetTypeInfo();
-                    if (fi.IsGenericType && field.FieldType.GetGenericTypeDefinition() == typeof(List<>))
+                    
+                    foreach (var tcs in TypeConversionSpecializationsWithDefault)
                     {
-                        var genArg = fi.GetGenericArguments().Single();
-                        var iEnumerableConstructor = fi.GetConstructors().Single(
-                            c => c.GetParameters().Any(p => p.ParameterType.GetTypeInfo().IsGenericType));
-                        notNullBranch = Expression.Assign(
-                            Expression.Field(targetParam, field),
-                            Expression.New(iEnumerableConstructor, Expression.Convert(valueVariable, genArg.MakeArrayType())));
-                    }
-                    else
-                    {
-                        notNullBranch = Expression.Assign(Expression.Field(targetParam, field), Expression.Convert(valueVariable, field.FieldType));
+                        if (tcs.Matches(fi, field.FieldType))
+                        {
+                            notNullBranch = Expression.Assign(
+                                Expression.Field(targetParam, field),
+                                tcs.Convert(fi, field.FieldType, valueVariable)
+                            );
+                            break;
+                        }
                     }
                 }
                 else
@@ -190,19 +157,17 @@ namespace Deviax.QueryBuilder
                     }
 
                     var ti = property.PropertyType.GetTypeInfo();
-                    if (ti.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(List<>))
+                    
+                    foreach (var tcs in TypeConversionSpecializationsWithDefault)
                     {
-
-                        var genArg = ti.GetGenericArguments().Single();
-                        var iEnumerableConstructor =
-                            ti.GetConstructors().Single(c => c.GetParameters().Any(p => p.ParameterType.GetTypeInfo().IsGenericType));
-                        notNullBranch = Expression.Assign(
-                            Expression.Property(targetParam, property),
-                            Expression.New(iEnumerableConstructor, Expression.Convert(valueVariable, genArg.MakeArrayType())));
-                    }
-                    else
-                    {
-                        notNullBranch = Expression.Assign(Expression.Property(targetParam, property), Expression.Convert(valueVariable, property.PropertyType));
+                        if (tcs.Matches(ti, property.PropertyType))
+                        {
+                            notNullBranch = Expression.Assign(
+                                Expression.Property(targetParam, property),
+                                tcs.Convert(ti, property.PropertyType, valueVariable)
+                            );
+                            break;
+                        }
                     }
                 }
 
@@ -220,7 +185,6 @@ namespace Deviax.QueryBuilder
 
             var action = Expression.Lambda<Action<DbDataReader, T>>(block, readerParam, targetParam).Compile();
             return action;
-
         }
 
         public async Task<List<T>> ToList<T>(DbCommand cmd) where T : new()
@@ -283,7 +247,6 @@ namespace Deviax.QueryBuilder
 
         public async Task InsertBatched<T>(T[] items, int batchSize, DbConnection con, DbTransaction tx = null)
         {
-            
             if (items.Length <= batchSize)
             {
                 await Insert(items, con, tx);

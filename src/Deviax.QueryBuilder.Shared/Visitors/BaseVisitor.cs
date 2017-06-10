@@ -21,13 +21,9 @@ namespace Deviax.QueryBuilder.Visitors
 
     public abstract partial class BaseVisitor : INodeVisitor
     {
-        protected readonly IVisitorResult Result;
-        protected CoarseState State;
-        public BaseVisitor(IVisitorResult result)
-        {
-            Result = result;
-            State = CoarseState.Select;
-        }
+        public IVisitorResult Result;
+        protected CoarseState State = CoarseState.Select;
+        
         protected bool ExpectsFqn;
         protected bool NoTableName;
 
@@ -143,21 +139,22 @@ namespace Deviax.QueryBuilder.Visitors
         public void Visit(BaseUpdateQuery updateQuery)
         {
             Result.Append("(");
-            new UpdateVisitor(Result).Process(updateQuery);
+            
+            new UpdateVisitor{ Result = Result}.Process(updateQuery);
             Result.Append(")");
         }
 
         public void Visit(BaseSelectQuery query)
         {
             Result.Append("(");
-            new SelectVisitor(Result).Process(query);
+            new SelectVisitor{ Result = Result}.Process(query);
             Result.Append(")");
         }
 
         public void Visit(BaseDeleteQuery query)
         {
             Result.Append("(");
-            new DeleteVisitor(Result).Process(query);
+            new DeleteVisitor{ Result = Result}.Process(query);
             Result.Append(")");
         }
 

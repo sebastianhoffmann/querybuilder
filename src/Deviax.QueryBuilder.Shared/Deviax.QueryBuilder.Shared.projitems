@@ -42,6 +42,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Visitors\BaseVisitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Visitors\DeleteVisitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Visitors\InsertVisitor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Visitors\IQueryingVisitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Visitors\SelectVisitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Visitors\INodeVisitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Visitors\IVisitorState.cs" />

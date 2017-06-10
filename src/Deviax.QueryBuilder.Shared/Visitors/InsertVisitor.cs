@@ -4,12 +4,8 @@ using System;
 
 namespace Deviax.QueryBuilder.Visitors
 {
-    public partial class InsertVisitor : BaseVisitor
+    public partial class InsertVisitor : BaseVisitor, IQueryingVisitor<BaseInsertQuery>
     {
-        public InsertVisitor(IVisitorResult result) : base(result)
-        {
-        }
-
         public void Process(BaseInsertQuery q)
         {
 

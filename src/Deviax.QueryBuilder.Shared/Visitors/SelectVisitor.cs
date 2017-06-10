@@ -4,9 +4,9 @@ using Deviax.QueryBuilder.Parts.Aggregation;
 
 namespace Deviax.QueryBuilder.Visitors
 {
-    public partial class SelectVisitor : BaseVisitor
+    public partial class SelectVisitor : BaseVisitor, IQueryingVisitor<BaseSelectQuery>
     {
-        public SelectVisitor(IVisitorResult result) : base(result)
+        public SelectVisitor()
         {
             State = CoarseState.Select;
         }

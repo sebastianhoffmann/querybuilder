@@ -4,12 +4,8 @@ using System;
 
 namespace Deviax.QueryBuilder.Visitors
 {
-    public partial class DeleteVisitor : BaseVisitor
+    public partial class DeleteVisitor : BaseVisitor, IQueryingVisitor<BaseDeleteQuery>
     {
-        public DeleteVisitor(IVisitorResult result) : base(result)
-        {
-        }
-        
         public void Process(BaseDeleteQuery q)
         {
             Result.Append("DELETE FROM ");
