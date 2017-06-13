@@ -15,7 +15,9 @@ namespace Deviax.QueryBuilder
     {
         [Pure]
         public static InsertQuery<TTable> InsertInto<TTable>(TTable table) where TTable : Table => new InsertQuery<TTable>(table);
-        
+
+        public static async Task InsertOne<T>(DbConnection con, T item) => await Insert(con, null, new []{item});
+        public static async Task InsertOne<T>(DbConnection con, DbTransaction tx, T item) => await Insert(con, tx, new []{item});
 
         public static async Task Insert<T>(DbConnection con, DbTransaction tx, T[] items)
         {
@@ -56,6 +58,7 @@ namespace Deviax.QueryBuilder
 
         [Pure]
         public static SelectQuery From(IFromPart p) => new SelectQuery(p);
+        
         [Pure]
         public static SelectQuery<T> From<T>(T p) where T : Table => new SelectQuery<T>(p) ;
 
