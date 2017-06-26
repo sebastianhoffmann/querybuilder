@@ -115,4 +115,16 @@ namespace Deviax.QueryBuilder.Parts
         public OrPart(IPart left, IPart right) : base(left, right) {}
         public override void Accept(INodeVisitor visitor) => visitor.Visit(this);
     }
+    
+    public class ExistsPart : Part, IBooleanPart
+    {
+        public IPart What;
+        
+        public ExistsPart(IPart what)
+        {
+            What = what;
+        }
+
+        public override void Accept(INodeVisitor visitor) => visitor.Visit(this);
+    }
 }

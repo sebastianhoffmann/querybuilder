@@ -54,5 +54,6 @@ namespace Deviax.QueryBuilder.Visitors
         void Visit(CasePart casePart);
         void Visit(DistinctPart distinctPart);
         void Visit(AbsPart absPart);
+        void Visit(ExistsPart exists);
     }
 }

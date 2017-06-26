@@ -82,6 +82,13 @@ namespace Deviax.QueryBuilder.Visitors
         public void Visit(GtPart gt) => HandleOperation(gt.Left, gt.Right, "> ");
         public void Visit(LtPart lt) => HandleOperation(lt.Left, lt.Right, "< ");
 
+        public void Visit(ExistsPart exists)
+        {
+            Result.Append("EXISTS (");
+            exists.What.Accept(this);
+            Result.Append(")");
+        }
+        
         public void Visit(IsNotNullPart notNull)
         {
             notNull.Part.Accept(this);

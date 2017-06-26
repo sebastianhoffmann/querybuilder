@@ -97,5 +97,8 @@ namespace Deviax.QueryBuilder
 
         [Pure]
         public static DistinctPart Distinct(params IPart[] over) => new DistinctPart(over);
+        
+        [Pure]
+        public static ExistsPart Exists(IPart what) => new ExistsPart(what);
     }
 }
