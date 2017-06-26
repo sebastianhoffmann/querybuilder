@@ -172,13 +172,34 @@ namespace Deviax.QueryBuilder
                     ).Compile();
 
                     var obj2Arg = Expression.Parameter(typeof(object));
-                    TypeToTableEntry<T>.ApplyReturning = Expression.Lambda<Action<object, object>>(
-                        Expression.Assign(mt.Item1, Expression.Convert(obj2Arg, mt.Item2)),
-                        new[] {
-                            objArg,
-                            obj2Arg
-                        }
-                    ).Compile();
+
+                    if (mt.Item2 == typeof(long))
+                    {
+                        var conversionMethod = typeof(Convert).GetMethod(
+                            "ToInt64",
+                            new Type[] {
+                                typeof(object)
+                            });
+                        
+                        TypeToTableEntry<T>.ApplyReturning = Expression.Lambda<Action<object, object>>(
+                            Expression.Assign(mt.Item1, Expression.Call(conversionMethod, obj2Arg)) ,
+                            new[] {
+                                objArg,
+                                obj2Arg
+                            }
+                        ).Compile();
+                    }
+                    else
+                    {
+                        TypeToTableEntry<T>.ApplyReturning = Expression.Lambda<Action<object, object>>(
+                            Expression.Assign(mt.Item1, Expression.Convert(obj2Arg, mt.Item2)),
+                            new[] {
+                                objArg,
+                                obj2Arg
+                            }
+                        ).Compile();
+                    }
+                   
                 }
             }
         }
