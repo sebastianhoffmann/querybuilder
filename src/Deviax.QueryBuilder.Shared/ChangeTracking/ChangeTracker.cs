@@ -71,6 +71,13 @@ namespace Deviax.QueryBuilder.ChangeTracking
             Track(current, Copy(current), table);
         }
 
+        public static ChangeTrackingContext StartWith<T>(T current, Table table = null)
+        {
+            var ctc = new ChangeTrackingContext();
+            ctc.Track(current, table);
+            return ctc;
+        }
+
         private T Copy<T>(T item)
         {
             if (CopyCache<T>.F == null)
