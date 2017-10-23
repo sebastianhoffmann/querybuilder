@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Description>SQL DSL / Micro ORM - PostgreSQL Driver</Description>
     <Authors>Sebastian Hoffmann</Authors>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>netstandard1.5</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>portable</DebugType>
