@@ -114,6 +114,11 @@ namespace Deviax.QueryBuilder
 
             var getValueMethod = typeof(DbDataReader).GetTypeInfo().GetMethod("GetValue");
 
+            #if DEBUG
+            var exceptionConstructor = typeof(InvalidCastException).GetConstructor(new [] {typeof(string), typeof(Exception)});
+            var exceptParam = Expression.Parameter(typeof(Exception));
+            #endif
+            
             for (var i = 0; i < reader.VisibleFieldCount; i++)
             {
                 var dbName = reader.GetName(i);
@@ -138,10 +143,20 @@ namespace Deviax.QueryBuilder
                     {
                         if (tcs.Matches(fi, field.FieldType))
                         {
+#if DEBUG
+                            notNullBranch = Expression.TryCatch(
+                                Expression.Assign(
+                                    Expression.Field(targetParam, field),
+                                    tcs.Convert(fi, field.FieldType, valueVariable)
+                                    ),
+                                Expression.Catch(exceptParam, Expression.Throw(Expression.New(exceptionConstructor,  Expression.Constant(field.Name), exceptParam ), field.FieldType))
+                            );
+#else
                             notNullBranch = Expression.Assign(
                                 Expression.Field(targetParam, field),
                                 tcs.Convert(fi, field.FieldType, valueVariable)
                             );
+#endif
                             break;
                         }
                     }
@@ -162,10 +177,20 @@ namespace Deviax.QueryBuilder
                     {
                         if (tcs.Matches(ti, property.PropertyType))
                         {
+#if DEBUG
+                            notNullBranch = Expression.TryCatch( 
+                                Expression.Assign(
+                                    Expression.Property(targetParam, property),
+                                    tcs.Convert(ti, property.PropertyType, valueVariable)
+                                ),
+                                Expression.Catch(exceptParam, Expression.Throw(Expression.New(exceptionConstructor,  Expression.Constant(property.Name), exceptParam ), property.PropertyType))
+                            );
+#else
                             notNullBranch = Expression.Assign(
                                 Expression.Property(targetParam, property),
                                 tcs.Convert(ti, property.PropertyType, valueVariable)
                             );
+#endif
                             break;
                         }
                     }
