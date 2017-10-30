@@ -18,7 +18,7 @@ namespace Deviax.QueryBuilder
 
         protected internal Field F(string name) => new Field(this, name);
 
-        public void Accept(INodeVisitor visitor)
+        public virtual void Accept(INodeVisitor visitor)
         {
             visitor.Visit(this);
         }

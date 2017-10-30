@@ -23,14 +23,13 @@ namespace Deviax.QueryBuilder.Visitors
                 Result.Append(", ");
                 q.SetParts[i].Accept(this);
             }
-
             
-            if (q.From != null)
+            if (q.FromPart != null)
             {
                 TransitionToFromPart();
                 Result.Append("\nFROM ");
                 ExpectsFqn = true;
-                q.From.Accept(this);
+                q.FromPart.Accept(this);
                 ExpectsFqn = false;
             }
 

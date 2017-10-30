@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Deviax.QueryBuilder.Parts;
 
 namespace Deviax.QueryBuilder.Visitors
@@ -41,11 +42,11 @@ namespace Deviax.QueryBuilder.Visitors
                 {typeof(short), (o) => $"{o}"},
                 {typeof(long), (o) => $"{o}"},
                 {typeof(ushort), (o) => $"{o}"},
-                {typeof(DateTime), (o) => $"'{((DateTime)o).ToString("o")}'"}
+                {typeof(DateTime), (o) => $"'{((DateTime)o).ToString("o")}'"},
+                {typeof(TimeSpan), (o) => $"interval '{((TimeSpan)o).ToString("d\\dh\\hm\\m")}'"},
             };
 
-
-            foreach (var para in ParameterDic)
+            foreach (var para in ParameterDic.OrderByDescending(a => a.Key.Length))
             {
                 var t = para.Value.GetType();
                 var ti = t.GetTypeInfo();
@@ -63,7 +64,7 @@ namespace Deviax.QueryBuilder.Visitors
                 {
                     replacer = replacers[t];
                 }
-
+                
                 StringBuilder.Replace($"@{para.Key}", replacer(para.Value));
             }
         }

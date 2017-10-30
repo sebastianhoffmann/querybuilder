@@ -18,6 +18,7 @@ namespace Deviax.QueryBuilder.Visitors
             if (NoTableName)
             {
                 Result.Append("\"").Append(field.Name).Append("\" ");
+                NoTableName = false; // TODO: rework this
             }
             else
             {
@@ -246,7 +247,36 @@ namespace Deviax.QueryBuilder.Visitors
         public abstract void Visit(RowNumberPart rowNumberPart);
         public abstract void Visit(PartitionPart partitionPart);
 
-        public void Accept(MatchesRegexPart matchesRegexPart)
+        public void Visit(UnnestTable unnestTable)
+        {
+            if (ExpectsFqn)
+            {
+                Result.Append(
+                    "UNNEST ("
+                );
+
+                unnestTable.Parameters[0].Accept(this);
+                for (int i = 1; i < unnestTable.Parameters.Count; i++)
+                {
+                    Result.Append(",");
+                    unnestTable.Parameters[i].Accept(this);
+                }
+
+                Result.Append(") AS ").Append(unnestTable.TableAlias).Append("(").Append(unnestTable.Parameters[0].Name);
+                for (int i = 1; i < unnestTable.Parameters.Count; i++)
+                {
+                    Result.Append(",").Append(unnestTable.Parameters[i].Name);
+                }
+
+                Result.Append(") ");
+            }
+            else
+            {
+                Result.Append(unnestTable.TableAlias);
+            }
+        }
+        
+        public void Visit(MatchesRegexPart matchesRegexPart)
         {
             HandleOperation(matchesRegexPart.Left, matchesRegexPart.Right, " ~ ");
         }

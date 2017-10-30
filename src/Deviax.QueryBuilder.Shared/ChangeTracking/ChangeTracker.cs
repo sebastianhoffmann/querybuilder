@@ -44,7 +44,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
             return cnt;
         }
         
-        public void CommitSync(DbConnection con, DbTransaction tx)
+        public long CommitSync(DbConnection con, DbTransaction tx)
         {
             var cnt = 0L;
             foreach (var qt in ToUpdateQueries())

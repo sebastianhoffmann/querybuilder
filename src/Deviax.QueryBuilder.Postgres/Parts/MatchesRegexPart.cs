@@ -15,7 +15,7 @@ namespace Deviax.QueryBuilder.Parts
 
         public override void Accept(INodeVisitor visitor)
         {
-            visitor.Accept(this);
+            visitor.Visit(this);
         }
     }
 }

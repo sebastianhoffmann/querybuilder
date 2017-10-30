@@ -14,6 +14,13 @@ namespace Deviax.QueryBuilder.Visitors
             q.From.Accept(this);
             ExpectsFqn = false;
 
+            if (q.UsingPart != null)
+            {
+                ExpectsFqn = true;
+                q.UsingPart.Accept(this);
+                ExpectsFqn = false;
+            }
+            
             if (q.WhereParts != null && q.WhereParts.Count > 0)
             {
                 TransitionToWhere();
@@ -23,6 +30,7 @@ namespace Deviax.QueryBuilder.Visitors
 
                 for (int i = 1; i < q.WhereParts.Count; i++)
                 {
+                    NoTableName = true;
                     Result.Append("AND ");
                     q.WhereParts[i].Accept(this);
                 }

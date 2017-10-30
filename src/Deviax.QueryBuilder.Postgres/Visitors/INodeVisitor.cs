@@ -17,6 +17,7 @@ namespace Deviax.QueryBuilder.Visitors
         void Visit(RowNumberPart rowNumberPart);
         void Visit(PartitionPart partitionPart);
         void Visit(ContainsPart containsPart);
-        void Accept(MatchesRegexPart matchesRegexPart);
+        void Visit(MatchesRegexPart matchesRegexPart);
+        void Visit(UnnestTable unnestTable);
     }
 }
