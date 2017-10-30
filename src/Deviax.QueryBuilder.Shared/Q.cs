@@ -18,6 +18,9 @@ namespace Deviax.QueryBuilder
 
         public static async Task InsertOne<T>(DbConnection con, T item) => await Insert(con, null, new []{item});
         public static async Task InsertOne<T>(DbConnection con, DbTransaction tx, T item) => await Insert(con, tx, new []{item});
+        
+        public static void InsertOneSync<T>(DbConnection con, T item) => InsertSync(con, null, new []{item});
+        public static void InsertOneSync<T>(DbConnection con, DbTransaction tx, T item) => InsertSync(con, tx, new []{item});
 
         public static async Task Insert<T>(DbConnection con, DbTransaction tx, T[] items)
         {
@@ -26,6 +29,14 @@ namespace Deviax.QueryBuilder
 
             await QueryExecutor.DefaultExecutor.InsertBatched(items, 1000, con, tx);
         }
+        
+        public static void InsertSync<T>(DbConnection con, DbTransaction tx, T[] items)
+        {
+            if (items == null || items.Length == 0)
+                return;
+
+            QueryExecutor.DefaultExecutor.InsertBatchedSync(items, 1000, con, tx);
+        }
 
         public static async Task Insert<T>(DbConnection con, T[] items)
         {
@@ -33,6 +44,14 @@ namespace Deviax.QueryBuilder
                 return;
 
             await QueryExecutor.DefaultExecutor.InsertBatched(items, 1000, con, null);
+        }
+        
+        public static void InsertSync<T>(DbConnection con, T[] items)
+        {
+            if (items == null || items.Length == 0)
+                return;
+
+            QueryExecutor.DefaultExecutor.InsertBatchedSync(items, 1000, con, null);
         }
 
         [Pure]

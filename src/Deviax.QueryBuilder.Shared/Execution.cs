@@ -233,6 +233,28 @@ namespace Deviax.QueryBuilder
 
             return result;
         }
+        
+        public List<T> ToListSync<T>(DbCommand cmd) where T : new()
+        {
+            var result = new List<T>();
+
+            using (var reader = cmd.ExecuteReader())
+            {
+                if (AssignmentCache<T>.Action == null)
+                {
+                    AssignmentCache<T>.Action = GenerateAssignment<T>(DefaultNameResolver, reader);
+                }
+
+                while (reader.Read())
+                {
+                    var item = new T();
+                    AssignmentCache<T>.Action(reader, item);
+                    result.Add(item);
+                }
+            }
+
+            return result;
+        }
 
         public async Task ForEach<T>(DbCommand cmd, Action<T> action) where T : new()
         {
@@ -286,6 +308,23 @@ namespace Deviax.QueryBuilder
                 }
             }
         }
+        
+        public void InsertBatchedSync<T>(T[] items, int batchSize, DbConnection con, DbTransaction tx = null)
+        {
+            if (items.Length <= batchSize)
+            {
+                InsertSync(items, con, tx);
+            }
+            else
+            {
+                foreach (var batch in items.Select((item, inx) => new {item, inx})
+                    .GroupBy(x => x.inx / batchSize)
+                    .Select(g => g.Select(x => x.item)))
+                {
+                    InsertSync(batch.ToArray(), con, tx);
+                }
+            }
+        }
 
         public async Task Insert<T>(T[] items, DbConnection con, DbTransaction tx = null)
         {
@@ -310,10 +349,54 @@ namespace Deviax.QueryBuilder
                 await q.Execute(con, tx);
             }
         }
+        
+        public void InsertSync<T>(T[] items, DbConnection con, DbTransaction tx = null)
+        {
+            var table = TypeToTableEntry<T>.DefaultTable;
+            var q = new BaseInsertQuery(table).WithValues(items.Select((item, i) => TypeToTableEntry<T>.ToValues(item, table, i)).ToArray());
+            var returningParts = TypeToTableEntry<T>.Returning(items[0], table);
+            if (returningParts != null)
+            {
+                q = q.Returning(returningParts);
+                var ids = q.ScalarListSync<int>(con, tx);
+
+                if (ids.Count != items.Length)
+                    throw new InvalidOperationException();
+
+                for (int i = 0; i < items.Length; i++)
+                {
+                    TypeToTableEntry<T>.ApplyReturning(items[i], ids[i]);
+                }
+            }
+            else
+            {
+                q.ExecuteSync(con, tx);
+            }
+        }
 
         public async Task<T> FirstOrDefault<T>(DbCommand cmd) where T : new()
         {
             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+            {
+                if (AssignmentCache<T>.Action == null)
+                {
+                    AssignmentCache<T>.Action = GenerateAssignment<T>(DefaultNameResolver, reader);
+                }
+
+                if (!reader.Read())
+                    return default(T);
+
+                var item = new T();
+                AssignmentCache<T>.Action(reader, item);
+
+                while (reader.Read()) { }
+                return item;
+            }
+        }
+        
+        public T FirstOrDefaultSync<T>(DbCommand cmd) where T : new()
+        {
+            using (var reader = cmd.ExecuteReader())
             {
                 if (AssignmentCache<T>.Action == null)
                 {
@@ -338,13 +421,26 @@ namespace Deviax.QueryBuilder
                 return await ToList<T>(cmd).ConfigureAwait(false);
             }
         }
+        
+        public List<T> ToListSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx = null) where T : new()
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return ToListSync<T>(cmd);
+            }
+        }
 
         public async Task<T> FirstOrDefault<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx = null) where T : new()
         {
             using (var cmd = ToCommand(query, con, tx))
                 return await FirstOrDefault<T>(cmd).ConfigureAwait(false);
         }
-
+        
+        public T FirstOrDefaultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx = null) where T : new()
+        {
+            using (var cmd = ToCommand(query, con, tx))
+                return FirstOrDefaultSync<T>(cmd);
+        }
 
         public async Task<T> FirstOrDefault<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx = null) where T : new()
         {
@@ -359,12 +455,28 @@ namespace Deviax.QueryBuilder
                 return await ScalarResult<T>(cmd);
             }
         }
+        
+        public T ScalarResultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return ScalarResultSync<T>(cmd);
+            }
+        }
 
         public async Task<T> ScalarResult<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
                 return await ScalarResult<T>(cmd);
+            }
+        }
+        
+        public T ScalarResultSync<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return ScalarResultSync<T>(cmd);
             }
         }
 
@@ -375,12 +487,28 @@ namespace Deviax.QueryBuilder
                 return await ScalarResult<T>(cmd);
             }
         }
+        
+        public T ScalarResultSync<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return ScalarResultSync<T>(cmd);
+            }
+        }
 
         public async Task<T> ScalarResult<T>(BaseDeleteQuery query, DbConnection con, DbTransaction tx)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
                 return await ScalarResult<T>(cmd);
+            }
+        }
+        
+        public T ScalarResultSync<T>(BaseDeleteQuery query, DbConnection con, DbTransaction tx)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return ScalarResultSync<T>(cmd);
             }
         }
 
@@ -391,8 +519,30 @@ namespace Deviax.QueryBuilder
             if (val == DBNull.Value)
                 return default(T);
 
-            if (val is T)
-                return (T) val;
+            if (val is T variable)
+                return variable;
+
+            if (typeof(T) == typeof(long))
+                return (T) (object) Convert.ToInt64(val);
+
+            if (typeof(T) == typeof(int))
+                return (T) (object) Convert.ToInt32(val);
+
+            if (typeof(T) == typeof(short))
+                return (T) (object) Convert.ToInt16(val);
+            
+            throw new ArgumentException();
+        }
+        
+        protected T ScalarResultSync<T>(DbCommand cmd)
+        {
+            var val = cmd.ExecuteScalar();
+
+            if (val == DBNull.Value)
+                return default(T);
+
+            if (val is T variable)
+                return variable;
 
             if (typeof(T) == typeof(long))
                 return (T) (object) Convert.ToInt64(val);
@@ -413,12 +563,28 @@ namespace Deviax.QueryBuilder
                 return await ScalarListResult<T>(cmd);
             }
         }
+        
+        public List<T> ScalarListResultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return ScalarListResultSync<T>(cmd);
+            }
+        }
 
         public async Task<List<T>> ScalarListResult<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
                 return await ScalarListResult<T>(cmd);
+            }
+        }
+        
+        public List<T> ScalarListResultSync<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return ScalarListResultSync<T>(cmd);
             }
         }
 
@@ -429,12 +595,61 @@ namespace Deviax.QueryBuilder
                 return await ScalarListResult<T>(cmd);
             }
         }
+        
+        public List<T> ScalarListResultSync<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return ScalarListResultSync<T>(cmd);
+            }
+        }
 
-        protected async Task<List<T>>  ScalarListResult<T>(DbCommand cmd)
+        protected async Task<List<T>> ScalarListResult<T>(DbCommand cmd)
         {
             var result = new List<T>();
 
             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+            {
+                while (reader.Read())
+                {
+                    var val = reader[0];
+
+                    if (val == DBNull.Value)
+                        result.Add(default(T));
+                    else
+                    {
+                        if (val is T)
+                        {
+                            result.Add((T) val);
+                        }
+                        else if (typeof(T) == typeof(long))
+                        {
+                            result.Add((T) (object) Convert.ToInt64(val));
+                        }
+                        else if (typeof(T) == typeof(int))
+                        {
+                            result.Add((T) (object) Convert.ToInt32(val));
+                        }
+                        else if (typeof(T) == typeof(short))
+                        {
+                            result.Add((T) (object) Convert.ToInt16(val));
+                        }
+                        else
+                        {
+                            throw new ArgumentException();
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+        
+        protected List<T>  ScalarListResultSync<T>(DbCommand cmd)
+        {
+            var result = new List<T>();
+
+            using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
                 {

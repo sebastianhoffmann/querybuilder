@@ -57,10 +57,20 @@ namespace Deviax.QueryBuilder
         {
             return await QueryExecutor.DefaultExecutor.ScalarListResult<T>(this, con, tx).ConfigureAwait(false);
         }
+        
+        public List<T> ScalarListSync<T>(DbConnection con, DbTransaction tx = null)
+        {
+            return QueryExecutor.DefaultExecutor.ScalarListResultSync<T>(this, con, tx);
+        }
 
         public async Task<int> Execute(DbConnection con, DbTransaction tx = null)
         {
             return await QueryExecutor.DefaultExecutor.ScalarResult<int>(this, con, tx).ConfigureAwait(false);
+        }
+        
+        public int ExecuteSync(DbConnection con, DbTransaction tx = null)
+        {
+            return QueryExecutor.DefaultExecutor.ScalarResultSync<int>(this, con, tx);
         }
 
         public string StringRepresentation => ToString();

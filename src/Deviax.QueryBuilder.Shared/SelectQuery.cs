@@ -1576,10 +1576,20 @@ namespace Deviax.QueryBuilder
         {
             return await QueryExecutor.DefaultExecutor.ToList<T>(this, con, tx).ConfigureAwait(false);
         }
+        
+        public List<T> ToListSync<T>(DbConnection con, DbTransaction tx = null) where T : new()
+        {
+            return QueryExecutor.DefaultExecutor.ToListSync<T>(this, con, tx);
+        }
 
         public async Task<T> FirstOrDefault<T>(DbConnection con, DbTransaction tx = null) where T : new()
         {
             return await QueryExecutor.DefaultExecutor.FirstOrDefault<T>(this, con, tx).ConfigureAwait(false);
+        }
+        
+        public T FirstOrDefaultSync<T>(DbConnection con, DbTransaction tx = null) where T : new()
+        {
+            return QueryExecutor.DefaultExecutor.FirstOrDefaultSync<T>(this, con, tx);
         }
 
         public new AliasedSelectQuery As(string alias) => new AliasedSelectQuery(alias, this);
@@ -1592,6 +1602,11 @@ namespace Deviax.QueryBuilder
         public async Task<List<T>> ScalarList<T>(DbConnection con, DbTransaction tx = null)
         {
             return await QueryExecutor.DefaultExecutor.ScalarListResult<T>(this, con, tx).ConfigureAwait(false);
+        }
+        
+        public List<T> ScalarListSync<T>(DbConnection con, DbTransaction tx = null)
+        {
+            return QueryExecutor.DefaultExecutor.ScalarListResultSync<T>(this, con, tx);
         }
 
         public string StringRepresentation => ToString();

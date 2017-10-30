@@ -43,6 +43,16 @@ namespace Deviax.QueryBuilder.ChangeTracking
             }
             return cnt;
         }
+        
+        public void CommitSync(DbConnection con, DbTransaction tx)
+        {
+            var cnt = 0L;
+            foreach (var qt in ToUpdateQueries())
+            {
+                cnt += qt.Item2.ScalarResultSync<long>(con, tx);
+            }
+            return cnt;
+        }
 
         public void Clear()
         {
