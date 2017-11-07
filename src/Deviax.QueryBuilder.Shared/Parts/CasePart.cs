@@ -9,23 +9,23 @@ namespace Deviax.QueryBuilder.Parts
     {
         public IPart ElsePart;
 
-        public List<Tuple<IBooleanPart, IPart>> Whens;
+        public List<(IBooleanPart, IPart)> Whens;
 
         public CasePart(CasePart casePart, IBooleanPart when, IPart then)
         {
-            Whens = new List<Tuple<IBooleanPart, IPart>>(casePart.Whens) { Tuple.Create(when, then) };
+            Whens = new List<(IBooleanPart, IPart)>(casePart.Whens) { (when, then) };
             ElsePart = casePart.ElsePart;
         }
 
         public CasePart(CasePart casePart, IPart elsePart)
         {
-            Whens = new List<Tuple<IBooleanPart, IPart>>(casePart.Whens);
+            Whens = new List<(IBooleanPart, IPart)>(casePart.Whens);
             ElsePart = elsePart;
         }
 
         public CasePart()
         {
-            Whens = new List<Tuple<IBooleanPart, IPart>>();
+            Whens = new List<(IBooleanPart, IPart)>();
         }
 
         public void Accept(INodeVisitor visitor)

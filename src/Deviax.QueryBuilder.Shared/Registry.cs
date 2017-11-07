@@ -91,7 +91,7 @@ namespace Deviax.QueryBuilder
                     setMethod = Expression.Call(tableFieldExpr,setVMethod.MakeGenericMethod(originalField.FieldType), Expression.Field(Expression.Convert(objArg, typeof(T)), originalField), paraNameExpr);
                 }
 
-                return Tuple.Create(memberExpression, targetType, f.Name, setMethod, tableFieldExpr);
+                return (memberExpression: memberExpression, targetType: targetType, memberName: f.Name, setMethod: setMethod, tableFieldExpression: tableFieldExpr);
             }).Concat(tableProps.Select(
                 p => {
                     MemberExpression memberExpression = null;
@@ -120,7 +120,7 @@ namespace Deviax.QueryBuilder
                         setMethod = Expression.Call(tableFieldExpr,setVMethod.MakeGenericMethod(originalField.FieldType), Expression.Field(Expression.Convert(objArg, typeof(T)), originalField), paraNameExpr);
                     }
 
-                    return Tuple.Create(memberExpression, targetType, p.Name, setMethod, tableFieldExpr);
+                    return (memberExpression: memberExpression, targetType: targetType, memberName: p.Name, setMethod: setMethod, tableFieldExpression: tableFieldExpr);
                 })).ToList();
 
             var blockExpressions = new List<Expression> { Expression.Assign(vcVar, Expression.New(typeof(ValuesCollection))) };

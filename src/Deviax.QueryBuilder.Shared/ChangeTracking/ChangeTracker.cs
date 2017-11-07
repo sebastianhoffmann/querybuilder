@@ -20,7 +20,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
             public Func<object, Table, IBooleanPart[]> ConditionGetter;
         }
         
-        public IEnumerable<Tuple<object, UpdateQuery>> ToUpdateQueries()
+        public List<(object, UpdateQuery)> ToUpdateQueries()
         {
             return Collect()
                 .GroupBy(c => c.Tracking)
@@ -30,8 +30,8 @@ namespace Deviax.QueryBuilder.ChangeTracking
                     if (group.Key.ConditionGetter != null)
                         qry = qry.Where(group.Key.ConditionGetter(group.Key.Original, group.Key.Table));
 
-                    return Tuple.Create(group.Key.Current, qry);
-                });
+                    return (group.Key.Current, qry);
+                }).ToList();
         }
 
         public async Task<long> Commit(DbConnection con, DbTransaction tx = null)
@@ -58,8 +58,6 @@ namespace Deviax.QueryBuilder.ChangeTracking
         {
             _objects.Clear();
         }
-
-        public UpdateQuery ToFirstQuery() => ToUpdateQueries().FirstOrDefault()?.Item2;
 
         private readonly List<Tracking> _objects = new List<Tracking>();
         public void Track<T>(T current, T copy, Table table = null)
