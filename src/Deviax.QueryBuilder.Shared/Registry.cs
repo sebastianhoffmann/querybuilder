@@ -131,10 +131,10 @@ namespace Deviax.QueryBuilder
                     Expression.NewArrayInit(typeof(SetFieldPart), thing.Item4)
                 ));
 
-                if (pk != null && pk.Fields.Any(f => f == thing.Item3))
+                if (pk != null && pk.Fields.Length == 1 && pk.Fields[0] == thing.memberName && pk.SingleKeyIsAutoincrement)
                 {
                     blockExpressions.Add(
-                        Expression.IfThen(Expression.Not(Expression.Equal(Expression.Default(thing.Item2), thing.Item1)), setExpr)
+                        Expression.IfThen(Expression.Not(Expression.Equal(Expression.Default(thing.targetType), thing.memberExpression)), setExpr)
                     );
                 }
                 else
@@ -156,9 +156,9 @@ namespace Deviax.QueryBuilder
                 nArg).Compile();
 
 
-            if (pk != null && pk.Fields.Length == 1)
+            if (pk != null && pk.Fields.Length == 1 && pk.SingleKeyIsAutoincrement)
             {
-                var mt = memberThings.Single(x => x.Item3 == pk.Fields[0]);
+                var mt = memberThings.Single(x => x.memberName == pk.Fields[0]);
                 if (mt.Item2 == typeof(int) || mt.Item2 == typeof(long))
                 {
                     var partArr = Expression.Variable(typeof(IPart[]));
