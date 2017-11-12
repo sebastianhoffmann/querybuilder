@@ -1598,6 +1598,11 @@ namespace Deviax.QueryBuilder
         {
             return await QueryExecutor.DefaultExecutor.ScalarResult<T>(this, con, tx).ConfigureAwait(false);
         }
+        
+        public T ScalarResultSync<T>(DbConnection con, DbTransaction tx = null)
+        {
+            return QueryExecutor.DefaultExecutor.ScalarResultSync<T>(this, con, tx);
+        }
 
         public async Task<List<T>> ScalarList<T>(DbConnection con, DbTransaction tx = null)
         {
