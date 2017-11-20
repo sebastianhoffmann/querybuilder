@@ -16,6 +16,9 @@ namespace Deviax.QueryBuilder
     public static partial class Q
     {
         [Pure]
+        public static ArrayOverlapPart ArrayOverlap(IPart left, IPart right) => new ArrayOverlapPart(left, right);
+        
+        [Pure]
         public static RowNumberPart RowNumber(IPartitionOverPart over) => new RowNumberPart(over);
 
         [Pure]

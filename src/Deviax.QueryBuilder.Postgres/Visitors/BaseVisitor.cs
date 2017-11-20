@@ -275,7 +275,14 @@ namespace Deviax.QueryBuilder.Visitors
                 Result.Append(unnestTable.TableAlias);
             }
         }
-        
+
+        public void Visit(ArrayOverlapPart arrayOverlapPart)
+        {
+            arrayOverlapPart.Left.Accept(this);
+            Result.Append("&& ");
+            arrayOverlapPart.Right.Accept(this);
+        }
+
         public void Visit(MatchesRegexPart matchesRegexPart)
         {
             HandleOperation(matchesRegexPart.Left, matchesRegexPart.Right, " ~ ");

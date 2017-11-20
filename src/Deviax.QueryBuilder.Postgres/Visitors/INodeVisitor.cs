@@ -19,5 +19,6 @@ namespace Deviax.QueryBuilder.Visitors
         void Visit(ContainsPart containsPart);
         void Visit(MatchesRegexPart matchesRegexPart);
         void Visit(UnnestTable unnestTable);
+        void Visit(ArrayOverlapPart arrayOverlapPart);
     }
 }

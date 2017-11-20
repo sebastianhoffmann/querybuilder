@@ -2,12 +2,12 @@
 
 namespace Deviax.QueryBuilder.Parts
 {
-    public class ContainsPart : Part, IBooleanPart
+    public class ArrayOverlapPart: Part, IBooleanPart
     {
         public readonly IPart Left;
         public readonly IPart Right;
 
-        public ContainsPart(IPart left, IPart right)
+        public ArrayOverlapPart(IPart left, IPart right)
         {
             Left = left;
             Right = right;
