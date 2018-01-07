@@ -79,6 +79,9 @@ namespace Deviax.QueryBuilder
         public static SelectQuery From(IFromPart p) => new SelectQuery(p);
         
         [Pure]
+        public static SelectQuery From(AliasedSelectQuery p) => new SelectQuery(p);
+        
+        [Pure]
         public static SelectQuery<T> From<T>(T p) where T : Table => new SelectQuery<T>(p) ;
 
         [Pure]

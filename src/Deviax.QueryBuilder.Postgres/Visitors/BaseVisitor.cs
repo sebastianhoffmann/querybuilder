@@ -42,7 +42,7 @@ namespace Deviax.QueryBuilder.Visitors
             //TODO: probably incorrect?
             aliased.Aliased.Accept(this);
 
-            if (State == CoarseState.Select)
+            if (State == CoarseState.Select || ExpectsFqn)
             {
                 Result.Append(" AS ").Append(aliased.Name);
             }
