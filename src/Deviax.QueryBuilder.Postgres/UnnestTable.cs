@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Deviax.QueryBuilder.Parts;
 using Deviax.QueryBuilder.Visitors;
+using NpgsqlTypes;
 
 namespace Deviax.QueryBuilder
 {
@@ -10,10 +12,14 @@ namespace Deviax.QueryBuilder
 
         internal List<IParameter> Parameters = new List<IParameter>();
 
-        public Field Field<T>(IEnumerable<T> i)
+        public Field Field<T>(IEnumerable<T> i, NpgsqlDbType npgsqlDbType = NpgsqlDbType.Unknown)
         {
             var name = $"unest_{Parameters.Count}";
-            Parameters.Add(new ArrayParameter<T>(i, name));
+            
+            if(npgsqlDbType != NpgsqlDbType.Unknown)
+                Parameters.Add(new ArrayParameter<T>(i, name, npgsqlDbType));    
+            else
+                Parameters.Add(new ArrayParameter<T>(i, name));
             return new Field(this,name);
         }
         
