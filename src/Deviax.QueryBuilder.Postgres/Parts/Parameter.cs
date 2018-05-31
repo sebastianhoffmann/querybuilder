@@ -26,7 +26,7 @@ namespace Deviax.QueryBuilder.Parts
             {
                 if (Value is DateTime)
                 {
-                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, NpgsqlTypes.NpgsqlDbType.TimestampTZ, Value);
+                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, NpgsqlTypes.NpgsqlDbType.TimestampTz, Value);
                 }
                 else
                 {

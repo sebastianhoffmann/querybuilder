@@ -31,7 +31,7 @@ namespace Deviax.QueryBuilder.Visitors
                 {
                     if (val is DateTime)
                     {
-                        _parameters[para.Name] = new NpgsqlParameter(para.Name, NpgsqlDbType.TimestampTZ) {Value = val};
+                        _parameters[para.Name] = new NpgsqlParameter(para.Name, NpgsqlDbType.TimestampTz) {Value = val};
                     }
                     else
                     {
