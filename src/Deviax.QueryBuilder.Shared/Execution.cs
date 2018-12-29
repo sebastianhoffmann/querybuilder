@@ -19,6 +19,7 @@ namespace Deviax.QueryBuilder
     public static class AssignmentCache<T> where T : new()
     {
         public static Action<DbDataReader, T> Action;
+        public static Func<T> Constructor;
     }
 
     public abstract class QueryExecutor
@@ -216,6 +217,11 @@ namespace Deviax.QueryBuilder
         {
             var result = new List<T>();
 
+            if (AssignmentCache<T>.Constructor == null)
+            {
+                AssignmentCache<T>.Constructor = GenerateConstructor<T>();
+            }
+            
             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
             {
                 if (AssignmentCache<T>.Action == null)
@@ -225,7 +231,7 @@ namespace Deviax.QueryBuilder
 
                 while (reader.Read())
                 {
-                    var item = new T();
+                    var item = AssignmentCache<T>.Constructor();
                     AssignmentCache<T>.Action(reader, item);
                     result.Add(item);
                 }
@@ -233,11 +239,23 @@ namespace Deviax.QueryBuilder
 
             return result;
         }
-        
+
+        private Func<T> GenerateConstructor<T>() where T : new()
+        {
+            var constructor = typeof(T).GetConstructor(Type.EmptyTypes);
+
+            return Expression.Lambda<Func<T>>(Expression.New(constructor)).Compile();
+        }
+
         public List<T> ToListSync<T>(DbCommand cmd) where T : new()
         {
             var result = new List<T>();
 
+            if (AssignmentCache<T>.Constructor == null)
+            {
+                AssignmentCache<T>.Constructor = GenerateConstructor<T>();
+            }
+            
             using (var reader = cmd.ExecuteReader())
             {
                 if (AssignmentCache<T>.Action == null)
@@ -247,7 +265,7 @@ namespace Deviax.QueryBuilder
 
                 while (reader.Read())
                 {
-                    var item = new T();
+                    var item = AssignmentCache<T>.Constructor();
                     AssignmentCache<T>.Action(reader, item);
                     result.Add(item);
                 }
@@ -258,6 +276,11 @@ namespace Deviax.QueryBuilder
 
         public async Task ForEach<T>(DbCommand cmd, Action<T> action) where T : new()
         {
+            if (AssignmentCache<T>.Constructor == null)
+            {
+                AssignmentCache<T>.Constructor = GenerateConstructor<T>();
+            }
+            
             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
             {
                 if (AssignmentCache<T>.Action == null)
@@ -267,7 +290,7 @@ namespace Deviax.QueryBuilder
 
                 while (reader.Read())
                 {
-                    var item = new T();
+                    var item = AssignmentCache<T>.Constructor();
                     AssignmentCache<T>.Action(reader, item);
                     action(item);
                 }
@@ -276,6 +299,11 @@ namespace Deviax.QueryBuilder
 
         public async Task ForEach<T>(DbCommand cmd, Func<T, Task> action) where T : new()
         {
+            if (AssignmentCache<T>.Constructor == null)
+            {
+                AssignmentCache<T>.Constructor = GenerateConstructor<T>();
+            }
+            
             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
             {
                 if (AssignmentCache<T>.Action == null)
@@ -285,7 +313,7 @@ namespace Deviax.QueryBuilder
 
                 while (reader.Read())
                 {
-                    var item = new T();
+                    var item = AssignmentCache<T>.Constructor();
                     AssignmentCache<T>.Action(reader, item);
                     await action(item);
                 }
@@ -376,6 +404,11 @@ namespace Deviax.QueryBuilder
 
         public async Task<T> FirstOrDefault<T>(DbCommand cmd) where T : new()
         {
+            if (AssignmentCache<T>.Constructor == null)
+            {
+                AssignmentCache<T>.Constructor = GenerateConstructor<T>();
+            }
+            
             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
             {
                 if (AssignmentCache<T>.Action == null)
@@ -386,7 +419,7 @@ namespace Deviax.QueryBuilder
                 if (!reader.Read())
                     return default(T);
 
-                var item = new T();
+                var item = AssignmentCache<T>.Constructor();
                 AssignmentCache<T>.Action(reader, item);
 
                 while (reader.Read()) { }
@@ -396,6 +429,11 @@ namespace Deviax.QueryBuilder
         
         public T FirstOrDefaultSync<T>(DbCommand cmd) where T : new()
         {
+            if (AssignmentCache<T>.Constructor == null)
+            {
+                AssignmentCache<T>.Constructor = GenerateConstructor<T>();
+            }
+            
             using (var reader = cmd.ExecuteReader())
             {
                 if (AssignmentCache<T>.Action == null)
@@ -406,7 +444,7 @@ namespace Deviax.QueryBuilder
                 if (!reader.Read())
                     return default(T);
 
-                var item = new T();
+                var item = AssignmentCache<T>.Constructor();
                 AssignmentCache<T>.Action(reader, item);
 
                 while (reader.Read()) { }
