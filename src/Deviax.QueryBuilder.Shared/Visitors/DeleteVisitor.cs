@@ -17,6 +17,7 @@ namespace Deviax.QueryBuilder.Visitors
             if (q.UsingPart != null)
             {
                 ExpectsFqn = true;
+                Result.Append("\nUSING ");
                 q.UsingPart.Accept(this);
                 ExpectsFqn = false;
             }
