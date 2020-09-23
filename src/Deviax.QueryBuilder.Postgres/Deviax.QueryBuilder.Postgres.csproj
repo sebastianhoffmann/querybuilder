@@ -21,6 +21,10 @@
     <Compile Include="..\Deviax.QueryBuilder.Shared\**\*.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="LitGit" Version="0.2.0.18-alpha">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Npgsql" Version="4.0.0" />
   <PackageReference Include="System.Data.Common" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.Contracts" Version="4.3.0" />
@@ -31,4 +35,12 @@
     <PackageReference Include="System.Reflection.Metadata" Version="1.4.2" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Deviax.QueryBuilder.Postgres.Nuget.props.template" />
+    <LitGitTemplateReference Include="Deviax.QueryBuilder.Postgres.Nuget.props.template" />
+
+  </ItemGroup>
+  <Import Project="Deviax.QueryBuilder.Postgres.Nuget.props" Condition="Exists('Deviax.QueryBuilder.Postgres.Nuget.props')" />
+
 </Project>
