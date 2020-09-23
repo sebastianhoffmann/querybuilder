@@ -196,3 +196,4 @@ FakesAssemblies/
 *.opt
 
 .idea/*
+/src/Deviax.QueryBuilder.Postgres/Deviax.QueryBuilder.Postgres.Nuget.props
