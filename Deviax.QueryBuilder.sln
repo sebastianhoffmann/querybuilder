@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deviax.QueryBuilder.Postgre
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deviax.QueryBuilder.MySql", "src\Deviax.QueryBuilder.MySql\Deviax.QueryBuilder.MySql.csproj", "{87FA9355-6D63-46EA-9B02-F02631CF3E45}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples.Postgres", "src\Examples.Postgres\Examples.Postgres.csproj", "{AF0146AA-EE01-42C7-A6C4-CB08C9AAFC5F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\Deviax.QueryBuilder.Shared\Deviax.QueryBuilder.Shared.projitems*{f0a3737d-fe0b-4301-a968-e7ea3755818f}*SharedItemsImports = 13
@@ -26,6 +28,10 @@ Global
 		{87FA9355-6D63-46EA-9B02-F02631CF3E45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87FA9355-6D63-46EA-9B02-F02631CF3E45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87FA9355-6D63-46EA-9B02-F02631CF3E45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF0146AA-EE01-42C7-A6C4-CB08C9AAFC5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF0146AA-EE01-42C7-A6C4-CB08C9AAFC5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF0146AA-EE01-42C7-A6C4-CB08C9AAFC5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF0146AA-EE01-42C7-A6C4-CB08C9AAFC5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
