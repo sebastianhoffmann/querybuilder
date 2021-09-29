@@ -21,7 +21,10 @@
     <Compile Include="..\Deviax.QueryBuilder.Shared\**\*.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="NodaTime" Version="3.0.6" />
     <PackageReference Include="Npgsql" Version="5.0.10" />
+    <PackageReference Include="Npgsql.NetTopologySuite" Version="5.0.10" />
+    <PackageReference Include="Npgsql.NodaTime" Version="5.0.10" />
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.Contracts" Version="4.3.0" />
     <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
