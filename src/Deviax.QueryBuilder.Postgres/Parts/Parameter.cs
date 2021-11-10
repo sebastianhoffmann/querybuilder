@@ -40,7 +40,8 @@ namespace Deviax.QueryBuilder.Parts
                 }
                 else if (Value is Geometry)
                 {
-                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, NpgsqlTypes.NpgsqlDbType.Geometry, Value);
+                    var p = ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, NpgsqlTypes.NpgsqlDbType.Geometry, Value);
+                    var foo = p.DataTypeName;
                 }
                 else
                 {
