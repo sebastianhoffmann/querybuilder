@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>SQL DSL / Micro ORM - PostgreSQL Driver</Description>
-    <Authors>Sebastian Hoffmann</Authors>
+    <Authors>Sebastian Hoffmann, Sascha Hering</Authors>
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>10</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>portable</DebugType>
-    <AssemblyName>Deviax.QueryBuilder.Postgres</AssemblyName>
-    <PackageId>Deviax.QueryBuilder.Postgres</PackageId>
+    <AssemblyName>NSSL.Deviax.QueryBuilder.Postgres</AssemblyName>
+    <PackageId>NSSL.Deviax.QueryBuilder.Postgres</PackageId>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
