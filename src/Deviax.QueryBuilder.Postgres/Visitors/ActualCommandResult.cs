@@ -37,7 +37,7 @@ namespace Deviax.QueryBuilder.Visitors
                     }
                     else if (val is Instant or LocalDateTime)
                     {
-                        _parameters[para.Name] = new NpgsqlParameter(para.Name, NpgsqlDbType.Timestamp) { Value = val };
+                        _parameters[para.Name] = new NpgsqlParameter(para.Name, NpgsqlDbType.TimestampTz) { Value = val };
                     }
                     else if (val is ZonedDateTime or OffsetDateTime or DateTimeOffset)
                     {

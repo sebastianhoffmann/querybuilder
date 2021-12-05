@@ -32,7 +32,7 @@ namespace Deviax.QueryBuilder.Parts
                 }
                 else if (Value is Instant or LocalDateTime)
                 {
-                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, NpgsqlTypes.NpgsqlDbType.Timestamp, Value);
+                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, NpgsqlTypes.NpgsqlDbType.TimestampTz, Value);
                 }
                 else if (Value is ZonedDateTime or OffsetDateTime or DateTimeOffset)
                 {
@@ -40,8 +40,7 @@ namespace Deviax.QueryBuilder.Parts
                 }
                 else if (Value is Geometry)
                 {
-                    var p = ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, NpgsqlTypes.NpgsqlDbType.Geometry, Value);
-                    var foo = p.DataTypeName;
+                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, NpgsqlTypes.NpgsqlDbType.Geometry, Value);
                 }
                 else
                 {
