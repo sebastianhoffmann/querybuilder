@@ -21,8 +21,6 @@ jobs:
     - uses: actions/checkout@v1
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.x
     - name: Get Git Submodules
       run: git submodule update --init --recursive
     - name: Build
