@@ -48,29 +48,29 @@ namespace Deviax.QueryBuilder
 
         public BaseInsertQuery WithValues(params ValuesCollection[] values) => new BaseInsertQuery(Target, With(Values, values), ReturningParts);
 
-        public async Task<T> ScalarResult<T>(DbConnection con, DbTransaction tx = null)
+        public async Task<T> ScalarResult<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
         {
-            return await QueryExecutor.DefaultExecutor.ScalarResult<T>(this, con, tx).ConfigureAwait(false);
+            return await QueryExecutor.DefaultExecutor.ScalarResult<T>(this, con, tx, prepare).ConfigureAwait(false);
         }
 
-        public async Task<List<T>> ScalarList<T>(DbConnection con, DbTransaction tx = null)
+        public async Task<List<T>> ScalarList<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
         {
-            return await QueryExecutor.DefaultExecutor.ScalarListResult<T>(this, con, tx).ConfigureAwait(false);
+            return await QueryExecutor.DefaultExecutor.ScalarListResult<T>(this, con, tx, prepare).ConfigureAwait(false);
         }
         
-        public List<T> ScalarListSync<T>(DbConnection con, DbTransaction tx = null)
+        public List<T> ScalarListSync<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
         {
-            return QueryExecutor.DefaultExecutor.ScalarListResultSync<T>(this, con, tx);
+            return QueryExecutor.DefaultExecutor.ScalarListResultSync<T>(this, con, tx, prepare);
         }
 
-        public async Task<int> Execute(DbConnection con, DbTransaction tx = null)
+        public async Task<int> Execute(DbConnection con, DbTransaction tx = null, bool prepare = true)
         {
-            return await QueryExecutor.DefaultExecutor.ScalarResult<int>(this, con, tx).ConfigureAwait(false);
+            return await QueryExecutor.DefaultExecutor.ScalarResult<int>(this, con, tx, prepare).ConfigureAwait(false);
         }
         
-        public int ExecuteSync(DbConnection con, DbTransaction tx = null)
+        public int ExecuteSync(DbConnection con, DbTransaction tx = null, bool prepare = true)
         {
-            return QueryExecutor.DefaultExecutor.ScalarResultSync<int>(this, con, tx);
+            return QueryExecutor.DefaultExecutor.ScalarResultSync<int>(this, con, tx, prepare);
         }
 
         public string StringRepresentation => ToString();

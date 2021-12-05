@@ -42,24 +42,24 @@ namespace Deviax.QueryBuilder
 
         public override void Accept(INodeVisitor visitor) => visitor.Visit(this);
 
-        public async Task<T> ScalarResult<T>(DbConnection con, DbTransaction tx = null)
+        public async Task<T> ScalarResult<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
         {
-            return await QueryExecutor.DefaultExecutor.ScalarResult<T>(this, con, tx).ConfigureAwait(false);
+            return await QueryExecutor.DefaultExecutor.ScalarResult<T>(this, con, tx, prepare).ConfigureAwait(false);
         }
         
-        public T ScalarResultSync<T>(DbConnection con, DbTransaction tx = null)
+        public T ScalarResultSync<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
         {
-            return QueryExecutor.DefaultExecutor.ScalarResultSync<T>(this, con, tx);
+            return QueryExecutor.DefaultExecutor.ScalarResultSync<T>(this, con, tx, prepare);
         }
 
-        public async Task<int> Execute(DbConnection con, DbTransaction tx = null)
+        public async Task<int> Execute(DbConnection con, DbTransaction tx = null, bool prepare = true)
         {
-            return await ScalarResult<int>(con, tx);
+            return await ScalarResult<int>(con, tx, prepare);
         }
         
-        public int ExecuteSync(DbConnection con, DbTransaction tx = null)
+        public int ExecuteSync(DbConnection con, DbTransaction tx = null, bool prepare = true)
         {
-            return ScalarResultSync<int>(con, tx);
+            return ScalarResultSync<int>(con, tx, prepare);
         }
 
         public string StringRepresentation => ToString();

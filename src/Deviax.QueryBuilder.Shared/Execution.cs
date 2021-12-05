@@ -213,7 +213,7 @@ namespace Deviax.QueryBuilder
             return action;
         }
 
-        public async Task<List<T>> ToList<T>(DbCommand cmd) where T : new()
+        public async Task<List<T>> ToList<T>(DbCommand cmd, bool prepare = true) where T : new()
         {
             var result = new List<T>();
 
@@ -221,7 +221,12 @@ namespace Deviax.QueryBuilder
             {
                 AssignmentCache<T>.Constructor = GenerateConstructor<T>();
             }
-            
+
+            if (prepare)
+            {
+                await cmd.PrepareAsync();
+            }
+
             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
             {
                 if (AssignmentCache<T>.Action == null)
@@ -247,7 +252,7 @@ namespace Deviax.QueryBuilder
             return Expression.Lambda<Func<T>>(Expression.New(constructor)).Compile();
         }
 
-        public List<T> ToListSync<T>(DbCommand cmd) where T : new()
+        public List<T> ToListSync<T>(DbCommand cmd, bool prepare = true) where T : new()
         {
             var result = new List<T>();
 
@@ -255,7 +260,12 @@ namespace Deviax.QueryBuilder
             {
                 AssignmentCache<T>.Constructor = GenerateConstructor<T>();
             }
-            
+
+            if (prepare)
+            {
+                cmd.PrepareAsync();
+            }
+
             using (var reader = cmd.ExecuteReader())
             {
                 if (AssignmentCache<T>.Action == null)
@@ -274,13 +284,18 @@ namespace Deviax.QueryBuilder
             return result;
         }
 
-        public async Task ForEach<T>(DbCommand cmd, Action<T> action) where T : new()
+        public async Task ForEach<T>(DbCommand cmd, Action<T> action, bool prepare = true) where T : new()
         {
             if (AssignmentCache<T>.Constructor == null)
             {
                 AssignmentCache<T>.Constructor = GenerateConstructor<T>();
             }
-            
+
+            if (prepare)
+            {
+                await cmd.PrepareAsync();
+            }
+
             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
             {
                 if (AssignmentCache<T>.Action == null)
@@ -297,13 +312,18 @@ namespace Deviax.QueryBuilder
             }
         }
 
-        public async Task ForEach<T>(DbCommand cmd, Func<T, Task> action) where T : new()
+        public async Task ForEach<T>(DbCommand cmd, Func<T, Task> action, bool prepare = true) where T : new()
         {
             if (AssignmentCache<T>.Constructor == null)
             {
                 AssignmentCache<T>.Constructor = GenerateConstructor<T>();
             }
-            
+
+            if (prepare)
+            {
+                await cmd.PrepareAsync();
+            }
+
             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
             {
                 if (AssignmentCache<T>.Action == null)
@@ -362,7 +382,7 @@ namespace Deviax.QueryBuilder
             if (returningParts != null)
             {
                 q = q.Returning(returningParts);
-                var ids = await q.ScalarList<int>(con, tx);
+                var ids = await q.ScalarList<int>(con, tx, items.Length == 1);
 
                 if (ids.Count != items.Length)
                     throw new InvalidOperationException();
@@ -374,7 +394,7 @@ namespace Deviax.QueryBuilder
             }
             else
             {
-                await q.Execute(con, tx);
+                await q.Execute(con, tx, items.Length == 1);
             }
         }
         
@@ -386,7 +406,7 @@ namespace Deviax.QueryBuilder
             if (returningParts != null)
             {
                 q = q.Returning(returningParts);
-                var ids = q.ScalarListSync<int>(con, tx);
+                var ids = q.ScalarListSync<int>(con, tx, items.Length == 1);
 
                 if (ids.Count != items.Length)
                     throw new InvalidOperationException();
@@ -398,17 +418,22 @@ namespace Deviax.QueryBuilder
             }
             else
             {
-                q.ExecuteSync(con, tx);
+                q.ExecuteSync(con, tx, items.Length == 1);
             }
         }
 
-        public async Task<T> FirstOrDefault<T>(DbCommand cmd) where T : new()
+        public async Task<T> FirstOrDefault<T>(DbCommand cmd, bool prepare = true) where T : new()
         {
             if (AssignmentCache<T>.Constructor == null)
             {
                 AssignmentCache<T>.Constructor = GenerateConstructor<T>();
             }
-            
+
+            if (prepare)
+            {
+                await cmd.PrepareAsync();
+            }
+
             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
             {
                 if (AssignmentCache<T>.Action == null)
@@ -427,13 +452,18 @@ namespace Deviax.QueryBuilder
             }
         }
         
-        public T FirstOrDefaultSync<T>(DbCommand cmd) where T : new()
+        public T FirstOrDefaultSync<T>(DbCommand cmd, bool prepare = true) where T : new()
         {
             if (AssignmentCache<T>.Constructor == null)
             {
                 AssignmentCache<T>.Constructor = GenerateConstructor<T>();
             }
-            
+
+            if (prepare)
+            {
+                cmd.Prepare();
+            }
+
             using (var reader = cmd.ExecuteReader())
             {
                 if (AssignmentCache<T>.Action == null)
@@ -452,106 +482,111 @@ namespace Deviax.QueryBuilder
             }
         }
 
-        public async Task<List<T>> ToList<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx = null) where T : new()
+        public async Task<List<T>> ToList<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx = null, bool prepare = true) where T : new()
         {
             using (var cmd = ToCommand(query, con, tx))
             {
-                return await ToList<T>(cmd).ConfigureAwait(false);
+                return await ToList<T>(cmd, prepare).ConfigureAwait(false);
             }
         }
         
-        public List<T> ToListSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx = null) where T : new()
+        public List<T> ToListSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx = null, bool prepare = true) where T : new()
         {
             using (var cmd = ToCommand(query, con, tx))
             {
-                return ToListSync<T>(cmd);
+                return ToListSync<T>(cmd, prepare);
             }
         }
 
-        public async Task<T> FirstOrDefault<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx = null) where T : new()
+        public async Task<T> FirstOrDefault<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx = null, bool prepare = true) where T : new()
         {
             using (var cmd = ToCommand(query, con, tx))
-                return await FirstOrDefault<T>(cmd).ConfigureAwait(false);
+                return await FirstOrDefault<T>(cmd, prepare).ConfigureAwait(false);
         }
         
-        public T FirstOrDefaultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx = null) where T : new()
+        public T FirstOrDefaultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx = null, bool prepare = true) where T : new()
         {
             using (var cmd = ToCommand(query, con, tx))
-                return FirstOrDefaultSync<T>(cmd);
+                return FirstOrDefaultSync<T>(cmd, prepare);
         }
 
-        public async Task<T> FirstOrDefault<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx = null) where T : new()
+        public async Task<T> FirstOrDefault<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx = null, bool prepare = true) where T : new()
         {
             using (var cmd = ToCommand(query, con, tx))
-                return await FirstOrDefault<T>(cmd).ConfigureAwait(false);
+                return await FirstOrDefault<T>(cmd, prepare).ConfigureAwait(false);
         }
 
-        public async Task<T> ScalarResult<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx)
+        public async Task<T> ScalarResult<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
-                return await ScalarResult<T>(cmd);
-            }
-        }
-        
-        public T ScalarResultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx)
-        {
-            using (var cmd = ToCommand(query, con, tx))
-            {
-                return ScalarResultSync<T>(cmd);
-            }
-        }
-
-        public async Task<T> ScalarResult<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx)
-        {
-            using (var cmd = ToCommand(query, con, tx))
-            {
-                return await ScalarResult<T>(cmd);
+                return await ScalarResult<T>(cmd, prepare);
             }
         }
         
-        public T ScalarResultSync<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx)
+        public T ScalarResultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
-                return ScalarResultSync<T>(cmd);
+                return ScalarResultSync<T>(cmd, prepare);
             }
         }
 
-        public async Task<T> ScalarResult<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx)
+        public async Task<T> ScalarResult<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
-                return await ScalarResult<T>(cmd);
+                return await ScalarResult<T>(cmd, prepare);
             }
         }
         
-        public T ScalarResultSync<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx)
+        public T ScalarResultSync<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
-                return ScalarResultSync<T>(cmd);
+                return ScalarResultSync<T>(cmd, prepare);
             }
         }
 
-        public async Task<T> ScalarResult<T>(BaseDeleteQuery query, DbConnection con, DbTransaction tx)
+        public async Task<T> ScalarResult<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
-                return await ScalarResult<T>(cmd);
+                return await ScalarResult<T>(cmd, prepare);
             }
         }
         
-        public T ScalarResultSync<T>(BaseDeleteQuery query, DbConnection con, DbTransaction tx)
+        public T ScalarResultSync<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
-                return ScalarResultSync<T>(cmd);
+                return ScalarResultSync<T>(cmd, prepare);
             }
         }
 
-        protected async Task<T> ScalarResult<T>(DbCommand cmd)
+        public async Task<T> ScalarResult<T>(BaseDeleteQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
         {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return await ScalarResult<T>(cmd, prepare);
+            }
+        }
+        
+        public T ScalarResultSync<T>(BaseDeleteQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return ScalarResultSync<T>(cmd, prepare);
+            }
+        }
+
+        protected async Task<T> ScalarResult<T>(DbCommand cmd, bool prepare = true)
+        {
+            if (prepare)
+            {
+                await cmd.PrepareAsync();
+            }
+
             var val = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
 
             if (val == DBNull.Value)
@@ -572,8 +607,13 @@ namespace Deviax.QueryBuilder
             throw new ArgumentException();
         }
         
-        protected T ScalarResultSync<T>(DbCommand cmd)
+        protected T ScalarResultSync<T>(DbCommand cmd, bool prepare = true)
         {
+            if (prepare)
+            {
+                cmd.Prepare();
+            }
+
             var val = cmd.ExecuteScalar();
 
             if (val == DBNull.Value)
@@ -594,57 +634,62 @@ namespace Deviax.QueryBuilder
             throw new ArgumentException();
         }
 
-        public async Task<List<T>> ScalarListResult<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx)
+        public async Task<List<T>> ScalarListResult<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
-                return await ScalarListResult<T>(cmd);
+                return await ScalarListResult<T>(cmd, prepare);
             }
         }
         
-        public List<T> ScalarListResultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx)
+        public List<T> ScalarListResultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
-                return ScalarListResultSync<T>(cmd);
+                return ScalarListResultSync<T>(cmd, prepare);
             }
         }
 
-        public async Task<List<T>> ScalarListResult<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx)
+        public async Task<List<T>> ScalarListResult<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
-                return await ScalarListResult<T>(cmd);
+                return await ScalarListResult<T>(cmd, prepare);
             }
         }
         
-        public List<T> ScalarListResultSync<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx)
+        public List<T> ScalarListResultSync<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
-                return ScalarListResultSync<T>(cmd);
+                return ScalarListResultSync<T>(cmd, prepare);
             }
         }
 
-        public async Task<List<T>> ScalarListResult<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx)
+        public async Task<List<T>> ScalarListResult<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
-                return await ScalarListResult<T>(cmd);
+                return await ScalarListResult<T>(cmd, prepare);
             }
         }
         
-        public List<T> ScalarListResultSync<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx)
+        public List<T> ScalarListResultSync<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
-                return ScalarListResultSync<T>(cmd);
+                return ScalarListResultSync<T>(cmd, prepare);
             }
         }
 
-        protected async Task<List<T>> ScalarListResult<T>(DbCommand cmd)
+        protected async Task<List<T>> ScalarListResult<T>(DbCommand cmd, bool prepare = true)
         {
             var result = new List<T>();
+
+            if (prepare)
+            {
+                await cmd.PrepareAsync();
+            }
 
             using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
             {
@@ -683,9 +728,14 @@ namespace Deviax.QueryBuilder
             return result;
         }
         
-        protected List<T>  ScalarListResultSync<T>(DbCommand cmd)
+        protected List<T>  ScalarListResultSync<T>(DbCommand cmd, bool prepare = true)
         {
             var result = new List<T>();
+
+            if (prepare)
+            {
+                cmd.Prepare();
+            }
 
             using (var reader = cmd.ExecuteReader())
             {

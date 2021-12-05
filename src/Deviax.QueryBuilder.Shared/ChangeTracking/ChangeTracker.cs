@@ -39,7 +39,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
             var cnt = 0L;
             foreach (var qt in ToUpdateQueries())
             {
-                cnt += await qt.Item2.ScalarResult<long>(con, tx);
+                cnt += await qt.Item2.ScalarResult<long>(con, tx, false);
             }
             return cnt;
         }
@@ -49,7 +49,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
             var cnt = 0L;
             foreach (var qt in ToUpdateQueries())
             {
-                cnt += qt.Item2.ScalarResultSync<long>(con, tx);
+                cnt += qt.Item2.ScalarResultSync<long>(con, tx, false);
             }
             return cnt;
         }
