@@ -263,7 +263,7 @@ namespace Deviax.QueryBuilder
 
             if (prepare)
             {
-                cmd.PrepareAsync();
+                cmd.Prepare();
             }
 
             using (var reader = cmd.ExecuteReader())
