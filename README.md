@@ -1,5 +1,5 @@
 ﻿
-**SQL DSL:**
+## SQL DSL:
 
 A C# Query Builder DSL that is very close to SQL but does not rely on naked strings and hence avoids the refactoring and typo issues. 
 
@@ -116,7 +116,8 @@ var items = await baseQuery
 
 The SQL DSL covers Update, Delete and Select queries. ORM-Like Inserts and change tracking based updates also exists.
 
-**Query Projection**
+## Query Projection
+
 Project the result of a DbCommand to a C# class per row. For each selected column / value a Field or Property has to exist on the Projection class. This feature is usually not used on its own but rather indirectly via the FirstOrDefault or ToList methods on the query builder DSL.
 
 ```csharp
@@ -129,16 +130,16 @@ var items = QueryExecutor.DefaultExecutor.ToList<ProjectionExample>(cmd);
 The first execution for a given projection class has some overhead as it compiles the projection for future calls. 
 
 
-**Insert**
+## Insert
 
 ```csharp
 // Customer = Id (C#: int, PG: Serial aka auto increment PK), Name (c#: string, PG: text)
 var customer = new Customer { Name = "Some Name" };
-await Q.InsertOne(con, tx); // optional transaction
+await Q.InsertOne(con, tx, customer); // tx / transaction is optional
 Console.WriteLine(customer.Id); // Will print the PK returned from the DB
 ```
 
-**Change Tracking**
+## Change Tracking
 ```csharp
 var ctc = ChangeTrackingContext.StartWith(customer);
 // To track more entities: ctc.Track(xy)
