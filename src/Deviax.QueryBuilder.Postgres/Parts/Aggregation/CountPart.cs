@@ -8,7 +8,7 @@ namespace Deviax.QueryBuilder.Parts.Aggregation
             FilterPart = filterPart;
         }
 
-        internal readonly IBooleanPart FilterPart;
+        internal readonly IBooleanPart? FilterPart;
 
         public CountPart Filter(IBooleanPart filter)
         {

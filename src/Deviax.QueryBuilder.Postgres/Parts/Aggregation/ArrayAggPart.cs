@@ -5,7 +5,7 @@ namespace Deviax.QueryBuilder.Parts.Aggregation
     public class ArrayAggPart : Part
     {
         internal readonly IPart Over;
-        internal readonly IBooleanPart FilterPart;
+        internal readonly IBooleanPart? FilterPart;
 
         public ArrayAggPart(IPart over)
         {

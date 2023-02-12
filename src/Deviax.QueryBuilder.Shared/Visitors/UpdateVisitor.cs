@@ -16,7 +16,7 @@ namespace Deviax.QueryBuilder.Visitors
             TransitionToSetPart();
             Result.Append("\nSET ");
 
-            q.SetParts[0].Accept(this);
+            q.SetParts![0].Accept(this);
 
             for (int i = 1; i < q.SetParts.Count; i++)
             {

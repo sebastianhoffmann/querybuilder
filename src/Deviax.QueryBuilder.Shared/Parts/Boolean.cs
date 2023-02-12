@@ -21,7 +21,7 @@ namespace Deviax.QueryBuilder.Parts
 
     public sealed class AndPart : LeftRightPart, IBooleanPart
     {
-        public static IBooleanPart Build(params IBooleanPart[] parts)
+        public static IBooleanPart? Build(params IBooleanPart[] parts)
         {
             var builder = new Builder();
             foreach (var booleanPart in parts)
@@ -46,9 +46,9 @@ namespace Deviax.QueryBuilder.Parts
                 return this;
             }
             
-            public T AppendTo<T>(T q) where T : BaseSelectQuery<T> => _parts.Count == 0 ? q : q.Where(Build());
+            public T AppendTo<T>(T q) where T : BaseSelectQuery<T> => _parts.Count == 0 ? q : q.Where(Build()!);
 
-            public IBooleanPart Build()
+            public IBooleanPart? Build()
             {
                 if (_parts.Count == 0)
                     return null;
@@ -69,7 +69,7 @@ namespace Deviax.QueryBuilder.Parts
     }
     public class OrPart : LeftRightPart, IBooleanPart
     {
-        public static IBooleanPart Build(params IBooleanPart[] parts)
+        public static IBooleanPart? Build(params IBooleanPart[] parts)
         {
             var builder = new Builder();
             foreach (var booleanPart in parts)
@@ -83,7 +83,7 @@ namespace Deviax.QueryBuilder.Parts
         {
             private readonly List<IBooleanPart>  _parts = new List<IBooleanPart>();
 
-            public Builder Add(IBooleanPart part)
+            public Builder Add(IBooleanPart? part)
             {
                 if(part != null)
                     _parts.Add(part);
@@ -91,9 +91,9 @@ namespace Deviax.QueryBuilder.Parts
                 return this;
             }
 
-            public T AppendTo<T>(T q) where T : BaseSelectQuery<T> => _parts.Count == 0 ? q : q.Where(Build());
+            public T AppendTo<T>(T q) where T : BaseSelectQuery<T> => _parts.Count == 0 ? q : q.Where(Build()!);
 
-            public IBooleanPart Build()
+            public IBooleanPart? Build()
             {
                 if (_parts.Count == 0)
                     return null;

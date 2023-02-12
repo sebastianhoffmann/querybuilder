@@ -58,14 +58,14 @@ namespace Deviax.QueryBuilder
             TTable9 t9,
             TTable10 t10,
             IFromPart from,
-           List<JoinPart> joins,
-           List<IPart> selectParts,
-           List<IBooleanPart> whereParts,
-           List<IBooleanPart> havingParts,
-           List<IPart> groupByParts,
-           List<IOrderPart> orderByParts,
-           LimitOffsetPart limitOffsetPart,
-           List<IPart> extraParameters
+           List<JoinPart>? joins,
+           List<IPart>? selectParts,
+           List<IBooleanPart>? whereParts,
+           List<IBooleanPart>? havingParts,
+           List<IPart>? groupByParts,
+           List<IOrderPart>? orderByParts,
+           LimitOffsetPart? limitOffsetPart,
+           List<IPart>? extraParameters
            ) : base(from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters)
         {
             Table1 = t1;
@@ -130,7 +130,7 @@ namespace Deviax.QueryBuilder
             );
         }
 
-        protected override SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, TTable8, TTable9, TTable10> New(SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, TTable8, TTable9, TTable10> t, IFromPart from, List<JoinPart> joins, List<IPart> selectParts, List<IBooleanPart> whereParts, List<IBooleanPart> havingParts, List<IPart> groupByParts, List<IOrderPart> orderByParts, LimitOffsetPart limitOffsetPart, List<IPart> extraParameters)
+        protected override SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, TTable8, TTable9, TTable10> New(SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, TTable8, TTable9, TTable10> t, IFromPart from, List<JoinPart>? joins, List<IPart>? selectParts, List<IBooleanPart>? whereParts, List<IBooleanPart>? havingParts, List<IPart>? groupByParts, List<IOrderPart>? orderByParts, LimitOffsetPart? limitOffsetPart, List<IPart>? extraParameters)
         {
             return new SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, TTable8, TTable9, TTable10>(t.Table1, t.Table2, t.Table3, t.Table4, t.Table5, t.Table6, t.Table7, t.Table8, t.Table9, t.Table10, from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters);
         }
@@ -181,14 +181,14 @@ namespace Deviax.QueryBuilder
             TTable8 t8,
             TTable9 t9,
             IFromPart from,
-           List<JoinPart> joins,
-           List<IPart> selectParts,
-           List<IBooleanPart> whereParts,
-           List<IBooleanPart> havingParts,
-           List<IPart> groupByParts,
-           List<IOrderPart> orderByParts,
-           LimitOffsetPart limitOffsetPart,
-           List<IPart> extraParameters
+           List<JoinPart>? joins,
+           List<IPart>? selectParts,
+           List<IBooleanPart>? whereParts,
+           List<IBooleanPart>? havingParts,
+           List<IPart>? groupByParts,
+           List<IOrderPart>? orderByParts,
+           LimitOffsetPart? limitOffsetPart,
+           List<IPart>? extraParameters
            ) : base(from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters)
         {
             Table1 = t1;
@@ -301,7 +301,7 @@ namespace Deviax.QueryBuilder
             );
         }
 
-        protected override SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, TTable8, TTable9> New(SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, TTable8, TTable9> t, IFromPart from, List<JoinPart> joins, List<IPart> selectParts, List<IBooleanPart> whereParts, List<IBooleanPart> havingParts, List<IPart> groupByParts, List<IOrderPart> orderByParts, LimitOffsetPart limitOffsetPart, List<IPart> extraParameters)
+        protected override SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, TTable8, TTable9> New(SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, TTable8, TTable9> t, IFromPart from, List<JoinPart>? joins, List<IPart>? selectParts, List<IBooleanPart>? whereParts, List<IBooleanPart>? havingParts, List<IPart>? groupByParts, List<IOrderPart>? orderByParts, LimitOffsetPart? limitOffsetPart, List<IPart>? extraParameters)
         {
             return new SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, TTable8, TTable9>(t.Table1, t.Table2, t.Table3, t.Table4, t.Table5, t.Table6, t.Table7, t.Table8, t.Table9, from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters);
         }
@@ -349,14 +349,14 @@ namespace Deviax.QueryBuilder
             TTable7 t7,
             TTable8 t8,
             IFromPart from,
-           List<JoinPart> joins,
-           List<IPart> selectParts,
-           List<IBooleanPart> whereParts,
-           List<IBooleanPart> havingParts,
-           List<IPart> groupByParts,
-           List<IOrderPart> orderByParts,
-           LimitOffsetPart limitOffsetPart,
-           List<IPart> extraParameters
+           List<JoinPart>? joins,
+           List<IPart>? selectParts,
+           List<IBooleanPart>? whereParts,
+           List<IBooleanPart>? havingParts,
+           List<IPart>? groupByParts,
+           List<IOrderPart>? orderByParts,
+           LimitOffsetPart? limitOffsetPart,
+           List<IPart>? extraParameters
            ) : base(from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters)
         {
             Table1 = t1;
@@ -471,7 +471,7 @@ namespace Deviax.QueryBuilder
             );
         }
 
-        protected override SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, TTable8> New(SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, TTable8> t, IFromPart from, List<JoinPart> joins, List<IPart> selectParts, List<IBooleanPart> whereParts, List<IBooleanPart> havingParts, List<IPart> groupByParts, List<IOrderPart> orderByParts, LimitOffsetPart limitOffsetPart, List<IPart> extraParameters)
+        protected override SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, TTable8> New(SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, TTable8> t, IFromPart from, List<JoinPart>? joins, List<IPart>? selectParts, List<IBooleanPart>? whereParts, List<IBooleanPart>? havingParts, List<IPart>? groupByParts, List<IOrderPart>? orderByParts, LimitOffsetPart? limitOffsetPart, List<IPart>? extraParameters)
         {
             return new SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7, TTable8>(t.Table1, t.Table2, t.Table3, t.Table4, t.Table5, t.Table6, t.Table7, t.Table8, from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters);
         }
@@ -515,14 +515,14 @@ namespace Deviax.QueryBuilder
             TTable6 t6,
             TTable7 t7,
             IFromPart from,
-           List<JoinPart> joins,
-           List<IPart> selectParts,
-           List<IBooleanPart> whereParts,
-           List<IBooleanPart> havingParts,
-           List<IPart> groupByParts,
-           List<IOrderPart> orderByParts,
-           LimitOffsetPart limitOffsetPart,
-           List<IPart> extraParameters
+           List<JoinPart>? joins,
+           List<IPart>? selectParts,
+           List<IBooleanPart>? whereParts,
+           List<IBooleanPart>? havingParts,
+           List<IPart>? groupByParts,
+           List<IOrderPart>? orderByParts,
+           LimitOffsetPart? limitOffsetPart,
+           List<IPart>? extraParameters
            ) : base(from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters)
         {
             Table1 = t1;
@@ -646,7 +646,7 @@ namespace Deviax.QueryBuilder
             );
         }
 
-        protected override SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7> New(SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7> t, IFromPart from, List<JoinPart> joins, List<IPart> selectParts, List<IBooleanPart> whereParts, List<IBooleanPart> havingParts, List<IPart> groupByParts, List<IOrderPart> orderByParts, LimitOffsetPart limitOffsetPart, List<IPart> extraParameters)
+        protected override SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7> New(SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7> t, IFromPart from, List<JoinPart>? joins, List<IPart>? selectParts, List<IBooleanPart>? whereParts, List<IBooleanPart>? havingParts, List<IPart>? groupByParts, List<IOrderPart>? orderByParts, LimitOffsetPart? limitOffsetPart, List<IPart>? extraParameters)
         {
             return new SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6, TTable7>(t.Table1, t.Table2, t.Table3, t.Table4, t.Table5, t.Table6, t.Table7, from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters);
         }
@@ -686,14 +686,14 @@ namespace Deviax.QueryBuilder
             TTable5 t5,
             TTable6 t6,
             IFromPart from,
-           List<JoinPart> joins,
-           List<IPart> selectParts,
-           List<IBooleanPart> whereParts,
-           List<IBooleanPart> havingParts,
-           List<IPart> groupByParts,
-           List<IOrderPart> orderByParts,
-           LimitOffsetPart limitOffsetPart,
-           List<IPart> extraParameters
+           List<JoinPart>? joins,
+           List<IPart>? selectParts,
+           List<IBooleanPart>? whereParts,
+           List<IBooleanPart>? havingParts,
+           List<IPart>? groupByParts,
+           List<IOrderPart>? orderByParts,
+           LimitOffsetPart? limitOffsetPart,
+           List<IPart>? extraParameters
            ) : base(from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters)
         {
             Table1 = t1;
@@ -805,7 +805,7 @@ namespace Deviax.QueryBuilder
             );
         }
 
-        protected override SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6> New(SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6> t, IFromPart from, List<JoinPart> joins, List<IPart> selectParts, List<IBooleanPart> whereParts, List<IBooleanPart> havingParts, List<IPart> groupByParts, List<IOrderPart> orderByParts, LimitOffsetPart limitOffsetPart, List<IPart> extraParameters)
+        protected override SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6> New(SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6> t, IFromPart from, List<JoinPart>? joins, List<IPart>? selectParts, List<IBooleanPart>? whereParts, List<IBooleanPart>? havingParts, List<IPart>? groupByParts, List<IOrderPart>? orderByParts, LimitOffsetPart? limitOffsetPart, List<IPart>? extraParameters)
         {
             return new SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5, TTable6>(t.Table1, t.Table2, t.Table3, t.Table4, t.Table5, t.Table6, from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters);
         }
@@ -841,14 +841,14 @@ namespace Deviax.QueryBuilder
             TTable4 t4,
             TTable5 t5,
             IFromPart from,
-           List<JoinPart> joins,
-           List<IPart> selectParts,
-           List<IBooleanPart> whereParts,
-           List<IBooleanPart> havingParts,
-           List<IPart> groupByParts,
-           List<IOrderPart> orderByParts,
-           LimitOffsetPart limitOffsetPart,
-           List<IPart> extraParameters
+           List<JoinPart>? joins,
+           List<IPart>? selectParts,
+           List<IBooleanPart>? whereParts,
+           List<IBooleanPart>? havingParts,
+           List<IPart>? groupByParts,
+           List<IOrderPart>? orderByParts,
+           LimitOffsetPart? limitOffsetPart,
+           List<IPart>? extraParameters
            ) : base(from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters)
         {
             Table1 = t1;
@@ -959,7 +959,7 @@ namespace Deviax.QueryBuilder
             );
         }
 
-        protected override SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5> New(SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5> t, IFromPart from, List<JoinPart> joins, List<IPart> selectParts, List<IBooleanPart> whereParts, List<IBooleanPart> havingParts, List<IPart> groupByParts, List<IOrderPart> orderByParts, LimitOffsetPart limitOffsetPart, List<IPart> extraParameters)
+        protected override SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5> New(SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5> t, IFromPart from, List<JoinPart>? joins, List<IPart>? selectParts, List<IBooleanPart>? whereParts, List<IBooleanPart>? havingParts, List<IPart>? groupByParts, List<IOrderPart>? orderByParts, LimitOffsetPart? limitOffsetPart, List<IPart>? extraParameters)
         {
             return new SelectQuery<TTable, TTable2, TTable3, TTable4, TTable5>(t.Table1, t.Table2, t.Table3, t.Table4, t.Table5, from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters);
         }
@@ -991,14 +991,14 @@ namespace Deviax.QueryBuilder
             TTable3 t3,
             TTable4 t4,
             IFromPart from,
-           List<JoinPart> joins,
-           List<IPart> selectParts,
-           List<IBooleanPart> whereParts,
-           List<IBooleanPart> havingParts,
-           List<IPart> groupByParts,
-           List<IOrderPart> orderByParts,
-           LimitOffsetPart limitOffsetPart,
-           List<IPart> extraParameters
+           List<JoinPart>? joins,
+           List<IPart>? selectParts,
+           List<IBooleanPart>? whereParts,
+           List<IBooleanPart>? havingParts,
+           List<IPart>? groupByParts,
+           List<IOrderPart>? orderByParts,
+           LimitOffsetPart? limitOffsetPart,
+           List<IPart>? extraParameters
            ) : base(from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters)
         {
             Table1 = t1;
@@ -1108,7 +1108,7 @@ namespace Deviax.QueryBuilder
             );
         }
 
-        protected override SelectQuery<TTable, TTable2, TTable3, TTable4> New(SelectQuery<TTable, TTable2, TTable3, TTable4> t, IFromPart from, List<JoinPart> joins, List<IPart> selectParts, List<IBooleanPart> whereParts, List<IBooleanPart> havingParts, List<IPart> groupByParts, List<IOrderPart> orderByParts, LimitOffsetPart limitOffsetPart, List<IPart> extraParameters)
+        protected override SelectQuery<TTable, TTable2, TTable3, TTable4> New(SelectQuery<TTable, TTable2, TTable3, TTable4> t, IFromPart from, List<JoinPart>? joins, List<IPart>? selectParts, List<IBooleanPart>? whereParts, List<IBooleanPart>? havingParts, List<IPart>? groupByParts, List<IOrderPart>? orderByParts, LimitOffsetPart? limitOffsetPart, List<IPart>? extraParameters)
         {
             return new SelectQuery<TTable, TTable2, TTable3, TTable4>(t.Table1, t.Table2, t.Table3, t.Table4, from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters);
         }
@@ -1136,14 +1136,14 @@ namespace Deviax.QueryBuilder
             TTable2 t2,
             TTable3 t3,
             IFromPart from,
-           List<JoinPart> joins,
-           List<IPart> selectParts,
-           List<IBooleanPart> whereParts,
-           List<IBooleanPart> havingParts,
-           List<IPart> groupByParts,
-           List<IOrderPart> orderByParts,
-           LimitOffsetPart limitOffsetPart,
-           List<IPart> extraParameters
+           List<JoinPart>? joins,
+           List<IPart>? selectParts,
+           List<IBooleanPart>? whereParts,
+           List<IBooleanPart>? havingParts,
+           List<IPart>? groupByParts,
+           List<IOrderPart>? orderByParts,
+           LimitOffsetPart? limitOffsetPart,
+           List<IPart>? extraParameters
            ) : base(from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters)
         {
             Table1 = t1;
@@ -1252,7 +1252,7 @@ namespace Deviax.QueryBuilder
             );
         }
 
-        protected override SelectQuery<TTable, TTable2, TTable3> New(SelectQuery<TTable, TTable2, TTable3> t, IFromPart from, List<JoinPart> joins, List<IPart> selectParts, List<IBooleanPart> whereParts, List<IBooleanPart> havingParts, List<IPart> groupByParts, List<IOrderPart> orderByParts, LimitOffsetPart limitOffsetPart, List<IPart> extraParameters)
+        protected override SelectQuery<TTable, TTable2, TTable3> New(SelectQuery<TTable, TTable2, TTable3> t, IFromPart from, List<JoinPart>? joins, List<IPart>? selectParts, List<IBooleanPart>? whereParts, List<IBooleanPart>? havingParts, List<IPart>? groupByParts, List<IOrderPart>? orderByParts, LimitOffsetPart? limitOffsetPart, List<IPart>? extraParameters)
         {
             return new SelectQuery<TTable, TTable2, TTable3>(t.Table1, t.Table2, t.Table3, from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters);
         }
@@ -1273,17 +1273,17 @@ namespace Deviax.QueryBuilder
         }
 
         internal SelectQuery(
-            TTable t1,
-            TTable2 t2,
-            IFromPart from,
-           List<JoinPart> joins,
-           List<IPart> selectParts,
-           List<IBooleanPart> whereParts,
-           List<IBooleanPart> havingParts,
-           List<IPart> groupByParts,
-           List<IOrderPart> orderByParts,
-           LimitOffsetPart limitOffsetPart,
-           List<IPart> extraParameters
+           TTable t1,
+           TTable2 t2,
+           IFromPart from,
+           List<JoinPart>? joins,
+           List<IPart>? selectParts,
+           List<IBooleanPart>? whereParts,
+           List<IBooleanPart>? havingParts,
+           List<IPart>? groupByParts,
+           List<IOrderPart>? orderByParts,
+           LimitOffsetPart? limitOffsetPart,
+           List<IPart>? extraParameters
            ) : base(from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters)
         {
             Table1 = t1;
@@ -1391,7 +1391,7 @@ namespace Deviax.QueryBuilder
             );
         }
 
-        protected override SelectQuery<TTable, TTable2> New(SelectQuery<TTable, TTable2> t, IFromPart from, List<JoinPart> joins, List<IPart> selectParts, List<IBooleanPart> whereParts, List<IBooleanPart> havingParts, List<IPart> groupByParts, List<IOrderPart> orderByParts, LimitOffsetPart limitOffsetPart, List<IPart> extraParameters)
+        protected override SelectQuery<TTable, TTable2> New(SelectQuery<TTable, TTable2> t, IFromPart from, List<JoinPart>? joins, List<IPart>? selectParts, List<IBooleanPart>? whereParts, List<IBooleanPart>? havingParts, List<IPart>? groupByParts, List<IOrderPart>? orderByParts, LimitOffsetPart? limitOffsetPart, List<IPart>? extraParameters)
         {
             return new SelectQuery<TTable, TTable2>(t.Table1, t.Table2, from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters);
         }
@@ -1409,16 +1409,16 @@ namespace Deviax.QueryBuilder
         }
 
         internal SelectQuery(
-            TTable t1,
-            IFromPart from,
-           List<JoinPart> joins,
-           List<IPart> selectParts,
-           List<IBooleanPart> whereParts,
-           List<IBooleanPart> havingParts,
-           List<IPart> groupByParts,
-           List<IOrderPart> orderByParts,
-           LimitOffsetPart limitOffsetPart,
-           List<IPart> extraParameters
+           TTable t1,
+           IFromPart from,
+           List<JoinPart>? joins,
+           List<IPart>? selectParts,
+           List<IBooleanPart>? whereParts,
+           List<IBooleanPart>? havingParts,
+           List<IPart>? groupByParts,
+           List<IOrderPart>? orderByParts,
+           LimitOffsetPart? limitOffsetPart,
+           List<IPart>? extraParameters
            ) : base(from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters)
         {
             Table1 = t1;
@@ -1525,7 +1525,7 @@ namespace Deviax.QueryBuilder
             );
         }
 
-        protected override SelectQuery<TTable> New(SelectQuery<TTable> t, IFromPart from, List<JoinPart> joins, List<IPart> selectParts, List<IBooleanPart> whereParts, List<IBooleanPart> havingParts, List<IPart> groupByParts, List<IOrderPart> orderByParts, LimitOffsetPart limitOffsetPart, List<IPart> extraParameters)
+        protected override SelectQuery<TTable> New(SelectQuery<TTable> t, IFromPart from, List<JoinPart>? joins, List<IPart>? selectParts, List<IBooleanPart>? whereParts, List<IBooleanPart>? havingParts, List<IPart>? groupByParts, List<IOrderPart>? orderByParts, LimitOffsetPart? limitOffsetPart, List<IPart>? extraParameters)
         {
             return new SelectQuery<TTable>(t.Table1, from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters);
         }
@@ -1534,24 +1534,24 @@ namespace Deviax.QueryBuilder
     public abstract class BaseSelectQuery : Part
     {
         internal readonly IFromPart From;
-        internal readonly List<IPart> GroupByParts;
-        internal readonly List<IBooleanPart> HavingParts;
-        internal readonly List<JoinPart> Joins;
-        internal readonly List<IOrderPart> OrderByParts;
-        internal readonly List<IPart> SelectParts;
-        internal readonly List<IBooleanPart> WhereParts;
-        internal readonly LimitOffsetPart LimitOffsetPart;
-        internal readonly List<IPart> ExtraParameters;
+        internal readonly List<IPart>? GroupByParts;
+        internal readonly List<IBooleanPart>? HavingParts;
+        internal readonly List<JoinPart>? Joins;
+        internal readonly List<IOrderPart>? OrderByParts;
+        internal readonly List<IPart>? SelectParts;
+        internal readonly List<IBooleanPart>? WhereParts;
+        internal readonly LimitOffsetPart? LimitOffsetPart;
+        internal readonly List<IPart>? ExtraParameters;
 
         protected BaseSelectQuery(IFromPart from,
-            List<JoinPart> joins,
-            List<IPart> selectParts,
-            List<IBooleanPart> whereParts,
-            List<IBooleanPart> havingParts,
-            List<IPart> groupByParts,
-            List<IOrderPart> orderByParts,
-            LimitOffsetPart limitOffsetPart,
-            List<IPart> extraParameters
+            List<JoinPart>? joins,
+            List<IPart>? selectParts,
+            List<IBooleanPart>? whereParts,
+            List<IBooleanPart>? havingParts,
+            List<IPart>? groupByParts,
+            List<IOrderPart>? orderByParts,
+            LimitOffsetPart? limitOffsetPart,
+            List<IPart>? extraParameters
             )
         {
             From = from;
@@ -1572,44 +1572,44 @@ namespace Deviax.QueryBuilder
 
         public override void Accept(INodeVisitor visitor) => visitor.Visit(this);
 
-        public async Task<List<T>> ToList<T>(DbConnection con, DbTransaction tx = null, bool prepare = true) where T : new()
+        public async Task<List<T>> ToList<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
         {
             return await QueryExecutor.DefaultExecutor.ToList<T>(this, con, tx, prepare).ConfigureAwait(false);
         }
         
-        public List<T> ToListSync<T>(DbConnection con, DbTransaction tx = null, bool prepare = true) where T : new()
+        public List<T> ToListSync<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
         {
             return QueryExecutor.DefaultExecutor.ToListSync<T>(this, con, tx, prepare);
         }
 
-        public async Task<T> FirstOrDefault<T>(DbConnection con, DbTransaction tx = null, bool prepare = true) where T : new()
+        public async Task<T> FirstOrDefault<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
         {
             return await QueryExecutor.DefaultExecutor.FirstOrDefault<T>(this, con, tx, prepare).ConfigureAwait(false);
         }
         
-        public T FirstOrDefaultSync<T>(DbConnection con, DbTransaction tx = null, bool prepare = true) where T : new()
+        public T FirstOrDefaultSync<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
         {
             return QueryExecutor.DefaultExecutor.FirstOrDefaultSync<T>(this, con, tx, prepare);
         }
 
         public new AliasedSelectQuery As(string alias) => new AliasedSelectQuery(alias, this);
 
-        public async Task<T> ScalarResult<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public async Task<T> ScalarResult<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return await QueryExecutor.DefaultExecutor.ScalarResult<T>(this, con, tx, prepare).ConfigureAwait(false);
         }
         
-        public T ScalarResultSync<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public T ScalarResultSync<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return QueryExecutor.DefaultExecutor.ScalarResultSync<T>(this, con, tx, prepare);
         }
 
-        public async Task<List<T>> ScalarList<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public async Task<List<T>> ScalarList<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return await QueryExecutor.DefaultExecutor.ScalarListResult<T>(this, con, tx, prepare).ConfigureAwait(false);
         }
         
-        public List<T> ScalarListSync<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public List<T> ScalarListSync<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return QueryExecutor.DefaultExecutor.ScalarListResultSync<T>(this, con, tx, prepare);
         }
@@ -1625,14 +1625,14 @@ namespace Deviax.QueryBuilder
     public abstract class BaseSelectQuery<TQ>  : BaseSelectQuery where TQ : BaseSelectQuery<TQ>
     {
         protected BaseSelectQuery(IFromPart from,
-            List<JoinPart> joins,
-            List<IPart> selectParts,
-            List<IBooleanPart> whereParts,
-            List<IBooleanPart> havingParts,
-            List<IPart> groupByParts,
-            List<IOrderPart> orderByParts,
-            LimitOffsetPart limitOffsetPart,
-            List<IPart> extraParameters
+            List<JoinPart>? joins,
+            List<IPart>? selectParts,
+            List<IBooleanPart>? whereParts,
+            List<IBooleanPart>? havingParts,
+            List<IPart>? groupByParts,
+            List<IOrderPart>? orderByParts,
+            LimitOffsetPart? limitOffsetPart,
+            List<IPart>? extraParameters
             ) : base(from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters)
         {
         }
@@ -1640,21 +1640,21 @@ namespace Deviax.QueryBuilder
         protected abstract TQ New(
             TQ t,
             IFromPart from,
-            List<JoinPart> joins,
-            List<IPart> selectParts,
-            List<IBooleanPart> whereParts,
-            List<IBooleanPart> havingParts,
-            List<IPart> groupByParts,
-            List<IOrderPart> orderByParts,
-            LimitOffsetPart limitOffsetPart,
-            List<IPart> extraParameters
+            List<JoinPart>? joins,
+            List<IPart>? selectParts,
+            List<IBooleanPart>? whereParts,
+            List<IBooleanPart>? havingParts,
+            List<IPart>? groupByParts,
+            List<IOrderPart>? orderByParts,
+            LimitOffsetPart? limitOffsetPart,
+            List<IPart>? extraParameters
         );
 
         protected BaseSelectQuery(IFromPart from) : base(from)
         {
         }
 
-        protected static List<T> With<T>(IReadOnlyCollection<T> existing, params T[] toAdd)
+        protected static List<T> With<T>(IReadOnlyCollection<T>? existing, params T[] toAdd)
         {
             if (existing == null)
                 return new List<T>(toAdd);
@@ -1747,14 +1747,14 @@ namespace Deviax.QueryBuilder
     public class SelectQuery : BaseSelectQuery<SelectQuery>
     {
         internal SelectQuery(IFromPart from,
-            List<JoinPart> joins,
-            List<IPart> selectParts,
-            List<IBooleanPart> whereParts,
-            List<IBooleanPart> havingParts,
-            List<IPart> groupByParts,
-            List<IOrderPart> orderByParts,
-            LimitOffsetPart limitOffsetPart,
-            List<IPart> extraParameters 
+            List<JoinPart>? joins,
+            List<IPart>? selectParts,
+            List<IBooleanPart>? whereParts,
+            List<IBooleanPart>? havingParts,
+            List<IPart>? groupByParts,
+            List<IOrderPart>? orderByParts,
+            LimitOffsetPart? limitOffsetPart,
+            List<IPart>? extraParameters
             ) : base(from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters)
         {
         }
@@ -1772,14 +1772,14 @@ namespace Deviax.QueryBuilder
         protected override SelectQuery New(
             SelectQuery t,
             IFromPart from,
-            List<JoinPart> joins,
-            List<IPart> selectParts,
-            List<IBooleanPart> whereParts,
-            List<IBooleanPart> havingParts,
-            List<IPart> groupByParts,
-            List<IOrderPart> orderByParts,
-            LimitOffsetPart limitOffsetPart,
-            List<IPart> extraParameters
+            List<JoinPart>? joins,
+            List<IPart>? selectParts,
+            List<IBooleanPart>? whereParts,
+            List<IBooleanPart>? havingParts,
+            List<IPart>? groupByParts,
+            List<IOrderPart>? orderByParts,
+            LimitOffsetPart? limitOffsetPart,
+            List<IPart>? extraParameters
         ) => new SelectQuery(from, joins, selectParts, whereParts, havingParts, groupByParts, orderByParts, limitOffsetPart, extraParameters);
         
         [Pure]

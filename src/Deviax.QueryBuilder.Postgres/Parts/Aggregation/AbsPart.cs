@@ -12,7 +12,7 @@ namespace Deviax.QueryBuilder.Parts.Aggregation
             FilterPart = filterPart;
         }
 
-        internal readonly IBooleanPart FilterPart;
+        internal readonly IBooleanPart? FilterPart;
 
         public AbsPart Filter(IBooleanPart filter)
         {

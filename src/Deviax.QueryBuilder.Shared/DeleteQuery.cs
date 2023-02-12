@@ -12,15 +12,15 @@ namespace Deviax.QueryBuilder
     public abstract class BaseDeleteQuery : Part
     {
         internal readonly IFromPart From;
-        internal readonly IFromPart UsingPart; // TODO: move to postgres only
-        internal readonly List<IBooleanPart> WhereParts;
-        internal readonly List<IPart> ExtraParameters;
+        internal readonly IFromPart? UsingPart; // TODO: move to postgres only
+        internal readonly List<IBooleanPart>? WhereParts;
+        internal readonly List<IPart>? ExtraParameters;
 
         protected BaseDeleteQuery(
             IFromPart from,
-            IFromPart @using,
-            List<IBooleanPart> whereParts,
-            List<IPart> extraParameters
+            IFromPart? @using,
+            List<IBooleanPart>? whereParts,
+            List<IPart>? extraParameters
             )
         {
             From = from;
@@ -36,22 +36,22 @@ namespace Deviax.QueryBuilder
 
         public override void Accept(INodeVisitor visitor) => visitor.Visit(this);
 
-        public async Task<T> ScalarResult<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public async Task<T> ScalarResult<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return await QueryExecutor.DefaultExecutor.ScalarResult<T>(this, con, tx, prepare).ConfigureAwait(false);
         }
         
-        public T ScalarResultSync<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public T ScalarResultSync<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return QueryExecutor.DefaultExecutor.ScalarResultSync<T>(this, con, tx, prepare);
         }
 
-        public async Task<int> Execute(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public async Task<int> Execute(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return await ScalarResult<int>(con, tx, prepare);
         }
         
-        public int ExecuteSync(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public int ExecuteSync(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return ScalarResultSync<int>(con, tx, prepare);
         }
@@ -68,9 +68,9 @@ namespace Deviax.QueryBuilder
     {
         protected BaseDeleteQuery(
             IFromPart from,
-            IFromPart @using,
-            List<IBooleanPart> whereParts,
-            List<IPart> extraParameters
+            IFromPart? @using,
+            List<IBooleanPart>? whereParts,
+            List<IPart>? extraParameters
             ) : base(from, @using, whereParts, extraParameters)
         {
         }
@@ -78,16 +78,16 @@ namespace Deviax.QueryBuilder
         protected abstract TQ New(
             TQ t,
             IFromPart from,
-            IFromPart @using,
-            List<IBooleanPart> whereParts,
-            List<IPart> extraParameters
+            IFromPart? @using,
+            List<IBooleanPart>? whereParts,
+            List<IPart>? extraParameters
         );
 
         protected BaseDeleteQuery(IFromPart target) : base(target)
         {
         }
 
-        protected static List<T> With<T>(IReadOnlyCollection<T> existing, params T[] toAdd)
+        protected static List<T> With<T>(IReadOnlyCollection<T>? existing, params T[] toAdd)
         {
             if (existing == null)
                 return new List<T>(toAdd);
@@ -125,9 +125,9 @@ namespace Deviax.QueryBuilder
         internal DeleteQuery(
             TTable t1,
             IFromPart from,
-            IFromPart @using,
-            List<IBooleanPart> whereParts,
-            List<IPart> extraParameters
+            IFromPart? @using,
+            List<IBooleanPart>? whereParts,
+            List<IPart>? extraParameters
             ) : base(from, @using, whereParts, extraParameters)
         {
             Table1 = t1;
@@ -148,7 +148,7 @@ namespace Deviax.QueryBuilder
             return new DeleteQuery<TTable, TTable2>(Table1, t2, From, t2, WhereParts, ExtraParameters);
         }
         
-        protected override DeleteQuery<TTable> New(DeleteQuery<TTable> t, IFromPart @from, IFromPart @using, List<IBooleanPart> whereParts, List<IPart> extraParameters)
+        protected override DeleteQuery<TTable> New(DeleteQuery<TTable> t, IFromPart @from, IFromPart? @using, List<IBooleanPart>? whereParts, List<IPart>? extraParameters)
         {
             return new DeleteQuery<TTable>(t.Table1, from, @using, whereParts, extraParameters);
         }
@@ -169,9 +169,9 @@ namespace Deviax.QueryBuilder
             TTable t1,
             TTable2 t2,
             IFromPart from,
-            IFromPart @using,
-            List<IBooleanPart> whereParts,
-            List<IPart> extraParameters
+            IFromPart? @using,
+            List<IBooleanPart>? whereParts,
+            List<IPart>? extraParameters
         ) : base(from, @using, whereParts, extraParameters)
         {
             Table1 = t1;
@@ -187,7 +187,7 @@ namespace Deviax.QueryBuilder
             );
         }
         
-        protected override DeleteQuery<TTable, TTable2> New(DeleteQuery<TTable, TTable2> t, IFromPart @from, IFromPart @using, List<IBooleanPart> whereParts, List<IPart> extraParameters)
+        protected override DeleteQuery<TTable, TTable2> New(DeleteQuery<TTable, TTable2> t, IFromPart from, IFromPart? @using, List<IBooleanPart>? whereParts, List<IPart>? extraParameters)
         {
             return new DeleteQuery<TTable, TTable2>(t.Table1, t.Table2, from, @using, whereParts, extraParameters);
         }

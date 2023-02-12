@@ -21,7 +21,7 @@ namespace Deviax.QueryBuilder.Visitors
 
     public abstract partial class BaseVisitor : INodeVisitor
     {
-        public IVisitorResult Result;
+        public IVisitorResult Result = null!;
         protected CoarseState State = CoarseState.Select;
         
         protected bool ExpectsFqn;
@@ -128,7 +128,7 @@ namespace Deviax.QueryBuilder.Visitors
             }
             else
             {
-                Result.Append(literal.Value.ToString()).Append(" ");
+                Result.Append(literal.Value!.ToString()).Append(" ");
             }
         }
 

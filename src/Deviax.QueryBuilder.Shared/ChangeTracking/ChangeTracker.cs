@@ -13,11 +13,11 @@ namespace Deviax.QueryBuilder.ChangeTracking
     {
         public class Tracking
         {
-            public object Original;
-            public object Current;
-            public Action<Tracking, object, object, List<FieldChange>> Comparer;
-            public Table Table;
-            public Func<object, Table, IBooleanPart[]> ConditionGetter;
+            public object Original = null!;
+            public object Current = null!;
+            public Action<Tracking, object, object, List<FieldChange>> Comparer = null!;
+            public Table Table = null!;
+            public Func<object, Table, IBooleanPart[]>? ConditionGetter;
         }
         
         public List<(object, UpdateQuery)> ToUpdateQueries()
@@ -34,7 +34,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
                 }).ToList();
         }
 
-        public async Task<long> Commit(DbConnection con, DbTransaction tx = null)
+        public async Task<long> Commit(DbConnection con, DbTransaction? tx = null)
         {
             var cnt = 0L;
             foreach (var qt in ToUpdateQueries())
@@ -44,7 +44,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
             return cnt;
         }
         
-        public long CommitSync(DbConnection con, DbTransaction tx)
+        public long CommitSync(DbConnection con, DbTransaction? tx)
         {
             var cnt = 0L;
             foreach (var qt in ToUpdateQueries())
@@ -60,7 +60,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
         }
 
         private readonly List<Tracking> _objects = new List<Tracking>();
-        public void Track<T>(T current, T copy, Table table = null)
+        public void Track<T>(T current, T copy, Table? table = null)
         {
             var comparison = ComparisonCache<T>.Comparison ?? (ComparisonCache<T>.Comparison = BuildComparison<T>());
 
@@ -71,15 +71,15 @@ namespace Deviax.QueryBuilder.ChangeTracking
                 throw new ArgumentException($"Please register `{typeof(T).FullName}` with a table via Registry.RegisterTypeToTable or pass a Table to Track");
             }
 
-            _objects.Add(new Tracking { Original = copy, Current = current, Comparer = comparison, Table = table, ConditionGetter = TypeToTableEntry<T>.GetDefaultConditions });
+            _objects.Add(new Tracking { Original = copy!, Current = current!, Comparer = comparison, Table = table, ConditionGetter = TypeToTableEntry<T>.GetDefaultConditions });
         }
 
-        public void Track<T>(T current, Table table = null)
+        public void Track<T>(T current, Table? table = null)
         {
             Track(current, Copy(current), table);
         }
 
-        public static ChangeTrackingContext StartWith<T>(T current, Table table = null)
+        public static ChangeTrackingContext StartWith<T>(T current, Table? table = null)
         {
             var ctc = new ChangeTrackingContext();
             ctc.Track(current, table);
@@ -92,7 +92,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
             {
                 var p1 = Expression.Parameter(typeof(T));
                 CopyCache<T>.F = Expression.Lambda<Func<T,T>>(
-                Expression.Convert(Expression.Call(p1, typeof(T).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance)), typeof(T)),
+                Expression.Convert(Expression.Call(p1, typeof(T).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance)!), typeof(T)),
                 p1).Compile();
             }
 
@@ -101,7 +101,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
 
         private static Expression NewChange(Expression tracking, Type t, MemberInfo mi, Expression val)
         {
-            var constructor = typeof(FieldChange<>).MakeGenericType(t).GetConstructor(new[] { typeof(Tracking), typeof(string), t });
+            var constructor = typeof(FieldChange<>).MakeGenericType(t).GetConstructor(new[] { typeof(Tracking), typeof(string), t })!;
             return Expression.Convert(Expression.New(constructor, tracking, Expression.Constant(mi.Name), val), typeof(FieldChange));
         }
 
@@ -120,7 +120,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
 
             var changeListType = typeof(List<FieldChange>);
 
-            var addChangeMethod = changeListType.GetMethod("Add", new[] { typeof(FieldChange) });
+            var addChangeMethod = changeListType.GetMethod("Add", new[] { typeof(FieldChange) })!;
 
             var listArg = Expression.Parameter(changeListType);
             var original = Expression.Variable(t);
@@ -228,7 +228,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
 
         internal static class ComparisonCache<T>
         {
-            public static Action<Tracking, object, object, List<FieldChange>> Comparison;
+            public static Action<Tracking, object, object, List<FieldChange>>? Comparison;
         }
 
         public abstract class FieldChange
@@ -258,6 +258,6 @@ namespace Deviax.QueryBuilder.ChangeTracking
 
     internal static class CopyCache<T>
     {
-        public static Func<T, T> F;
+        public static Func<T, T>? F;
     }
 }

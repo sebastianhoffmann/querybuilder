@@ -6,7 +6,7 @@ namespace Deviax.QueryBuilder.Visitors
     {
         void Start();
 
-        IVisitorResult Append(string str);
+        IVisitorResult Append(string? str);
         void AddParameter<T>(IParameter<T> para);
 
         void Finished();

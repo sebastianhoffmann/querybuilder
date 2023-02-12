@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Deviax.QueryBuilder.Parts;
 using Deviax.QueryBuilder.Parts.Aggregation;
 using Deviax.QueryBuilder.Parts.FullTextSearch;
@@ -262,6 +263,7 @@ namespace Deviax.QueryBuilder.Visitors
                     unnestTable.Parameters[i].Accept(this);
                 }
 
+                Debug.Assert(unnestTable.TableAlias != null, "unnestTable.TableAlias != null");
                 Result.Append(") AS ").Append(unnestTable.TableAlias).Append("(").Append(unnestTable.Parameters[0].Name);
                 for (int i = 1; i < unnestTable.Parameters.Count; i++)
                 {
@@ -272,6 +274,7 @@ namespace Deviax.QueryBuilder.Visitors
             }
             else
             {
+                Debug.Assert(unnestTable.TableAlias != null, "unnestTable.TableAlias != null");
                 Result.Append(unnestTable.TableAlias);
             }
         }
@@ -294,7 +297,8 @@ namespace Deviax.QueryBuilder.Visitors
             {
                 Result.Append("\"").Append(table.TableSchema).Append("\".");
             }
-
+            
+            Debug.Assert(table.TableName != null, "table.TableName != null");
             Result.Append("\"").Append(table.TableName).Append("\"");
         }
     }

@@ -19,7 +19,7 @@ namespace Deviax.QueryBuilder.Visitors
 
             NpgsqlParameter p;
 
-            if (_parameters.TryGetValue(para.Name, out p))
+            if (_parameters.TryGetValue(para.Name, out p!))
             {
                 p.Value = val;
             }

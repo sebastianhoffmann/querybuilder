@@ -20,10 +20,10 @@ namespace Deviax.QueryBuilder
         public override void Accept(INodeVisitor visitor) => visitor.Visit(this);
 
         [Pure]
-        public EqPart EqV<T>(T value, string name = null) => new EqPart(this, new Parameter<T>(value, name ?? Name));
+        public EqPart EqV<T>(T value, string? name = null) => new EqPart(this, new Parameter<T>(value, name ?? Name));
 
         [Pure]
-        public SetFieldPart SetV<T>(T value, string name = null) => new SetFieldPart(this, new Parameter<T>(value, name ?? Name ));
+        public SetFieldPart SetV<T>(T value, string? name = null) => new SetFieldPart(this, new Parameter<T>(value, name ?? Name ));
         
         [Pure]
         public SetFieldPart Set(IPart part) => new SetFieldPart(this, part);

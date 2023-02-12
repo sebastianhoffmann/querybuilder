@@ -18,13 +18,13 @@ namespace Deviax.QueryBuilder
 
     public static class AssignmentCache<T> where T : new()
     {
-        public static Action<DbDataReader, T> Action;
-        public static Func<T> Constructor;
+        public static Action<DbDataReader, T>? Action;
+        public static Func<T>? Constructor;
     }
 
     public abstract class QueryExecutor
     {
-        public static QueryExecutor DefaultExecutor;
+        public static QueryExecutor DefaultExecutor = null!;
         public static INameResolver NameResolver => DefaultExecutor.DefaultNameResolver;
 
         protected abstract INameResolver DefaultNameResolver { get; }
@@ -58,7 +58,7 @@ namespace Deviax.QueryBuilder
             r.Finished();
         }
         
-        private DbCommand ToCommand<TVisitor, TQuery>(TQuery q, DbConnection con, DbTransaction tx = null) where TVisitor : BaseVisitor, IQueryingVisitor<TQuery>, new()
+        private DbCommand ToCommand<TVisitor, TQuery>(TQuery q, DbConnection con, DbTransaction? tx = null) where TVisitor : BaseVisitor, IQueryingVisitor<TQuery>, new()
         {
             var r = new ActualCommandResult(con);
             Process(new TVisitor(), q, r);
@@ -73,7 +73,7 @@ namespace Deviax.QueryBuilder
             return r.StringBuilder + r.ParameterDescription;
         }
         
-        public DbCommand ToCommand(BaseSelectQuery query, DbConnection con, DbTransaction tx = null) 
+        public DbCommand ToCommand(BaseSelectQuery query, DbConnection con, DbTransaction? tx = null) 
             => ToCommand<SelectVisitor, BaseSelectQuery>(query, con, tx);
 
         public PreparedCommand ToPreparedCommand(BaseSelectQuery query)
@@ -83,13 +83,13 @@ namespace Deviax.QueryBuilder
             return r.Result;
         }
 
-        public DbCommand ToCommand(BaseUpdateQuery query, DbConnection con, DbTransaction tx = null)
+        public DbCommand ToCommand(BaseUpdateQuery query, DbConnection con, DbTransaction? tx = null)
             => ToCommand<UpdateVisitor, BaseUpdateQuery>(query, con, tx);
         
-        public DbCommand ToCommand(BaseInsertQuery query, DbConnection con, DbTransaction tx = null)
+        public DbCommand ToCommand(BaseInsertQuery query, DbConnection con, DbTransaction? tx = null)
             => ToCommand<InsertVisitor, BaseInsertQuery>(query, con, tx);
 
-        public DbCommand ToCommand(BaseDeleteQuery query, DbConnection con, DbTransaction tx = null)
+        public DbCommand ToCommand(BaseDeleteQuery query, DbConnection con, DbTransaction? tx = null)
             => ToCommand<DeleteVisitor, BaseDeleteQuery>(query, con, tx);
 
         public string ToQueryText(BaseSelectQuery query)
@@ -116,7 +116,7 @@ namespace Deviax.QueryBuilder
             var getValueMethod = typeof(DbDataReader).GetTypeInfo().GetMethod("GetValue");
 
             #if DEBUG
-            var exceptionConstructor = typeof(InvalidCastException).GetConstructor(new [] {typeof(string), typeof(Exception)});
+            var exceptionConstructor = typeof(InvalidCastException).GetConstructor(new [] {typeof(string), typeof(Exception)})!;
             var exceptParam = Expression.Parameter(typeof(Exception));
             #endif
             
@@ -125,9 +125,9 @@ namespace Deviax.QueryBuilder
                 var dbName = reader.GetName(i);
                 var csharpName = nameResolver.DbToCSharp(dbName);
 
-                expressions.Add(Expression.Assign(valueVariable, Expression.Call(readerParam, getValueMethod, Expression.Constant(i))));
+                expressions.Add(Expression.Assign(valueVariable, Expression.Call(readerParam, getValueMethod!, Expression.Constant(i))));
 
-                Expression notNullBranch = null;
+                Expression notNullBranch = null!;
 
                 if (csharpName == t.Name)
                 {
@@ -247,7 +247,7 @@ namespace Deviax.QueryBuilder
 
         private Func<T> GenerateConstructor<T>() where T : new()
         {
-            var constructor = typeof(T).GetConstructor(Type.EmptyTypes);
+            var constructor = typeof(T).GetConstructor(Type.EmptyTypes)!;
 
             return Expression.Lambda<Func<T>>(Expression.New(constructor)).Compile();
         }
@@ -340,7 +340,7 @@ namespace Deviax.QueryBuilder
             }
         }
 
-        public async Task InsertBatched<T>(T[] items, int batchSize, DbConnection con, DbTransaction tx = null)
+        public async Task InsertBatched<T>(T[] items, int batchSize, DbConnection con, DbTransaction? tx = null)
         {
             if (items.Length <= batchSize)
             {
@@ -357,7 +357,7 @@ namespace Deviax.QueryBuilder
             }
         }
         
-        public void InsertBatchedSync<T>(T[] items, int batchSize, DbConnection con, DbTransaction tx = null)
+        public void InsertBatchedSync<T>(T[] items, int batchSize, DbConnection con, DbTransaction? tx = null)
         {
             if (items.Length <= batchSize)
             {
@@ -374,11 +374,11 @@ namespace Deviax.QueryBuilder
             }
         }
 
-        public async Task Insert<T>(T[] items, DbConnection con, DbTransaction tx = null)
+        public async Task Insert<T>(T[] items, DbConnection con, DbTransaction? tx = null)
         {
             var table = TypeToTableEntry<T>.DefaultTable;
-            var q = new BaseInsertQuery(table).WithValues(items.Select((item, i) => TypeToTableEntry<T>.ToValues(item, table, i)).ToArray());
-            var returningParts = TypeToTableEntry<T>.Returning(items[0], table);
+            var q = new BaseInsertQuery(table).WithValues(items.Select((item, i) => TypeToTableEntry<T>.ToValues(item!, table, i)).ToArray());
+            var returningParts = TypeToTableEntry<T>.Returning(items[0]!, table);
             if (returningParts != null)
             {
                 q = q.Returning(returningParts);
@@ -389,7 +389,7 @@ namespace Deviax.QueryBuilder
 
                 for (int i = 0; i < items.Length; i++)
                 {
-                    TypeToTableEntry<T>.ApplyReturning(items[i], ids[i]);
+                    TypeToTableEntry<T>.ApplyReturning(items[i]!, ids[i]);
                 }
             }
             else
@@ -398,11 +398,11 @@ namespace Deviax.QueryBuilder
             }
         }
         
-        public void InsertSync<T>(T[] items, DbConnection con, DbTransaction tx = null)
+        public void InsertSync<T>(T[] items, DbConnection con, DbTransaction? tx = null)
         {
             var table = TypeToTableEntry<T>.DefaultTable;
-            var q = new BaseInsertQuery(table).WithValues(items.Select((item, i) => TypeToTableEntry<T>.ToValues(item, table, i)).ToArray());
-            var returningParts = TypeToTableEntry<T>.Returning(items[0], table);
+            var q = new BaseInsertQuery(table).WithValues(items.Select((item, i) => TypeToTableEntry<T>.ToValues(item!, table, i)).ToArray());
+            var returningParts = TypeToTableEntry<T>.Returning(items[0]!, table);
             if (returningParts != null)
             {
                 q = q.Returning(returningParts);
@@ -413,7 +413,7 @@ namespace Deviax.QueryBuilder
 
                 for (int i = 0; i < items.Length; i++)
                 {
-                    TypeToTableEntry<T>.ApplyReturning(items[i], ids[i]);
+                    TypeToTableEntry<T>.ApplyReturning(items[i]!, ids[i]);
                 }
             }
             else
@@ -442,7 +442,7 @@ namespace Deviax.QueryBuilder
                 }
 
                 if (!reader.Read())
-                    return default(T);
+                    return default!;
 
                 var item = AssignmentCache<T>.Constructor();
                 AssignmentCache<T>.Action(reader, item);
@@ -472,7 +472,7 @@ namespace Deviax.QueryBuilder
                 }
 
                 if (!reader.Read())
-                    return default(T);
+                    return default!;
 
                 var item = AssignmentCache<T>.Constructor();
                 AssignmentCache<T>.Action(reader, item);
@@ -482,7 +482,7 @@ namespace Deviax.QueryBuilder
             }
         }
 
-        public async Task<List<T>> ToList<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx = null, bool prepare = true) where T : new()
+        public async Task<List<T>> ToList<T>(BaseSelectQuery query, DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -490,7 +490,7 @@ namespace Deviax.QueryBuilder
             }
         }
         
-        public List<T> ToListSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx = null, bool prepare = true) where T : new()
+        public List<T> ToListSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -498,25 +498,25 @@ namespace Deviax.QueryBuilder
             }
         }
 
-        public async Task<T> FirstOrDefault<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx = null, bool prepare = true) where T : new()
+        public async Task<T> FirstOrDefault<T>(BaseSelectQuery query, DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
         {
             using (var cmd = ToCommand(query, con, tx))
                 return await FirstOrDefault<T>(cmd, prepare).ConfigureAwait(false);
         }
         
-        public T FirstOrDefaultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx = null, bool prepare = true) where T : new()
+        public T FirstOrDefaultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
         {
             using (var cmd = ToCommand(query, con, tx))
                 return FirstOrDefaultSync<T>(cmd, prepare);
         }
 
-        public async Task<T> FirstOrDefault<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx = null, bool prepare = true) where T : new()
+        public async Task<T> FirstOrDefault<T>(BaseUpdateQuery query, DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
         {
             using (var cmd = ToCommand(query, con, tx))
                 return await FirstOrDefault<T>(cmd, prepare).ConfigureAwait(false);
         }
 
-        public async Task<T> ScalarResult<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
+        public async Task<T> ScalarResult<T>(BaseSelectQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -524,7 +524,7 @@ namespace Deviax.QueryBuilder
             }
         }
         
-        public T ScalarResultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
+        public T ScalarResultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -532,7 +532,7 @@ namespace Deviax.QueryBuilder
             }
         }
 
-        public async Task<T> ScalarResult<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
+        public async Task<T> ScalarResult<T>(BaseUpdateQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -540,7 +540,7 @@ namespace Deviax.QueryBuilder
             }
         }
         
-        public T ScalarResultSync<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
+        public T ScalarResultSync<T>(BaseUpdateQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -548,7 +548,7 @@ namespace Deviax.QueryBuilder
             }
         }
 
-        public async Task<T> ScalarResult<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
+        public async Task<T> ScalarResult<T>(BaseInsertQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -556,7 +556,7 @@ namespace Deviax.QueryBuilder
             }
         }
         
-        public T ScalarResultSync<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
+        public T ScalarResultSync<T>(BaseInsertQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -564,7 +564,7 @@ namespace Deviax.QueryBuilder
             }
         }
 
-        public async Task<T> ScalarResult<T>(BaseDeleteQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
+        public async Task<T> ScalarResult<T>(BaseDeleteQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -572,7 +572,7 @@ namespace Deviax.QueryBuilder
             }
         }
         
-        public T ScalarResultSync<T>(BaseDeleteQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
+        public T ScalarResultSync<T>(BaseDeleteQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -590,7 +590,7 @@ namespace Deviax.QueryBuilder
             var val = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
 
             if (val == DBNull.Value)
-                return default(T);
+                return default!;
 
             if (val is T variable)
                 return variable;
@@ -617,7 +617,7 @@ namespace Deviax.QueryBuilder
             var val = cmd.ExecuteScalar();
 
             if (val == DBNull.Value)
-                return default(T);
+                return default!;
 
             if (val is T variable)
                 return variable;
@@ -634,7 +634,7 @@ namespace Deviax.QueryBuilder
             throw new ArgumentException();
         }
 
-        public async Task<List<T>> ScalarListResult<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
+        public async Task<List<T>> ScalarListResult<T>(BaseSelectQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -642,7 +642,7 @@ namespace Deviax.QueryBuilder
             }
         }
         
-        public List<T> ScalarListResultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
+        public List<T> ScalarListResultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -650,7 +650,7 @@ namespace Deviax.QueryBuilder
             }
         }
 
-        public async Task<List<T>> ScalarListResult<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
+        public async Task<List<T>> ScalarListResult<T>(BaseUpdateQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -658,7 +658,7 @@ namespace Deviax.QueryBuilder
             }
         }
         
-        public List<T> ScalarListResultSync<T>(BaseUpdateQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
+        public List<T> ScalarListResultSync<T>(BaseUpdateQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -666,7 +666,7 @@ namespace Deviax.QueryBuilder
             }
         }
 
-        public async Task<List<T>> ScalarListResult<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
+        public async Task<List<T>> ScalarListResult<T>(BaseInsertQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -674,7 +674,7 @@ namespace Deviax.QueryBuilder
             }
         }
         
-        public List<T> ScalarListResultSync<T>(BaseInsertQuery query, DbConnection con, DbTransaction tx, bool prepare = true)
+        public List<T> ScalarListResultSync<T>(BaseInsertQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
         {
             using (var cmd = ToCommand(query, con, tx))
             {
@@ -698,12 +698,12 @@ namespace Deviax.QueryBuilder
                     var val = reader[0];
 
                     if (val == DBNull.Value)
-                        result.Add(default(T));
+                        result.Add(default!);
                     else
                     {
-                        if (val is T)
+                        if (val is T val1)
                         {
-                            result.Add((T) val);
+                            result.Add(val1);
                         }
                         else if (typeof(T) == typeof(long))
                         {
@@ -744,12 +744,12 @@ namespace Deviax.QueryBuilder
                     var val = reader[0];
 
                     if (val == DBNull.Value)
-                        result.Add(default(T));
+                        result.Add(default!);
                     else
                     {
-                        if (val is T)
+                        if (val is T val1)
                         {
-                            result.Add((T) val);
+                            result.Add(val1);
                         }
                         else if (typeof(T) == typeof(long))
                         {

@@ -35,7 +35,7 @@ namespace Deviax.QueryBuilder
                 var l = Expression.Lambda<Func<object, Table, IBooleanPart[]>>(
                 Expression.NewArrayInit(typeof(IBooleanPart),
                     pk.Fields.Select(f => typeof(TTable).GetField(f)).Select(fi => {
-                        var originalField = typeof(T).GetField(fi.Name);
+                        var originalField = typeof(T).GetField(fi!.Name);
 
                         if (originalField == null)
                         {
@@ -55,15 +55,15 @@ namespace Deviax.QueryBuilder
 
             var vcVar = Expression.Variable(typeof(ValuesCollection));
             var addMethod = typeof(ValuesCollection).GetMethod("Add");
-            var setVMethod = typeof(Field).GetMethod(nameof(Field.SetV));
+            var setVMethod = typeof(Field).GetMethod(nameof(Field.SetV))!;
             var tableFields = typeof(TTable).GetFields().Where(f => f.Name != "TableName" && f.Name != "TableSchema" && f.Name != "TableAlias").ToList();
             var tableProps = typeof(TTable).GetProperties();
             var nArg = Expression.Parameter(typeof(int));
-            var concatMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
-            var intToStr = typeof(int).GetMethod("ToString", Type.EmptyTypes);
+            var concatMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) })!;
+            var intToStr = typeof(int).GetMethod("ToString", Type.EmptyTypes)!;
 
             var memberThings = tableFields.Select(f => {
-                MemberExpression memberExpression = null;
+                MemberExpression memberExpression = null!;
                 Type targetType;
                 MethodCallExpression setMethod;
                 MemberExpression tableFieldExpr = Expression.Field(Expression.Convert(tableArg, typeof(TTable)), f); 
@@ -94,7 +94,7 @@ namespace Deviax.QueryBuilder
                 return (memberExpression: memberExpression, targetType: targetType, memberName: f.Name, setMethod: setMethod, tableFieldExpression: tableFieldExpr);
             }).Concat(tableProps.Select(
                 p => {
-                    MemberExpression memberExpression = null;
+                    MemberExpression memberExpression = null!;
                     Type targetType;
                     MethodCallExpression setMethod;
                     MemberExpression tableFieldExpr = Expression.Property(Expression.Convert(tableArg, typeof(TTable)), p); ;
@@ -127,7 +127,7 @@ namespace Deviax.QueryBuilder
             
             foreach (var thing in memberThings)
             {
-                var setExpr = Expression.Assign(vcVar, Expression.Call(vcVar, addMethod,
+                var setExpr = Expression.Assign(vcVar, Expression.Call(vcVar, addMethod!,
                     Expression.NewArrayInit(typeof(SetFieldPart), thing.Item4)
                 ));
 
@@ -182,7 +182,7 @@ namespace Deviax.QueryBuilder
                             });
                         
                         TypeToTableEntry<T>.ApplyReturning = Expression.Lambda<Action<object, object>>(
-                            Expression.Assign(mt.Item1, Expression.Call(conversionMethod, obj2Arg)) ,
+                            Expression.Assign(mt.Item1, Expression.Call(conversionMethod!, obj2Arg)) ,
                             new[] {
                                 objArg,
                                 obj2Arg
@@ -207,11 +207,11 @@ namespace Deviax.QueryBuilder
 
     internal static class TypeToTableEntry<T>
     {
-        public static Func<string, Table> TableConstructor;
-        public static Func<object, Table, IBooleanPart[]> GetDefaultConditions;
-        public static Func<object, Table, int, ValuesCollection> ToValues;
-        public static Func<object, Table, IPart[]> Returning = (o,t) => null;
+        public static Func<string, Table> TableConstructor = null!;
+        public static Func<object, Table, IBooleanPart[]> GetDefaultConditions = null!;
+        public static Func<object, Table, int, ValuesCollection> ToValues = null!;
+        public static Func<object, Table, IPart[]?> Returning = (o,t) => null!;
         public static Action<object, object> ApplyReturning = (o,t) => {};
-        public static Table DefaultTable;
+        public static Table DefaultTable = null!;
     }
 }

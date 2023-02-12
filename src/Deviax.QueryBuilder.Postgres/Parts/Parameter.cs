@@ -22,7 +22,7 @@ namespace Deviax.QueryBuilder.Parts
         {
             if (NpgsqlDbType.HasValue)
             {
-                ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, NpgsqlDbType.Value, Value);
+                ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, NpgsqlDbType.Value, Value!);
             }
             else
             {
@@ -44,7 +44,7 @@ namespace Deviax.QueryBuilder.Parts
                 }
                 else
                 {
-                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, Value);
+                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, Value!);
                 }
             }
         }

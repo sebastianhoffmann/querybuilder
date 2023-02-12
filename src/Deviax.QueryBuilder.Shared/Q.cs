@@ -22,16 +22,18 @@ namespace Deviax.QueryBuilder
         public static void InsertOneSync<T>(DbConnection con, T item) => InsertSync(con, null, new []{item});
         public static void InsertOneSync<T>(DbConnection con, DbTransaction tx, T item) => InsertSync(con, tx, new []{item});
 
-        public static async Task Insert<T>(DbConnection con, DbTransaction tx, T[] items)
+        public static async Task Insert<T>(DbConnection con, DbTransaction? tx, T[] items)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (items == null || items.Length == 0)
                 return;
 
             await QueryExecutor.DefaultExecutor.InsertBatched(items, 1000, con, tx);
         }
         
-        public static void InsertSync<T>(DbConnection con, DbTransaction tx, T[] items)
+        public static void InsertSync<T>(DbConnection con, DbTransaction? tx, T[] items)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (items == null || items.Length == 0)
                 return;
 
@@ -40,6 +42,7 @@ namespace Deviax.QueryBuilder
 
         public static async Task Insert<T>(DbConnection con, T[] items)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (items == null || items.Length == 0)
                 return;
 
@@ -48,6 +51,7 @@ namespace Deviax.QueryBuilder
         
         public static void InsertSync<T>(DbConnection con, T[] items)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (items == null || items.Length == 0)
                 return;
 

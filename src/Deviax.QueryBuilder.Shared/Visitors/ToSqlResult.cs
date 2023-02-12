@@ -11,8 +11,8 @@ namespace Deviax.QueryBuilder.Visitors
 {
     public class ToSqlResult : IVisitorResult
     {
-        public Dictionary<string, object> ParameterDic;
-        public StringBuilder StringBuilder;
+        public Dictionary<string, object> ParameterDic = null!;
+        public StringBuilder StringBuilder = null!;
 
         public void Start()
         {
@@ -20,7 +20,7 @@ namespace Deviax.QueryBuilder.Visitors
             ParameterDic = new Dictionary<string, object>();
         }
 
-        public IVisitorResult Append(string str)
+        public IVisitorResult Append(string? str)
         {
             StringBuilder.Append(str);
             return this;
@@ -28,7 +28,7 @@ namespace Deviax.QueryBuilder.Visitors
 
         public void AddParameter<T>(IParameter<T> para)
         {
-            ParameterDic[para.Name] = para.Value;
+            ParameterDic[para.Name] = para.Value!;
         }
 
         public string ParameterDescription => 
@@ -51,14 +51,14 @@ namespace Deviax.QueryBuilder.Visitors
                 var t = para.Value.GetType();
                 var ti = t.GetTypeInfo();
 
-                Func<object, string> replacer = null;
+                Func<object, string> replacer = null!;
                 if (ti.IsArray)
                 {
                     var elements = new List<object>();
                     foreach (var ele in (IEnumerable) para.Value)
                         elements.Add(ele);
 
-                    replacer = (o) => $"ARRAY[{string.Join(", ", elements.Select(replacers[ti.GetElementType()]))}]";
+                    replacer = (o) => $"ARRAY[{string.Join(", ", elements.Select(replacers[ti.GetElementType()!]))}]";
                 }
                 else
                 {

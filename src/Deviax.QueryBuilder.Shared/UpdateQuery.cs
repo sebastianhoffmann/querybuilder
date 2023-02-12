@@ -12,19 +12,19 @@ namespace Deviax.QueryBuilder
     public abstract class BaseUpdateQuery : Part
     {
         internal readonly IFromPart Target;
-        internal readonly IFromPart FromPart; // TODO: move to postgres
-        internal readonly List<IBooleanPart> WhereParts;
-        internal readonly List<IPart> ReturningParts;
-        internal readonly List<IPart> ExtraParameters;
-        internal readonly List<ISetPart> SetParts;
+        internal readonly IFromPart? FromPart; // TODO: move to postgres
+        internal readonly List<IBooleanPart>? WhereParts;
+        internal readonly List<IPart>? ReturningParts;
+        internal readonly List<IPart>? ExtraParameters;
+        internal readonly List<ISetPart>? SetParts;
 
         protected BaseUpdateQuery(
             IFromPart target,
-            IFromPart from,
-            List<IBooleanPart> whereParts,
-            List<IPart> returningParts,
-            List<IPart> extraParameters,
-            List<ISetPart> setParts
+            IFromPart? from,
+            List<IBooleanPart>? whereParts,
+            List<IPart>? returningParts,
+            List<IPart>? extraParameters,
+            List<ISetPart>? setParts
             )
         {
             Target = target;
@@ -42,22 +42,22 @@ namespace Deviax.QueryBuilder
 
         public override void Accept(INodeVisitor visitor) => visitor.Visit(this);
 
-        public async Task<T> ScalarResult<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public async Task<T> ScalarResult<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return await QueryExecutor.DefaultExecutor.ScalarResult<T>(this, con, tx, prepare).ConfigureAwait(false);
         }
         
-        public T ScalarResultSync<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public T ScalarResultSync<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return QueryExecutor.DefaultExecutor.ScalarResultSync<T>(this, con, tx, prepare);
         }
 
-        public async Task<int> Execute(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public async Task<int> Execute(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return await ScalarResult<int>(con, tx, prepare);
         }
         
-        public int ExecuteSync(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public int ExecuteSync(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return ScalarResultSync<int>(con, tx, prepare);
         }
@@ -74,11 +74,11 @@ namespace Deviax.QueryBuilder
     {
         protected BaseUpdateQuery(
             IFromPart target,
-            IFromPart from,
-            List<IBooleanPart> whereParts,
-            List<IPart> returningParts,
-            List<IPart> extraParameters,
-            List<ISetPart> setParts
+            IFromPart? from,
+            List<IBooleanPart>? whereParts,
+            List<IPart>? returningParts,
+            List<IPart>? extraParameters,
+            List<ISetPart>? setParts
             ) : base(target, from, whereParts, returningParts, extraParameters, setParts)
         {
         }
@@ -86,18 +86,18 @@ namespace Deviax.QueryBuilder
         protected abstract TQ New(
             TQ t,
             IFromPart target,
-            IFromPart from,
-            List<IBooleanPart> whereParts,
-            List<IPart> returningParts,
-            List<IPart> extraParameters,
-            List<ISetPart> setParts
+            IFromPart? from,
+            List<IBooleanPart>? whereParts,
+            List<IPart>? returningParts,
+            List<IPart>? extraParameters,
+            List<ISetPart>? setParts
         );
 
         protected BaseUpdateQuery(IFromPart target) : base(target)
         {
         }
 
-        protected static List<T> With<T>(IReadOnlyCollection<T> existing, params T[] toAdd)
+        protected static List<T> With<T>(IReadOnlyCollection<T>? existing, params T[] toAdd)
         {
             if (existing == null)
                 return new List<T>(toAdd);
@@ -154,11 +154,11 @@ namespace Deviax.QueryBuilder
         internal UpdateQuery(
             TTable t1,
             IFromPart target,
-            IFromPart from,
-            List<IBooleanPart> whereParts,
-            List<IPart> returningParts,
-            List<IPart> extraParameters,
-            List<ISetPart> setParts
+            IFromPart? from,
+            List<IBooleanPart>? whereParts,
+            List<IPart>? returningParts,
+            List<IPart>? extraParameters,
+            List<ISetPart>? setParts
             ) : base(target, from, whereParts, returningParts, extraParameters, setParts)
         {
             Table1 = t1;
@@ -191,7 +191,7 @@ namespace Deviax.QueryBuilder
             );
         }
 
-        protected override UpdateQuery<TTable> New(UpdateQuery<TTable> t, IFromPart target, IFromPart @from, List<IBooleanPart> whereParts, List<IPart> returningParts, List<IPart> extraParameters, List<ISetPart> setParts)
+        protected override UpdateQuery<TTable> New(UpdateQuery<TTable> t, IFromPart target, IFromPart? from, List<IBooleanPart>? whereParts, List<IPart>? returningParts, List<IPart>? extraParameters, List<ISetPart>? setParts)
         {
            return new UpdateQuery<TTable>(t.Table1, target, from, whereParts, returningParts, extraParameters, setParts);
         }
@@ -206,11 +206,11 @@ namespace Deviax.QueryBuilder
             TTable t1,
             TTable2 t2,
             IFromPart target,
-            IFromPart from,
-            List<IBooleanPart> whereParts,
-            List<IPart> returningParts,
-            List<IPart> extraParameters,
-            List<ISetPart> setParts
+            IFromPart? from,
+            List<IBooleanPart>? whereParts,
+            List<IPart>? returningParts,
+            List<IPart>? extraParameters,
+            List<ISetPart>? setParts
             ) : base(target, from, whereParts, returningParts, extraParameters, setParts)
         {
             Table1 = t1;
@@ -235,7 +235,7 @@ namespace Deviax.QueryBuilder
             );
         }
 
-        protected override UpdateQuery<TTable, TTable2> New(UpdateQuery<TTable, TTable2> t, IFromPart target, IFromPart @from, List<IBooleanPart> whereParts, List<IPart> returningParts, List<IPart> extraParameters, List<ISetPart> setParts)
+        protected override UpdateQuery<TTable, TTable2> New(UpdateQuery<TTable, TTable2> t, IFromPart target, IFromPart? from, List<IBooleanPart>? whereParts, List<IPart>? returningParts, List<IPart>? extraParameters, List<ISetPart>? setParts)
         {
            return new UpdateQuery<TTable, TTable2>(t.Table1, t.Table2, target, from, whereParts, returningParts, extraParameters, setParts);
         }
@@ -245,12 +245,12 @@ namespace Deviax.QueryBuilder
     public class UpdateQuery : BaseUpdateQuery<UpdateQuery>
     {
         internal UpdateQuery(
-             IFromPart target,
-            IFromPart from,
-            List<IBooleanPart> whereParts,
-            List<IPart> returningParts,
-            List<IPart> extraParameters,
-            List<ISetPart> setParts
+            IFromPart target,
+            IFromPart? from,
+            List<IBooleanPart>? whereParts,
+            List<IPart>? returningParts,
+            List<IPart>? extraParameters,
+            List<ISetPart>? setParts
             ) : base(target, from, whereParts, returningParts, extraParameters, setParts) { }
 
         public UpdateQuery(IFromPart target) : base(target)
@@ -262,7 +262,7 @@ namespace Deviax.QueryBuilder
         
         protected override UpdateQuery New(
             UpdateQuery t,
-            IFromPart target, IFromPart from, List<IBooleanPart> whereParts, List<IPart> returningParts, List<IPart> extraParameters, List<ISetPart> setParts
+            IFromPart target, IFromPart? from, List<IBooleanPart>? whereParts, List<IPart>? returningParts, List<IPart>? extraParameters, List<ISetPart>? setParts
         ) => new UpdateQuery(target, from, whereParts, returningParts, extraParameters, setParts);
     }
 }

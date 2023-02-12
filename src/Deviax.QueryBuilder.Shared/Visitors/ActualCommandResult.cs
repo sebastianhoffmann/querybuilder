@@ -15,16 +15,16 @@ namespace Deviax.QueryBuilder.Visitors
             _con = con;
         }
 
-        public DbCommand Command;
+        public DbCommand Command = null!;
 
-        private StringBuilder _sb;
+        private StringBuilder _sb = null!;
         public void Start()
         {
             Command = _con.CreateCommand();
             _sb = new StringBuilder();
         }
 
-        public IVisitorResult Append(string str)
+        public IVisitorResult Append(string? str)
         {
             _sb.Append(str);
             return this;
@@ -35,7 +35,7 @@ namespace Deviax.QueryBuilder.Visitors
             Command.CommandText = _sb.ToString();
             AddParameters();
             _sb.Clear();
-            _sb = null;
+            _sb = null!;
         }
 
         public IVisitorResult Append(int value)
@@ -90,9 +90,9 @@ namespace Deviax.QueryBuilder.Visitors
 
     public partial class PreparingCommandResult : IVisitorResult
     {
-        private List<IParameter> _parameters;
-        public PreparedCommand Result;
-        private StringBuilder _sb;
+        private List<IParameter> _parameters = null!;
+        public PreparedCommand Result = null!;
+        private StringBuilder _sb = null!;
         public void Start()
         {
             _sb = new StringBuilder();
@@ -104,7 +104,7 @@ namespace Deviax.QueryBuilder.Visitors
             _parameters.Add(para);
         }
 
-        public IVisitorResult Append(string str)
+        public IVisitorResult Append(string? str)
         {
             _sb.Append(str);
             return this;
@@ -115,7 +115,7 @@ namespace Deviax.QueryBuilder.Visitors
             Result = new PreparedCommand(_sb.ToString(), _parameters);
 
             _sb.Clear();
-            _sb = null;
+            _sb = null!;
         }
 
         public IVisitorResult Append(int value)

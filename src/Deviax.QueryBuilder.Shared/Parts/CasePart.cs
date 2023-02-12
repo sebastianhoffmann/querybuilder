@@ -7,7 +7,7 @@ namespace Deviax.QueryBuilder.Parts
 {
     public class CasePart : IPart
     {
-        public IPart ElsePart;
+        public IPart? ElsePart;
 
         public List<(IBooleanPart, IPart)> Whens;
 

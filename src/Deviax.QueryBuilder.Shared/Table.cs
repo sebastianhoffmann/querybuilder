@@ -5,11 +5,11 @@ namespace Deviax.QueryBuilder
 {
     public abstract class Table : IFromPart
     {
-        public readonly string TableName;
-        public readonly string TableSchema;
-        public readonly string TableAlias;
+        public readonly string? TableName;
+        public readonly string? TableSchema;
+        public readonly string? TableAlias;
 
-        protected Table(string tableSchema, string tableName, string tableAlias = null)
+        protected Table(string? tableSchema, string? tableName, string? tableAlias = null)
         {
             TableName = tableName;
             TableSchema = tableSchema;
@@ -26,6 +26,6 @@ namespace Deviax.QueryBuilder
 
     public abstract class Table<T> : Table where T : Table<T>
     {
-        public Table(string tableSchema, string tableName, string tableAlias = null) : base(tableSchema, tableName, tableAlias) {}
+        public Table(string tableSchema, string tableName, string? tableAlias = null) : base(tableSchema, tableName, tableAlias) {}
     }
 }

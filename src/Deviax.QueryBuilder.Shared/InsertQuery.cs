@@ -48,27 +48,27 @@ namespace Deviax.QueryBuilder
 
         public BaseInsertQuery WithValues(params ValuesCollection[] values) => new BaseInsertQuery(Target, With(Values, values), ReturningParts);
 
-        public async Task<T> ScalarResult<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public async Task<T> ScalarResult<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return await QueryExecutor.DefaultExecutor.ScalarResult<T>(this, con, tx, prepare).ConfigureAwait(false);
         }
 
-        public async Task<List<T>> ScalarList<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public async Task<List<T>> ScalarList<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return await QueryExecutor.DefaultExecutor.ScalarListResult<T>(this, con, tx, prepare).ConfigureAwait(false);
         }
         
-        public List<T> ScalarListSync<T>(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public List<T> ScalarListSync<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return QueryExecutor.DefaultExecutor.ScalarListResultSync<T>(this, con, tx, prepare);
         }
 
-        public async Task<int> Execute(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public async Task<int> Execute(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return await QueryExecutor.DefaultExecutor.ScalarResult<int>(this, con, tx, prepare).ConfigureAwait(false);
         }
         
-        public int ExecuteSync(DbConnection con, DbTransaction tx = null, bool prepare = true)
+        public int ExecuteSync(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
             return QueryExecutor.DefaultExecutor.ScalarResultSync<int>(this, con, tx, prepare);
         }
@@ -119,7 +119,7 @@ namespace Deviax.QueryBuilder
 
     public class ValuesCollection
     {
-        protected static List<T> With<T>(IReadOnlyCollection<T> existing, params T[] toAdd)
+        protected static List<T> With<T>(IReadOnlyCollection<T>? existing, params T[] toAdd)
         {
             if (existing == null)
                 return new List<T>(toAdd);
@@ -130,7 +130,7 @@ namespace Deviax.QueryBuilder
             return l;
         }
 
-        private BaseInsertQuery _query;
+        private BaseInsertQuery? _query;
         internal readonly List<SetFieldPart> Values;
 
         protected ValuesCollection()
@@ -144,21 +144,21 @@ namespace Deviax.QueryBuilder
             Values = values;
         }
 
-        public ValuesCollection Add(params SetFieldPart[] parts) => new ValuesCollection(_query, With(Values, parts));
+        public ValuesCollection Add(params SetFieldPart[] parts) => new ValuesCollection(_query!, With(Values, parts));
 
         public BaseInsertQuery EndValues()
         {
             var q = _query;
             _query = null;
-            return q.WithValues(this);
+            return q!.WithValues(this);
 
         }
     }
 
     public class ValuesCollection<TTable, TQ> : ValuesCollection where TTable : Table where TQ : BaseInsertQuery<TQ>
     {
-        private TTable _table;
-        private TQ _query;
+        private TTable? _table;
+        private TQ? _query;
 
         public ValuesCollection(TTable table, TQ query)
         {
@@ -177,11 +177,11 @@ namespace Deviax.QueryBuilder
             var q = _query;
             _query = null;
             _table = null;
-            return q.WithValues(this);
+            return q!.WithValues(this);
 
         }
-        public new ValuesCollection<TTable, TQ> Add(params SetFieldPart[] parts) => new ValuesCollection<TTable, TQ>(_table, _query, With(Values, parts));
+        public new ValuesCollection<TTable, TQ> Add(params SetFieldPart[] parts) => new ValuesCollection<TTable, TQ>(_table!, _query!, With(Values, parts));
         public ValuesCollection<TTable, TQ> Add(params Func<TTable, SetFieldPart>[] f)
-            => new ValuesCollection<TTable, TQ>(_table, _query, With(Values, f.Select(a => a(_table)).ToArray()));
+            => new ValuesCollection<TTable, TQ>(_table!, _query!, With(Values, f.Select(a => a(_table!)).ToArray()));
     }
 }
