@@ -25,7 +25,15 @@ namespace Deviax.QueryBuilder.Parts
             }
             else
             {
-                ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, Value);
+                var dbt = TypeToNpgsqlDbType<T>.NpgsqlDbType;
+                if (dbt == null)
+                {
+                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, Value);
+                }
+                else
+                {
+                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, NpgsqlTypes.NpgsqlDbType.Array | dbt.Value, Value);
+                }
             }
         }
     }

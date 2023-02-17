@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Deviax.QueryBuilder.Parts;
-using NetTopologySuite.Geometries;
-using NodaTime;
 using Npgsql;
 using NpgsqlTypes;
 
@@ -15,7 +13,7 @@ namespace Deviax.QueryBuilder.Visitors
 
         public void AddParameter<T>(IParameter<T> para)
         {
-            var val = Equals(null, para.Value) ? (object) DBNull.Value : para.Value;
+            var val = para.Value is null ? (object)DBNull.Value : para.Value;
 
             NpgsqlParameter p;
 
@@ -31,25 +29,14 @@ namespace Deviax.QueryBuilder.Visitors
                 }
                 else
                 {
-                    if (val is DateTime)
+                    var dbt = TypeToNpgsqlDbType<T>.NpgsqlDbType;
+                    if (dbt == null)
                     {
-                        _parameters[para.Name] = new NpgsqlParameter(para.Name, NpgsqlDbType.TimestampTz) { Value = val };
-                    }
-                    else if (val is Instant or LocalDateTime)
-                    {
-                        _parameters[para.Name] = new NpgsqlParameter(para.Name, NpgsqlDbType.TimestampTz) { Value = val };
-                    }
-                    else if (val is ZonedDateTime or OffsetDateTime or DateTimeOffset)
-                    {
-                        _parameters[para.Name] = new NpgsqlParameter(para.Name, NpgsqlDbType.TimestampTz) { Value = val };
-                    }
-                    else if (val is Geometry)
-                    {
-                        _parameters[para.Name] = new NpgsqlParameter(para.Name, NpgsqlDbType.Geometry) { Value = val };
+                        _parameters[para.Name] = new NpgsqlParameter(para.Name, val);
                     }
                     else
                     {
-                        _parameters[para.Name] = new NpgsqlParameter(para.Name, val);
+                        _parameters[para.Name] = new NpgsqlParameter(para.Name, dbt.Value) { Value = val };
                     }
                 }
             }

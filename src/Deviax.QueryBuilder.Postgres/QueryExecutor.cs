@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Deviax.QueryBuilder
+﻿namespace Deviax.QueryBuilder
 {
     public class PostgresExecutor : QueryExecutor
     {

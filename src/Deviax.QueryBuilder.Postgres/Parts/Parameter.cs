@@ -1,7 +1,4 @@
-using System;
 using System.Data.Common;
-using NetTopologySuite.Geometries;
-using NodaTime;
 using Npgsql;
 using NpgsqlTypes;
 
@@ -26,25 +23,14 @@ namespace Deviax.QueryBuilder.Parts
             }
             else
             {
-                if (Value is DateTime)
+                var dbt = TypeToNpgsqlDbType<T>.NpgsqlDbType;
+                if (dbt == null)
                 {
-                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, NpgsqlTypes.NpgsqlDbType.TimestampTz, Value);
-                }
-                else if (Value is Instant or LocalDateTime)
-                {
-                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, NpgsqlTypes.NpgsqlDbType.TimestampTz, Value);
-                }
-                else if (Value is ZonedDateTime or OffsetDateTime or DateTimeOffset)
-                {
-                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, NpgsqlTypes.NpgsqlDbType.TimestampTz, Value);
-                }
-                else if (Value is Geometry)
-                {
-                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, NpgsqlTypes.NpgsqlDbType.Geometry, Value);
+                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, Value!);
                 }
                 else
                 {
-                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, Value!);
+                    ((NpgsqlCommand) cmd).Parameters.AddWithValue(Name, dbt.Value, Value!);
                 }
             }
         }
