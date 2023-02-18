@@ -45,7 +45,7 @@ namespace Deviax.QueryBuilder
             new ListTypeConversionSpecialization()
         };
         
-        internal static void RegisterTypeConversionSpecialization(TypeConversionSpecialization tcs)
+        public static void RegisterTypeConversionSpecialization(TypeConversionSpecialization tcs)
         {
             TypeConversionSpecializations.Add(tcs);
         }

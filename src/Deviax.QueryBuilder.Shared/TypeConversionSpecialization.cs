@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace Deviax.QueryBuilder
 {
-    internal abstract class TypeConversionSpecialization
+    public abstract class TypeConversionSpecialization
     {
         public abstract bool Matches(TypeInfo ti, Type t);
         public abstract Expression Convert(TypeInfo ti, Type t, ParameterExpression valueVariable);
