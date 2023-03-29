@@ -1582,12 +1582,12 @@ namespace Deviax.QueryBuilder
             return QueryExecutor.DefaultExecutor.ToListSync<T>(this, con, tx, prepare);
         }
 
-        public async Task<T> FirstOrDefault<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
+        public async Task<T?> FirstOrDefault<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
         {
             return await QueryExecutor.DefaultExecutor.FirstOrDefault<T>(this, con, tx, prepare).ConfigureAwait(false);
         }
         
-        public T FirstOrDefaultSync<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
+        public T? FirstOrDefaultSync<T>(DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
         {
             return QueryExecutor.DefaultExecutor.FirstOrDefaultSync<T>(this, con, tx, prepare);
         }

@@ -422,7 +422,7 @@ namespace Deviax.QueryBuilder
             }
         }
 
-        public async Task<T> FirstOrDefault<T>(DbCommand cmd, bool prepare = true) where T : new()
+        public async Task<T?> FirstOrDefault<T>(DbCommand cmd, bool prepare = true) where T : new()
         {
             if (AssignmentCache<T>.Constructor == null)
             {
@@ -442,7 +442,7 @@ namespace Deviax.QueryBuilder
                 }
 
                 if (!reader.Read())
-                    return default!;
+                    return default;
 
                 var item = AssignmentCache<T>.Constructor();
                 AssignmentCache<T>.Action(reader, item);
@@ -452,7 +452,7 @@ namespace Deviax.QueryBuilder
             }
         }
         
-        public T FirstOrDefaultSync<T>(DbCommand cmd, bool prepare = true) where T : new()
+        public T? FirstOrDefaultSync<T>(DbCommand cmd, bool prepare = true) where T : new()
         {
             if (AssignmentCache<T>.Constructor == null)
             {
@@ -472,7 +472,7 @@ namespace Deviax.QueryBuilder
                 }
 
                 if (!reader.Read())
-                    return default!;
+                    return default;
 
                 var item = AssignmentCache<T>.Constructor();
                 AssignmentCache<T>.Action(reader, item);
@@ -498,19 +498,19 @@ namespace Deviax.QueryBuilder
             }
         }
 
-        public async Task<T> FirstOrDefault<T>(BaseSelectQuery query, DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
+        public async Task<T?> FirstOrDefault<T>(BaseSelectQuery query, DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
         {
             using (var cmd = ToCommand(query, con, tx))
                 return await FirstOrDefault<T>(cmd, prepare).ConfigureAwait(false);
         }
         
-        public T FirstOrDefaultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
+        public T? FirstOrDefaultSync<T>(BaseSelectQuery query, DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
         {
             using (var cmd = ToCommand(query, con, tx))
                 return FirstOrDefaultSync<T>(cmd, prepare);
         }
 
-        public async Task<T> FirstOrDefault<T>(BaseUpdateQuery query, DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
+        public async Task<T?> FirstOrDefault<T>(BaseUpdateQuery query, DbConnection con, DbTransaction? tx = null, bool prepare = true) where T : new()
         {
             using (var cmd = ToCommand(query, con, tx))
                 return await FirstOrDefault<T>(cmd, prepare).ConfigureAwait(false);
