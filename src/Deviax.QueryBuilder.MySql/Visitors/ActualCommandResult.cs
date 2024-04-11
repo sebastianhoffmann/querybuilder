@@ -14,7 +14,7 @@ namespace Deviax.QueryBuilder.Visitors
         {
             var val = Equals(null, para.Value) ? (object) DBNull.Value : para.Value;
 
-            MySqlParameter p;
+            MySqlParameter? p;
 
             if (_parameters.TryGetValue(para.Name, out p))
             {

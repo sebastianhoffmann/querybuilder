@@ -4,7 +4,6 @@ using System.Data.Common;
 using System.Linq;
 using System.Reflection;
 using System.Linq.Expressions;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Deviax.QueryBuilder.Visitors;
 
