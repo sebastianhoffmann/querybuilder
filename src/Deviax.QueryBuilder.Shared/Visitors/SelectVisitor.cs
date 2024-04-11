@@ -124,12 +124,14 @@ namespace Deviax.QueryBuilder.Visitors
                 {
                     Result.Append("SELECT ");
                     q.LimitOffsetPart.Accept(this);
-                    Result.Append(" *");
+                    Result.Append(" ");
                 }
                 else
                 {
-                    Result.Append("SELECT *");
+                    Result.Append("SELECT ");
                 }
+
+                Result.Append(q.From.DefaultSelect() ?? "* ");
             }
             else
             {

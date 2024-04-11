@@ -22,7 +22,12 @@ namespace Deviax.QueryBuilder
                 Parameters.Add(new ArrayParameter<T>(i, name));
             return new Field(this,name);
         }
-        
+
+        public override string? DefaultSelect()
+        {
+            return "*";
+        }
+
         public override void Accept(INodeVisitor visitor)
         {
             visitor.Visit(this);

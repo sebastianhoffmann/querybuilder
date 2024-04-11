@@ -125,6 +125,10 @@ namespace Deviax.QueryBuilder.Parts
     public interface IFromPart
     {
         void Accept(INodeVisitor visitor);
+        string? DefaultSelect()
+        {
+            return "*";
+        }
     }
 }
 
