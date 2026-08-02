@@ -250,7 +250,13 @@ namespace Deviax.QueryBuilder.ChangeTracking
                 Current = current;
             }
 
-            public override IPart Parameter { get { return new Parameter<TValue>(Current, Field); } }
+            public override IPart Parameter
+            {
+                get
+                {
+                    return new Parameter<TValue>(Current, Field);
+                }
+            }
 
             public TValue Current;
         }

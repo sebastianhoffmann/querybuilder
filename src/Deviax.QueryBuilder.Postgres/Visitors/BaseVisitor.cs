@@ -164,6 +164,9 @@ namespace Deviax.QueryBuilder.Visitors
 
         public void Visit<T>(IArrayParameter<T> arrayParam)
         {
+#if DEBUG
+            ValidateParameter(arrayParam, arrayParam.Value);
+#endif
             if (State == CoarseState.ExtraParameters)
             {
                 Result.AddParameter(arrayParam);

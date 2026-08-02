@@ -21,6 +21,10 @@ namespace Deviax.QueryBuilder.Visitors
 
     public abstract partial class BaseVisitor : INodeVisitor
     {
+#if DEBUG
+        private readonly System.Collections.Generic.Dictionary<string, object?> _parameters = new();
+#endif
+
         public IVisitorResult Result = null!;
         protected CoarseState State = CoarseState.Select;
         
@@ -66,6 +70,9 @@ namespace Deviax.QueryBuilder.Visitors
 
         public void Visit<T>(IParameter<T> parameter)
         {
+#if DEBUG
+            ValidateParameter(parameter, parameter.Value);
+#endif
             if (State == CoarseState.ExtraParameters)
             {
                 Result.AddParameter(parameter);
@@ -75,6 +82,44 @@ namespace Deviax.QueryBuilder.Visitors
                 Result.Append("@").Append(parameter.Name).Append(" ").AddParameter(parameter);
             }
         }
+
+#if DEBUG
+        protected void ValidateParameter(IParameter parameter, object? value)
+        {
+            if (_parameters.TryGetValue(parameter.Name, out var previous))
+            {
+                if (!ParameterValuesEqual(previous, value))
+                {
+                    throw new System.InvalidOperationException(
+                        $"Query parameter name '{parameter.Name}' is used with different values. "
+                            + "Use distinct parameter names for values that differ."
+                    );
+                }
+
+                return;
+            }
+
+            _parameters.Add(parameter.Name, value);
+        }
+
+        private static bool ParameterValuesEqual(object? left, object? right)
+        {
+            if (ReferenceEquals(left, right))
+            {
+                return true;
+            }
+
+            if (left is System.Collections.IStructuralEquatable structural)
+            {
+                return structural.Equals(
+                    right,
+                    System.Collections.StructuralComparisons.StructuralEqualityComparer
+                );
+            }
+
+            return Equals(left, right);
+        }
+#endif
 
         public void Visit(RawSql rawSql) => Result.Append(rawSql.Sql).Append(" ");
         public void Visit(GtePart gte) => HandleOperation(gte.Left, gte.Right, ">= ");

@@ -59,6 +59,20 @@ var tenMostRecentOrdersWithCustomerName = await Q.From(Order.Table)
 
 The queries are immutable, each builder method returns a new query. This allows for conditional where clause building as well as an easy way to execute a count query for pagination without repeating the conditions.
 
+Value helpers infer parameter names from their field by default and accept an
+explicit name when one query uses that field with different values:
+
+```csharp
+query.Where(
+    value => value.StartsAt.GteV(start, "starts_at_from"),
+    value => value.StartsAt.LtV(end, "starts_at_until")
+);
+```
+
+Debug builds throw while rendering a query whenever one parameter name is
+reused with a different value. Reusing a name with the same value is allowed.
+The collision check is not compiled into release builds.
+
 ```csharp
 var baseQuery = Q.From(Order.Table)  
     .InnerJoin(Customer.Table).On(

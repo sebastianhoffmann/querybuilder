@@ -23,31 +23,31 @@ namespace Deviax.QueryBuilder
         public EqPart EqV<T>(T value, string? name = null) => new EqPart(this, new Parameter<T>(value, name ?? Name));
 
         [Pure]
-        public SetFieldPart SetV<T>(T value, string? name = null) => new SetFieldPart(this, new Parameter<T>(value, name ?? Name ));
+        public SetFieldPart SetV<T>(T value, string? name = null) => new SetFieldPart(this, new Parameter<T>(value, name ?? Name));
         
         [Pure]
         public SetFieldPart Set(IPart part) => new SetFieldPart(this, part);
 
         [Pure]
-        public NeqPart NeqV<T>(T value) => new NeqPart(this, new Parameter<T>(value, Name));
+        public NeqPart NeqV<T>(T value, string? name = null) => new NeqPart(this, new Parameter<T>(value, name ?? Name));
        
         [Pure]
-        public GtPart GtV<T>(T value) => new GtPart(this, new Parameter<T>(value, Name));
+        public GtPart GtV<T>(T value, string? name = null) => new GtPart(this, new Parameter<T>(value, name ?? Name));
         
         [Pure]
-        public GtePart GteV<T>(T value) => new GtePart(this, new Parameter<T>(value, Name));
+        public GtePart GteV<T>(T value, string? name = null) => new GtePart(this, new Parameter<T>(value, name ?? Name));
        
         [Pure]
-        public LtPart LtV<T>(T value) => new LtPart(this, new Parameter<T>(value, Name));
+        public LtPart LtV<T>(T value, string? name = null) => new LtPart(this, new Parameter<T>(value, name ?? Name));
         
         [Pure]
-        public LtePart LteV<T>(T value) => new LtePart(this, new Parameter<T>(value, Name));
+        public LtePart LteV<T>(T value, string? name = null) => new LtePart(this, new Parameter<T>(value, name ?? Name));
 
         [Pure]
-        public BetweenPart BetweenV<T>(T left, T right) => new BetweenPart(this, new Parameter<T>(left, Name + "_l"), new Parameter<T>(right, Name + "_r"));
+        public BetweenPart BetweenV<T>(T left, T right, string? leftName = null, string? rightName = null) => new BetweenPart(this, new Parameter<T>(left, leftName ?? Name + "_l"), new Parameter<T>(right, rightName ?? Name + "_r"));
         
         [Pure]
-        public InPart InV<T>(IEnumerable<T> items) => new InPart(this, new ArrayParameter<T>(items, Name));
+        public InPart InV<T>(IEnumerable<T> items, string? name = null) => new InPart(this, new ArrayParameter<T>(items, name ?? Name));
 
         [Pure]public static PlusPart operator +(Field left, int right) => new PlusPart(left, new Parameter<int>(right, left.Name));
         [Pure]public static PlusPart operator +(Field left, long right) => new PlusPart(left, new Parameter<long>(right, left.Name));
