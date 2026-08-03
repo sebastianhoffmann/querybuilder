@@ -10,6 +10,11 @@ namespace Deviax.QueryBuilder.Visitors
     {
         protected bool LimitWithoutOffsetAtStart => false;
 
+        public virtual void Visit(ForUpdatePart forUpdatePart)
+        {
+            throw new NotSupportedException("FOR UPDATE is only supported on select queries.");
+        }
+
         public void Visit(StringConcatenation sc) => HandleOperation(sc.Left, sc.Right, "|| ");
 
         public void Visit(LikePart lp) => HandleOperation(lp.Left, lp.Right, lp.Mode == LikeMode.CaseSensitive ? "LIKE " : "ILIKE ");

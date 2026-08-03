@@ -1,10 +1,30 @@
-﻿using Deviax.QueryBuilder.Parts;
+﻿using System;
+using Deviax.QueryBuilder.Parts;
 using Deviax.QueryBuilder.Parts.Aggregation;
 
 namespace Deviax.QueryBuilder.Visitors
 {
     public partial class SelectVisitor
     {
+        public override void Visit(ForUpdatePart forUpdatePart)
+        {
+            Result.Append("\nFOR UPDATE ");
+
+            switch (forUpdatePart.WaitPolicy)
+            {
+                case ForUpdateWaitPolicy.Wait:
+                    break;
+                case ForUpdateWaitPolicy.NoWait:
+                    Result.Append("NOWAIT ");
+                    break;
+                case ForUpdateWaitPolicy.SkipLocked:
+                    Result.Append("SKIP LOCKED ");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         public override void Visit(LimitOffsetPart limitOffset)
         {
             if (limitOffset.Limit.HasValue)

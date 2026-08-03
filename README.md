@@ -59,6 +59,20 @@ var tenMostRecentOrdersWithCustomerName = await Q.From(Order.Table)
 
 The queries are immutable, each builder method returns a new query. This allows for conditional where clause building as well as an easy way to execute a count query for pagination without repeating the conditions.
 
+PostgreSQL select queries can lock their selected rows for the surrounding
+transaction with `ForUpdate()`:
+
+```csharp
+var customer = await Q.From(Customer.Table)
+    .Where(value => value.Id.EqV(customerId))
+    .ForUpdate(ForUpdateWaitPolicy.NoWait)
+    .FirstOrDefault<Customer>(con, tx);
+```
+
+`ForUpdateWaitPolicy.Wait` uses PostgreSQL's normal blocking behavior and is
+the default. `NoWait` and `SkipLocked` append `NOWAIT` and `SKIP LOCKED`
+respectively. The locking clause follows any `LIMIT` or `OFFSET` clause.
+
 Value helpers infer parameter names from their field by default and accept an
 explicit name when one query uses that field with different values:
 
