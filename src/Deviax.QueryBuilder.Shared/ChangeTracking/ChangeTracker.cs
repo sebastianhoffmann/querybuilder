@@ -25,7 +25,10 @@ namespace Deviax.QueryBuilder.ChangeTracking
             return Collect()
                 .GroupBy(c => c.Tracking)
                 .Select(group => {
-                    var qry = group.Aggregate(new UpdateQuery(group.Key.Table), (q, i) => q.Set(group.Key.Table.F(N.Db(i.Field)).Set(i.Parameter)));
+                    var qry = group.Aggregate(
+                        new UpdateQuery(group.Key.Table),
+                        (q, i) => q.Set(i.Set())
+                    );
 
                     if (group.Key.ConditionGetter != null)
                         qry = qry.Where(group.Key.ConditionGetter(group.Key.Original, group.Key.Table));
@@ -60,29 +63,29 @@ namespace Deviax.QueryBuilder.ChangeTracking
         }
 
         private readonly List<Tracking> _objects = new List<Tracking>();
-        public void Track<T>(T current, T copy, Table? table = null)
+        public void Track<T>(T current, T copy)
         {
-            var comparison = ComparisonCache<T>.Comparison ?? (ComparisonCache<T>.Comparison = BuildComparison<T>());
-
-            table = TypeToTableEntry<T>.DefaultTable;
+            var table = TypeToTableEntry<T>.DefaultTable;
 
             if (table == null)
             {
-                throw new ArgumentException($"Please register `{typeof(T).FullName}` with a table via Registry.RegisterTypeToTable or pass a Table to Track");
+                throw new ArgumentException($"Please register `{typeof(T).FullName}` with a table via Registry.RegisterTypeToTable");
             }
+
+            var comparison = ComparisonCache<T>.Comparison ?? (ComparisonCache<T>.Comparison = BuildComparison<T>(table));
 
             _objects.Add(new Tracking { Original = copy!, Current = current!, Comparer = comparison, Table = table, ConditionGetter = TypeToTableEntry<T>.GetDefaultConditions });
         }
 
-        public void Track<T>(T current, Table? table = null)
+        public void Track<T>(T current)
         {
-            Track(current, Copy(current), table);
+            Track(current, Copy(current));
         }
 
-        public static ChangeTrackingContext StartWith<T>(T current, Table? table = null)
+        public static ChangeTrackingContext StartWith<T>(T current)
         {
             var ctc = new ChangeTrackingContext();
-            ctc.Track(current, table);
+            ctc.Track(current);
             return ctc;
         }
 
@@ -99,13 +102,13 @@ namespace Deviax.QueryBuilder.ChangeTracking
             return CopyCache<T>.F(item);
         }
 
-        private static Expression NewChange(Expression tracking, Type t, MemberInfo mi, Expression val)
+        private static Expression NewChange(Expression tracking, Type t, Field field, Expression val)
         {
-            var constructor = typeof(FieldChange<>).MakeGenericType(t).GetConstructor(new[] { typeof(Tracking), typeof(string), t })!;
-            return Expression.Convert(Expression.New(constructor, tracking, Expression.Constant(mi.Name), val), typeof(FieldChange));
+            var constructor = typeof(FieldChange<>).MakeGenericType(t).GetConstructor(new[] { typeof(Tracking), typeof(Field), t })!;
+            return Expression.Convert(Expression.New(constructor, tracking, Expression.Constant(field), val), typeof(FieldChange));
         }
 
-        private static Action<Tracking, object, object, List<FieldChange>> BuildComparison<T>()
+        private static Action<Tracking, object, object, List<FieldChange>> BuildComparison<T>(Table table)
         {
             var t = typeof(T);
             var ti = t.GetTypeInfo();
@@ -135,6 +138,9 @@ namespace Deviax.QueryBuilder.ChangeTracking
 
             foreach (var prop in props)
             {
+                if (!table.Fields.TryGetValue(N.Db(prop.Name), out var field))
+                    continue;
+
                 var originalVal = Expression.Property(original, prop);
                 var currentVal = Expression.Property(current, prop);
                 
@@ -153,7 +159,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
                         comparers.Add(
                             Expression.IfThen(
                                 Expression.Not(Expression.Equal(originalVal, currentVal)),
-                                Expression.Call(listArg, addChangeMethod, NewChange(trackingArg, prop.PropertyType, prop, currentVal))
+                                Expression.Call(listArg, addChangeMethod, NewChange(trackingArg, prop.PropertyType, field, currentVal))
                             )
                         );
                     }
@@ -162,7 +168,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
                 {
                     comparers.Add(
                         Expression.IfThen(Expression.Not(Expression.Equal(originalVal, currentVal)),
-                            Expression.Call(listArg, addChangeMethod, NewChange(trackingArg, prop.PropertyType, prop, currentVal))
+                            Expression.Call(listArg, addChangeMethod, NewChange(trackingArg, prop.PropertyType, field, currentVal))
                         )
                     );
                 }
@@ -170,6 +176,9 @@ namespace Deviax.QueryBuilder.ChangeTracking
 
             foreach (var f in fields)
             {
+                if (!table.Fields.TryGetValue(N.Db(f.Name), out var field))
+                    continue;
+
                 var originalVal = Expression.Field(original, f);
                 var currentVal = Expression.Field(current, f);
 
@@ -189,7 +198,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
                         comparers.Add(
                             Expression.IfThen(
                                 Expression.Not(Expression.Equal(originalVal, currentVal)),
-                                Expression.Call(listArg, addChangeMethod, NewChange(trackingArg, f.FieldType, f, currentVal))
+                                Expression.Call(listArg, addChangeMethod, NewChange(trackingArg, f.FieldType, field, currentVal))
                             )
                         );
                     }
@@ -198,7 +207,7 @@ namespace Deviax.QueryBuilder.ChangeTracking
                 {
                     comparers.Add(
                         Expression.IfThen(Expression.Not(Expression.Equal(originalVal, currentVal)),
-                            Expression.Call(listArg, addChangeMethod, NewChange(trackingArg, f.FieldType, f, currentVal))
+                            Expression.Call(listArg, addChangeMethod, NewChange(trackingArg, f.FieldType, field, currentVal))
                         )
                     );
                 }
@@ -233,30 +242,24 @@ namespace Deviax.QueryBuilder.ChangeTracking
 
         public abstract class FieldChange
         {
-            public FieldChange(Tracking tracking, string field)
+            public FieldChange(Tracking tracking, Field field)
             {
                 Tracking = tracking;
                 Field = field;
             }
-            public abstract IPart Parameter { get; }
+            public abstract SetFieldPart Set();
             public Tracking Tracking;
-            public string Field;
+            public Field Field;
         }
 
         public class FieldChange<TValue> : FieldChange
         {
-            public FieldChange(Tracking tracking, string field, TValue current) : base(tracking, field)
+            public FieldChange(Tracking tracking, Field field, TValue current) : base(tracking, field)
             {
                 Current = current;
             }
 
-            public override IPart Parameter
-            {
-                get
-                {
-                    return new Parameter<TValue>(Current, Field);
-                }
-            }
+            public override SetFieldPart Set() => Field.SetV(Current);
 
             public TValue Current;
         }

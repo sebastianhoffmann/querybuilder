@@ -1,15 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Principal;
 using Deviax.QueryBuilder.Parts;
 using Deviax.QueryBuilder.Visitors;
 
 namespace Deviax.QueryBuilder
 {
-    public abstract class Table : IFromPart
+    public abstract partial class Table : IFromPart
     {
         public readonly string? TableName;
         public readonly string? TableSchema;
         public readonly string? TableAlias;
+
+        internal readonly Dictionary<string, Field> Fields = new(StringComparer.Ordinal);
         
         private string? _defaultSelect;
 
@@ -22,6 +25,9 @@ namespace Deviax.QueryBuilder
 
         protected internal Field F(string name)
         {
+            var field = new Field(this, name);
+            Fields.Add(name, field);
+
             if (_defaultSelect == null)
             {
                 _defaultSelect = $"{TableAlias ?? TableName}.{name} ";
@@ -31,7 +37,7 @@ namespace Deviax.QueryBuilder
                 _defaultSelect += $", {TableAlias ?? TableName}.{name} ";
             }
             
-            return new Field(this, name);
+            return field;
         }
 
         public virtual void Accept(INodeVisitor visitor)

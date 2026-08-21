@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Deviax.QueryBuilder.Parts;
 using Deviax.QueryBuilder.Visitors;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
 namespace Deviax.QueryBuilder
@@ -20,84 +20,155 @@ namespace Deviax.QueryBuilder
         public override void Accept(INodeVisitor visitor) => visitor.Visit(this);
 
         [Pure]
-        public EqPart EqV<T>(T value, string? name = null) => new EqPart(this, new Parameter<T>(value, name ?? Name));
-
-        [Pure]
-        public SetFieldPart SetV<T>(T value, string? name = null) => new SetFieldPart(this, new Parameter<T>(value, name ?? Name));
-        
-        [Pure]
         public SetFieldPart Set(IPart part) => new SetFieldPart(this, part);
 
         [Pure]
-        public NeqPart NeqV<T>(T value, string? name = null) => new NeqPart(this, new Parameter<T>(value, name ?? Name));
-       
-        [Pure]
-        public GtPart GtV<T>(T value, string? name = null) => new GtPart(this, new Parameter<T>(value, name ?? Name));
-        
-        [Pure]
-        public GtePart GteV<T>(T value, string? name = null) => new GtePart(this, new Parameter<T>(value, name ?? Name));
-       
-        [Pure]
-        public LtPart LtV<T>(T value, string? name = null) => new LtPart(this, new Parameter<T>(value, name ?? Name));
-        
-        [Pure]
-        public LtePart LteV<T>(T value, string? name = null) => new LtePart(this, new Parameter<T>(value, name ?? Name));
+        public EqPart EqV<T>(T value, string? name = null) =>
+            new EqPart(this, CreateParameter(value, name ?? Name));
 
         [Pure]
-        public BetweenPart BetweenV<T>(T left, T right, string? leftName = null, string? rightName = null) => new BetweenPart(this, new Parameter<T>(left, leftName ?? Name + "_l"), new Parameter<T>(right, rightName ?? Name + "_r"));
-        
-        [Pure]
-        public InPart InV<T>(IEnumerable<T> items, string? name = null) => new InPart(this, new ArrayParameter<T>(items, name ?? Name));
-
-        [Pure]public static PlusPart operator +(Field left, int right) => new PlusPart(left, new Parameter<int>(right, left.Name));
-        [Pure]public static PlusPart operator +(Field left, long right) => new PlusPart(left, new Parameter<long>(right, left.Name));
-        [Pure]public static PlusPart operator +(Field left, float right) => new PlusPart(left, new Parameter<float>(right, left.Name));
-        [Pure]public static PlusPart operator +(Field left, double right) => new PlusPart(left, new Parameter<double>(right, left.Name));
-        [Pure]public static PlusPart operator +(Field left, decimal right) => new PlusPart(left, new Parameter<decimal>(right, left.Name));
-        [Pure]public static PlusPart operator +(Field left, DateTime right) => new PlusPart(left, new Parameter<DateTime>(right, left.Name));
-       
-        [Pure]
-        public static MinusPart operator -(Field left, int right) => new MinusPart(left, new Parameter<int>(right, left.Name));
-        [Pure]
-        public static MinusPart operator -(Field left, long right) => new MinusPart(left, new Parameter<long>(right, left.Name));
-        [Pure]
-        public static MinusPart operator -(Field left, float right) => new MinusPart(left, new Parameter<float>(right, left.Name));
-        [Pure]
-        public static MinusPart operator -(Field left, double right) => new MinusPart(left, new Parameter<double>(right, left.Name));
-        [Pure]
-        public static MinusPart operator -(Field left, decimal right) => new MinusPart(left, new Parameter<decimal>(right, left.Name));
+        public SetFieldPart SetV<T>(T value, string? name = null) =>
+            new SetFieldPart(this, CreateParameter(value, name ?? Name));
 
         [Pure]
-        public static MulPart operator *(Field left, int right) => new MulPart(left, new Parameter<int>(right, left.Name));
+        public NeqPart NeqV<T>(T value, string? name = null) =>
+            new NeqPart(this, CreateParameter(value, name ?? Name));
+
         [Pure]
-        public static MulPart operator *(Field left, long right) => new MulPart(left, new Parameter<long>(right, left.Name));
+        public GtPart GtV<T>(T value, string? name = null) =>
+            new GtPart(this, CreateParameter(value, name ?? Name));
+
         [Pure]
-        public static MulPart operator *(Field left, float right) => new MulPart(left, new Parameter<float>(right, left.Name));
+        public GtePart GteV<T>(T value, string? name = null) =>
+            new GtePart(this, CreateParameter(value, name ?? Name));
+
         [Pure]
-        public static MulPart operator *(Field left, double right) => new MulPart(left, new Parameter<double>(right, left.Name));
+        public LtPart LtV<T>(T value, string? name = null) =>
+            new LtPart(this, CreateParameter(value, name ?? Name));
+
         [Pure]
-        public static MulPart operator *(Field left, decimal right) => new MulPart(left, new Parameter<decimal>(right, left.Name));
-        
+        public LtePart LteV<T>(T value, string? name = null) =>
+            new LtePart(this, CreateParameter(value, name ?? Name));
+
         [Pure]
-        public static DivPart operator /(Field left, int right) => new DivPart(left, new Parameter<int>(right, left.Name));
+        public BetweenPart BetweenV<T>(
+            T left,
+            T right,
+            string? leftName = null,
+            string? rightName = null
+        ) =>
+            new BetweenPart(
+                this,
+                CreateParameter(left, leftName ?? Name + "_l"),
+                CreateParameter(right, rightName ?? Name + "_r")
+            );
+
         [Pure]
-        public static DivPart operator /(Field left, long right) => new DivPart(left, new Parameter<long>(right, left.Name));
+        public InPart InV<T>(IEnumerable<T> items, string? name = null) =>
+            new InPart(this, CreateArrayParameter(items, name ?? Name));
+
         [Pure]
-        public static DivPart operator /(Field left, float right) => new DivPart(left, new Parameter<float>(right, left.Name));
+        public static PlusPart operator +(Field left, int right) =>
+            new PlusPart(left, left.CreateParameter(right, left.Name));
+
         [Pure]
-        public static DivPart operator /(Field left, double right) => new DivPart(left, new Parameter<double>(right, left.Name));
+        public static PlusPart operator +(Field left, long right) =>
+            new PlusPart(left, left.CreateParameter(right, left.Name));
+
         [Pure]
-        public static DivPart operator /(Field left, decimal right) => new DivPart(left, new Parameter<decimal>(right, left.Name));
-        
+        public static PlusPart operator +(Field left, float right) =>
+            new PlusPart(left, left.CreateParameter(right, left.Name));
+
         [Pure]
-        public static ModPart operator %(Field left, int right) => new ModPart(left, new Parameter<int>(right, left.Name));
+        public static PlusPart operator +(Field left, double right) =>
+            new PlusPart(left, left.CreateParameter(right, left.Name));
+
         [Pure]
-        public static ModPart operator %(Field left, long right) => new ModPart(left, new Parameter<long>(right, left.Name));
+        public static PlusPart operator +(Field left, decimal right) =>
+            new PlusPart(left, left.CreateParameter(right, left.Name));
+
         [Pure]
-        public static ModPart operator %(Field left, float right) => new ModPart(left, new Parameter<float>(right, left.Name));
+        public static PlusPart operator +(Field left, DateTime right) =>
+            new PlusPart(left, left.CreateParameter(right, left.Name));
+
         [Pure]
-        public static ModPart operator %(Field left, double right) => new ModPart(left, new Parameter<double>(right, left.Name));
+        public static MinusPart operator -(Field left, int right) =>
+            new MinusPart(left, left.CreateParameter(right, left.Name));
+
         [Pure]
-        public static ModPart operator %(Field left, decimal right) => new ModPart(left, new Parameter<decimal>(right, left.Name));
+        public static MinusPart operator -(Field left, long right) =>
+            new MinusPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static MinusPart operator -(Field left, float right) =>
+            new MinusPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static MinusPart operator -(Field left, double right) =>
+            new MinusPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static MinusPart operator -(Field left, decimal right) =>
+            new MinusPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static MulPart operator *(Field left, int right) =>
+            new MulPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static MulPart operator *(Field left, long right) =>
+            new MulPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static MulPart operator *(Field left, float right) =>
+            new MulPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static MulPart operator *(Field left, double right) =>
+            new MulPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static MulPart operator *(Field left, decimal right) =>
+            new MulPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static DivPart operator /(Field left, int right) =>
+            new DivPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static DivPart operator /(Field left, long right) =>
+            new DivPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static DivPart operator /(Field left, float right) =>
+            new DivPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static DivPart operator /(Field left, double right) =>
+            new DivPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static DivPart operator /(Field left, decimal right) =>
+            new DivPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static ModPart operator %(Field left, int right) =>
+            new ModPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static ModPart operator %(Field left, long right) =>
+            new ModPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static ModPart operator %(Field left, float right) =>
+            new ModPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static ModPart operator %(Field left, double right) =>
+            new ModPart(left, left.CreateParameter(right, left.Name));
+
+        [Pure]
+        public static ModPart operator %(Field left, decimal right) =>
+            new ModPart(left, left.CreateParameter(right, left.Name));
     }
 }
