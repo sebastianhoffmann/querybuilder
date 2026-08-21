@@ -75,13 +75,6 @@ namespace Deviax.QueryBuilder
         public DbCommand ToCommand(BaseSelectQuery query, DbConnection con, DbTransaction? tx = null) 
             => ToCommand<SelectVisitor, BaseSelectQuery>(query, con, tx);
 
-        public PreparedCommand ToPreparedCommand(BaseSelectQuery query)
-        {
-            var r = new PreparingCommandResult();
-            Process(new SelectVisitor(), query, r);
-            return r.Result;
-        }
-
         public DbCommand ToCommand(BaseUpdateQuery query, DbConnection con, DbTransaction? tx = null)
             => ToCommand<UpdateVisitor, BaseUpdateQuery>(query, con, tx);
         
