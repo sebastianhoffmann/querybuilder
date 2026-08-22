@@ -19,6 +19,9 @@ namespace Deviax.QueryBuilder.Visitors
 
             if (_parameters.TryGetValue(para.Name, out p!))
             {
+#if DEBUG
+                ParameterValidator.ValidateValue(para.Name, p.Value, val);
+#endif
                 p.Value = val;
             }
             else

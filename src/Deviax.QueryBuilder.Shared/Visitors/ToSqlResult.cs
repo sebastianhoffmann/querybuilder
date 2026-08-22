@@ -28,6 +28,12 @@ namespace Deviax.QueryBuilder.Visitors
 
         public void AddParameter<T>(IParameter<T> para)
         {
+#if DEBUG
+            if (ParameterDic.TryGetValue(para.Name, out var previous))
+            {
+                ParameterValidator.ValidateValue(para.Name, previous, para.Value);
+            }
+#endif
             ParameterDic[para.Name] = para.Value!;
         }
 
