@@ -48,12 +48,12 @@ namespace Deviax.QueryBuilder
 
         public async Task<int> Execute(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
-            return await ScalarResult<int>(con, tx, prepare);
+            return await QueryExecutor.DefaultExecutor.Execute(this, con, tx, prepare).ConfigureAwait(false);
         }
         
         public int ExecuteSync(DbConnection con, DbTransaction? tx = null, bool prepare = true)
         {
-            return ScalarResultSync<int>(con, tx, prepare);
+            return QueryExecutor.DefaultExecutor.ExecuteSync(this, con, tx, prepare);
         }
 
         public string StringRepresentation => ToString();

@@ -572,6 +572,74 @@ namespace Deviax.QueryBuilder
             }
         }
 
+        public async Task<int> Execute(BaseUpdateQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return await Execute(cmd, prepare).ConfigureAwait(false);
+            }
+        }
+
+        public int ExecuteSync(BaseUpdateQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return ExecuteSync(cmd, prepare);
+            }
+        }
+
+        public async Task<int> Execute(BaseInsertQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return await Execute(cmd, prepare).ConfigureAwait(false);
+            }
+        }
+
+        public int ExecuteSync(BaseInsertQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return ExecuteSync(cmd, prepare);
+            }
+        }
+
+        public async Task<int> Execute(BaseDeleteQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return await Execute(cmd, prepare).ConfigureAwait(false);
+            }
+        }
+
+        public int ExecuteSync(BaseDeleteQuery query, DbConnection con, DbTransaction? tx, bool prepare = true)
+        {
+            using (var cmd = ToCommand(query, con, tx))
+            {
+                return ExecuteSync(cmd, prepare);
+            }
+        }
+
+        private static async Task<int> Execute(DbCommand cmd, bool prepare)
+        {
+            if (prepare)
+            {
+                await cmd.PrepareAsync().ConfigureAwait(false);
+            }
+
+            return await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+        }
+
+        private static int ExecuteSync(DbCommand cmd, bool prepare)
+        {
+            if (prepare)
+            {
+                cmd.Prepare();
+            }
+
+            return cmd.ExecuteNonQuery();
+        }
+
         protected async Task<T> ScalarResult<T>(DbCommand cmd, bool prepare = true)
         {
             if (prepare)
